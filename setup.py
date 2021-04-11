@@ -1,10 +1,10 @@
 # coding=utf-8
 from setuptools import setup, find_packages
 
-setup(name='template',
+setup(name='compass',
       version='0.1.0',
       license='',
-      description='template.',
+      description='Helping investors to stick with theirs plans.',
       url='',
       platforms='Linux',
       classifiers=[
@@ -15,7 +15,7 @@ setup(name='template',
       packages=find_packages(),
       entry_points={
           'console_scripts': [
-              'template = template.main:main',
+              'compass = compass.main:main',
           ]
       },
       install_requires=['numpy==1.20.2',

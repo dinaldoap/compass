@@ -1,5 +1,5 @@
 {
-  "name": "template",  
+  "name": "compass",  
   // Use docker while docker-compose doesn't support --gpus
   "dockerFile": "pytorch.dockerfile",
   "context": "..",  
@@ -8,7 +8,7 @@
   "mounts": [
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/pytorch/.ssh",
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/pytorch/.gitconfig",
-    "type=volume,source=template_devcontainer_vscode-server,target=/home/pytorch/.vscode-server",
+    "type=volume,source=compass_devcontainer_vscode-server,target=/home/pytorch/.vscode-server",
   ],
   "runArgs": [
     "--gpus", "all"],
