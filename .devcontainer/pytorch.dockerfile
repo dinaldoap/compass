@@ -3,6 +3,7 @@ FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
 # Install Linux tools
 RUN apt-get update -q && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
+      openssh-client \
       git \
       build-essential && \
     rm -rf /var/lib/apt/lists/*
