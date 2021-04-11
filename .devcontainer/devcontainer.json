@@ -1,0 +1,50 @@
+{
+  "name": "template",  
+  // Use docker while docker-compose doesn't support --gpus
+  "dockerFile": "pytorch.dockerfile",
+  "context": "..",  
+  "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/pytorch/.ssh",
+    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/pytorch/.gitconfig",
+    "type=volume,source=template_devcontainer_vscode-server,target=/home/pytorch/.vscode-server",
+  ],
+  "runArgs": [
+    "--gpus", "all"],
+  "extensions": [
+    "ms-python.vscode-pylance",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "mhutchie.git-graph"
+  ],
+  "settings": {
+    // Save
+    "files.autoSave": "afterDelay",
+    // Format
+    // "editor.formatOnSave": true,
+    "editor.detectIndentation": false,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    // Ignore files
+    "files.exclude": {
+      "**/.git": true,
+      "**/.ipynb_checkpoints": true,
+    },
+    // Ignore for watching
+    "files.watcherExclude": {
+      "**/.git/**": true,
+      "**/data/**": true,
+      "**/compass.egg-info/**": true,
+    },
+    // Python
+    "python.languageServer": "Pylance",
+    "python.pythonPath": "/home/pytorch/.conda/envs/pytorch/bin/python",
+    // pytest
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true
+  }
+}
