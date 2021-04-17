@@ -5,7 +5,8 @@ import sys
 def run(argv):
     parser = argparse.ArgumentParser(
         description='Compass: Helping investors to stick with theirs plans.')
-    args = parser.parse_args(argv)
+    namespace = parser.parse_args(argv)
+    args = dict(vars(namespace))
 
 
 def main():
