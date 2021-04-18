@@ -3,6 +3,6 @@ from .base import Step
 import pandas as pd
 
 
-class Plan(Step):
+class Target(Step):
     def run(self, data: pd.DataFrame):
-        return pd.read_excel('data/plan.xlsx')
+        return pd.read_excel('data/target.xlsx')

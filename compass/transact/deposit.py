@@ -1,10 +1,10 @@
 from .base import Transact
-from compass.step import Actual, Change, Plan, Price, Quantity
+from compass.step import Actual, Change, Price, Quantity, Target
 
 
 class Deposit(Transact):
     def run(self):
-        steps = [Plan(), Actual(), Change(), Price(), Quantity()]
+        steps = [Target(), Actual(), Change(), Price(), Quantity()]
         data = None
         for step in steps:
             data = step.run(data=data)
