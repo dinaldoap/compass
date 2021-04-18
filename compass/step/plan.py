@@ -5,4 +5,4 @@ import pandas as pd
 
 class Plan(Step):
     def run(self, data: pd.DataFrame):
-        raise NotImplementedError()
+        return pd.read_excel('data/plan.xlsx')
