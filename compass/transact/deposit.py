@@ -7,4 +7,4 @@ class Deposit(Transact):
         steps = [Target(), Actual(), Price(), Change(), Quantity()]
         data = None
         for step in steps:
-            data = step.run(data=data)
+            data = step.run(input=data)

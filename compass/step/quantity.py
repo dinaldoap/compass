@@ -4,5 +4,5 @@ import pandas as pd
 
 
 class Quantity(Step):
-    def run(self, data: pd.DataFrame):
+    def run(self, input: pd.DataFrame):
         raise NotImplementedError()

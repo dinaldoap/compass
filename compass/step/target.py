@@ -4,5 +4,5 @@ import pandas as pd
 
 
 class Target(Step):
-    def run(self, data: pd.DataFrame):
+    def run(self, input: pd.DataFrame):
         return pd.read_excel('data/target.xlsx')
