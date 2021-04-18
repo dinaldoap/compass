@@ -5,4 +5,6 @@ import pandas as pd
 
 class Change(Step):
     def run(self, input: pd.DataFrame):
-        raise NotImplementedError()
+        output = input.copy()
+        output['Change'] = 0
+        return output
