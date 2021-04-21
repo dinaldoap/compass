@@ -1,6 +1,7 @@
 from .base import Step
 
 import pandas as pd
+import numpy as np
 
 
 class Change(Step):
@@ -9,6 +10,9 @@ class Change(Step):
 
     ...
     '''
+
+    def __init__(self):
+        self.value = 50
 
     def run(self, input: pd.DataFrame):
         '''Calculate the change.
@@ -32,6 +36,19 @@ class Change(Step):
                     Number of asset's units to buy or sell represented, repectivelly, by a positive or negative value.
 
         '''
+        target = input['Target'].values
+        actual = input['Actual'].values
+        price = input['Price'].values
+        actual = actual * price
+        actual = actual / (actual.sum() + self.value)
+        change = target - actual
+        assert np.any(
+            change > 0), 'Change is expected to have at least one value greater than zero: {}'.format(change)
+        change = np.maximum(change, [0.])
+        change = change / change.sum()
+        change = (self.value * change)
+        change = change // price
+        change = change.astype(int)
         output = input.copy()
-        output['Change'] = 0
+        output['Change'] = change
         return output
