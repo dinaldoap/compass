@@ -4,7 +4,34 @@ import pandas as pd
 
 
 class Change(Step):
+    '''
+    Change in the actual allocation required to approximate the target allocation.
+
+    ...
+    '''
+
     def run(self, input: pd.DataFrame):
+        '''Calculate the change.
+
+        Parameters
+        ----------
+        input : pandas.DataFrame
+            DataFrame with the following columns:
+                Target : float
+                    Fraction of the wealth that must be allocated in the asset.
+                Actual : int
+                    Number of asset's units currently owned.
+                Price : float
+                    Curent price of the asset.                
+
+        Returns
+        -------
+        pandas.DataFrame    
+            DataFrame with the same columns of ``input`` and the following columns:
+                Change : int
+                    Number of asset's units to buy or sell represented, repectivelly, by a positive or negative value.
+
+        '''
         output = input.copy()
         output['Change'] = 0
         return output
