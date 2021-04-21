@@ -5,4 +5,5 @@ import pandas as pd
 
 class Action(Step):
     def run(self, input: pd.DataFrame):
-        raise NotImplementedError()
+        input.to_excel('data/action.xlsx', index=False)
+        return input
