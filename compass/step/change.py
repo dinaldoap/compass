@@ -11,8 +11,8 @@ class Change(Step):
     ...
     '''
 
-    def __init__(self):
-        self.value = 50
+    def __init__(self, value):
+        self.value = value
 
     def run(self, input: pd.DataFrame):
         '''Calculate the change.
