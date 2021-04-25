@@ -6,13 +6,13 @@ from pandas.testing import assert_frame_equal
 import pytest
 
 @pytest.mark.parametrize("value, change", 
-                        [(  10., [2, 4]), # exact change
-                         (  11., [2, 4]), # round below x.5
-                         (   9., [1, 3])]) # round above x.5
-def test_first_deposit(value, change):
+                        [(  7., [1, 3]), # exact change
+                         (  8., [1, 3]), # round below x.5
+                         (   6., [0, 2])]) # round above x.5
+def test_deposit(value, change):
     data = {
         'Target': [.2, .8],
-        'Actual': [0, 0],
+        'Actual': [1, 1],
         'Price': [1., 2.],
     }
     input = pd.DataFrame(data)
