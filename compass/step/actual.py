@@ -13,7 +13,8 @@ class Actual(Step):
         output = self.source.read()
         output = output[['Ticker', 'Actual']]
         output = input.join(output.set_index('Ticker'),
-                            on='Ticker', how='inner')
+                            on='Ticker', how='left')
+        output['Actual'] = output['Actual'].fillna(0).astype(int)
         assert len(input) == len(output), 'output\'s length ({}) is expected to be the same as input\'s ({}).'.format(
             len(output), len(input))
         return output
