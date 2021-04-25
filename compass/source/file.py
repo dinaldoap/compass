@@ -31,6 +31,7 @@ class CEI(Source):
     def read(self):
         data = pd.read_excel(self.path)
         data = data.rename({
+            'Empresa': 'Name',
             'Cód. de Negociação': 'Ticker',
             'Qtde.': 'Actual',
 
