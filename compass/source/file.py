@@ -1,6 +1,7 @@
 from .base import Source
 
 import pandas as pd
+from pathlib import Path
 
 
 class Standard(Source):
@@ -10,7 +11,7 @@ class Standard(Source):
     ...
     '''
 
-    def __init__(self, path: str):
+    def __init__(self, path: Path):
         self.path = path
         _check_layout(self.path, ['Ticker', 'Actual'])
 
@@ -26,7 +27,7 @@ class CEI(Source):
     ...
     '''
 
-    def __init__(self, path: str):
+    def __init__(self, path: Path):
         self.path = path
         _check_layout(self.path, ['Cód. de Negociação', 'Qtde.'])
 
@@ -48,7 +49,7 @@ def _check_layout(path, columns):
 
 
 def create_source(config: dict) -> Source:
-    actual_path = config['actual']
+    actual_path = Path(config['directory'], 'actual.xlsx')
     try:
         return CEI(path=actual_path)
     except RuntimeError as err:
