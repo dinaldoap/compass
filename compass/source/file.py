@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 
-class Standard(Source):
+class StandardActual(Source):
     '''
     Excel worksheet with \'Ticker\' and \'Actual\' columns.
 
@@ -19,7 +19,7 @@ class Standard(Source):
         return pd.read_excel(self.path)
 
 
-class CEI(Source):
+class CeiActual(Source):
     '''
     Excel worksheet with data copied from \'Carteira de ativos\' of \'Canal Eletrônico do Investidor\' (https://cei.b3.com.br/).
     The columns 'Cód. de Negociação' and 'Qtde.' are, respectivelly, renamed to \'Ticker\' and \'Actual\'. 
@@ -48,9 +48,9 @@ def _check_layout(path, columns):
             'Columns {} are expected in file {}.'.format(columns, path))
 
 
-def create_source(config: dict) -> Source:
+def create_actual(config: dict) -> Source:
     actual_path = Path(config['directory'], 'actual.xlsx')
     try:
-        return CEI(path=actual_path)
+        return CeiActual(path=actual_path)
     except RuntimeError as err:
-        return Standard(path=actual_path)
+        return StandardActual(path=actual_path)
