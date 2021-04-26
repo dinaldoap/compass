@@ -28,12 +28,11 @@ class CEI(Source):
 
     def __init__(self, path: str):
         self.path = path
-        _check_layout(self.path, ['Empresa', 'Cód. de Negociação', 'Qtde.'])
+        _check_layout(self.path, ['Cód. de Negociação', 'Qtde.'])
 
     def read(self) -> pd.DataFrame:
         data = pd.read_excel(self.path)
         data = data.rename({
-            'Empresa': 'Name',
             'Cód. de Negociação': 'Ticker',
             'Qtde.': 'Actual',
 
