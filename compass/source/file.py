@@ -3,7 +3,7 @@ from .base import Source
 import pandas as pd
 
 
-class Default(Source):
+class Standard(Source):
     '''
     Excel worksheet with \'Ticker\' and \'Actual\' columns.
 
@@ -52,4 +52,4 @@ def create_source(config: dict) -> Source:
     try:
         return CEI(path=actual_path)
     except RuntimeError as err:
-        return Default(path=actual_path)
+        return Standard(path=actual_path)

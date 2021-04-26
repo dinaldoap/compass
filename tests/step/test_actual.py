@@ -1,5 +1,5 @@
 from compass.step import Actual
-from compass.source.file import Default
+from compass.source.file import Standard
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
@@ -14,5 +14,5 @@ def test_actual():
         'Target': [.2, .8],
         'Actual': [1, 2]
     })
-    output = Actual(source=Default(path='tests/data/actual_default.xlsx')).run(input)
+    output = Actual(source=Standard(path='tests/data/actual_standard.xlsx')).run(input)
     assert_frame_equal(expected, output[['Ticker', 'Target', 'Actual']])
