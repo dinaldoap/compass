@@ -10,8 +10,9 @@ class Default(Source):
     ...
     '''
 
-    def __init__(self, path : str):
+    def __init__(self, path: str):
         self.path = path
+        _check_layout(self.path, ['Ticker', 'Actual'])
 
     def read(self):
         return pd.read_excel(self.path)
@@ -27,6 +28,7 @@ class CEI(Source):
 
     def __init__(self, path: str):
         self.path = path
+        _check_layout(self.path, ['Empresa', 'Cód. de Negociação', 'Qtde.'])
 
     def read(self) -> pd.DataFrame:
         data = pd.read_excel(self.path)
@@ -39,11 +41,16 @@ class CEI(Source):
         return data
 
 
+def _check_layout(path, columns):
+    data = pd.read_excel(path)
+    if not set(columns).issubset(set(data.columns)):
+        raise RuntimeError(
+            'Columns {} are expected in file {}.'.format(columns, path))
+
+
 def create_source(config: dict) -> Source:
-    source_type = config['source_type']
-    source_path = config['source_path']
-    if 'default' == source_type:
-        return Default(path=source_path)
-    if 'cei' == source_type:
-        return CEI(path=source_path)
-    assert False, 'Source type not expected: {}'.format(source_type)
+    actual_path = config['actual']
+    try:
+        return CEI(path=actual_path)
+    except RuntimeError as err:
+        return Default(path=actual_path)
