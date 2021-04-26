@@ -10,7 +10,7 @@ class Default(Source):
     ...
     '''
 
-    def __init__(self, path):
+    def __init__(self, path : str):
         self.path = path
 
     def read(self):
@@ -25,10 +25,10 @@ class CEI(Source):
     ...
     '''
 
-    def __init__(self, path):
+    def __init__(self, path: str):
         self.path = path
 
-    def read(self):
+    def read(self) -> pd.DataFrame:
         data = pd.read_excel(self.path)
         data = data.rename({
             'Empresa': 'Name',
@@ -37,3 +37,13 @@ class CEI(Source):
 
         }, axis='columns')
         return data
+
+
+def create_source(config: dict) -> Source:
+    source_type = config['source_type']
+    source_path = config['source_path']
+    if 'default' == source_type:
+        return Default(path=source_path)
+    if 'cei' == source_type:
+        return CEI(path=source_path)
+    assert False, 'Source type not expected: {}'.format(source_type)

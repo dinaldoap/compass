@@ -1,15 +1,14 @@
 from .base import Step
-from compass.source import CEI
+from compass.source import Source
 
 import pandas as pd
 
 
 class Actual(Step):
-    def __init__(self):
-        super().__init__()
-        self.source = CEI('data/actual.xlsx')
+    def __init__(self, source: Source):
+        self.source = source
 
-    def run(self, input: pd.DataFrame):
+    def run(self, input: pd.DataFrame) -> pd.DataFrame:
         output = self.source.read()
         output = output[['Ticker', 'Actual']]
         output = input.join(output.set_index('Ticker'),

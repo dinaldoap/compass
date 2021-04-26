@@ -1,4 +1,4 @@
-from compass.source import Default, CEI
+from compass.source.file import Default, CEI
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
