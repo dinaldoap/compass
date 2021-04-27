@@ -8,8 +8,13 @@ class Deposit(Transact):
         self.config = config
 
     def run(self):
-        steps = [Target(), Actual(source=source.create_actual(config=self.config)),
-                 Price(), Change(value=self.config['value']), Action()]
+        steps = [
+            Target(source=source.create_target(config=self.config)),
+            Actual(source=source.create_actual(config=self.config)),
+            Price(),
+            Change(value=self.config['value']),
+            Action()
+        ]
         data = None
         for step in steps:
             data = step.run(input=data)

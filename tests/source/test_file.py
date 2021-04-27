@@ -3,6 +3,15 @@ from compass.source.file import *
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
+def test_StandardTarget():
+    output = StandardTarget('tests/data/target.xlsx').read()
+    expected = pd.DataFrame({
+        'Name': ['iShares Core S&P Total US Stock Market ETF', 'iShares Core MSCI EAFE ETF'],
+        'Ticker': ['BITO39', 'BIEF39'],
+        'Target': [.2, .8]
+    })
+    assert_frame_equal(expected, output[['Name', 'Ticker', 'Target']])
+
 def test_StandardActual():
     output = StandardActual('tests/data/actual_standard.xlsx').read()
     expected = pd.DataFrame({

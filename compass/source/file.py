@@ -4,6 +4,21 @@ import pandas as pd
 from pathlib import Path
 
 
+class StandardTarget(Source):
+    '''
+    Excel sheet with Name, Ticker and Target columns.
+
+    ...
+    '''
+
+    def __init__(self, path: Path):
+        self.path = path
+        _check_layout(self.path, ['Name', 'Ticker', 'Target'])
+
+    def read(self):
+        return pd.read_excel(self.path)
+
+
 class StandardActual(Source):
     '''
     Excel worksheet with \'Ticker\' and \'Actual\' columns.
@@ -46,6 +61,11 @@ def _check_layout(path, columns):
     if not set(columns).issubset(set(data.columns)):
         raise RuntimeError(
             'Columns {} are expected in file {}.'.format(columns, path))
+
+
+def create_target(config: dict) -> Source:
+    path = Path(config['directory'], 'target.xlsx')
+    return StandardTarget(path=path)
 
 
 def create_actual(config: dict) -> Source:
