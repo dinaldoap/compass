@@ -21,7 +21,7 @@ class StandardTarget(Source):
 
 class StandardActual(Source):
     '''
-    Excel worksheet with \'Ticker\' and \'Actual\' columns.
+    Excel sheet with Ticker and Actual columns.
 
     ...
     '''
@@ -36,8 +36,8 @@ class StandardActual(Source):
 
 class CeiActual(Source):
     '''
-    Excel worksheet with data copied from \'Carteira de ativos\' of \'Canal Eletrônico do Investidor\' (https://cei.b3.com.br/).
-    The columns 'Cód. de Negociação' and 'Qtde.' are, respectivelly, renamed to \'Ticker\' and \'Actual\'. 
+    Excel sheet with data copied from Carteira de ativos of Canal Eletrônico do Investidor (https://cei.b3.com.br/).
+    The columns Cód. de Negociação and Qtde. are, respectivelly, renamed to Ticker and Actual. 
 
     ...
     '''
@@ -69,8 +69,8 @@ def create_target(config: dict) -> Source:
 
 
 def create_actual(config: dict) -> Source:
-    actual_path = Path(config['directory'], 'actual.xlsx')
+    path = Path(config['directory'], 'actual.xlsx')
     try:
-        return CeiActual(path=actual_path)
+        return CeiActual(path=path)
     except RuntimeError as err:
-        return StandardActual(path=actual_path)
+        return StandardActual(path=path)
