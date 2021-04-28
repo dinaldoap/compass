@@ -62,7 +62,7 @@ def _check_layout(path, columns):
         raise RuntimeError(
             'Columns {} are expected in file {}.'.format(columns, path))
 
-
+# TODO move to factory.py
 def create_target(config: dict) -> Source:
     path = Path(config['directory'], 'target.xlsx')
     return StandardTarget(path=path)
@@ -73,4 +73,5 @@ def create_actual(config: dict) -> Source:
     try:
         return CeiActual(path=path)
     except RuntimeError as err:
+        # TODO move standard to first option
         return StandardActual(path=path)
