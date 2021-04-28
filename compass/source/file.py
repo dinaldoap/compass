@@ -80,18 +80,3 @@ def _check_layout(path, columns):
     if not set(columns).issubset(set(data.columns)):
         raise LayoutError(
             'Columns {} are expected in file {}.'.format(columns, path))
-
-# TODO move to factory.py
-
-
-def create_target(config: dict) -> Source:
-    path = Path(config['directory'], 'target.xlsx')
-    return StandardTarget(path=path)
-
-
-def create_actual(config: dict) -> Source:
-    path = Path(config['directory'], 'actual.xlsx')
-    try:
-        return StandardActual(path=path)
-    except LayoutError:
-        return CeiActual(path=path)
