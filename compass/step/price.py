@@ -1,11 +1,15 @@
 from .base import Step
+from compass.source import Source
 
 import pandas as pd
 
 
 class Price(Step):
+    def __init__(self, source: Source):
+        self.source = source
+
     def run(self, input: pd.DataFrame):
-        output = pd.read_excel('data/price.xlsx')
+        output = self.source.read(tickers=input['Ticker'])
         output = output[['Ticker', 'Price']]
         output = input.join(output.set_index('Ticker'),
                             on='Ticker', how='inner')

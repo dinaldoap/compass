@@ -27,3 +27,11 @@ def test_CEIActual():
         'Actual': [1, 2]
     })
     assert_frame_equal(expected, output[['Ticker', 'Actual']])
+
+def test_StandardPrice():
+    output = StandardPrice('tests/data/price.xlsx').read()
+    expected = pd.DataFrame({
+        'Ticker': ['BITO39', 'BIEF39', 'BIEM39'],
+        'Price': [1, 2, 3]
+    })
+    assert_frame_equal(expected, output[['Ticker', 'Price']])
