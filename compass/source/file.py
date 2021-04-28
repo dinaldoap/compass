@@ -92,7 +92,6 @@ def create_target(config: dict) -> Source:
 def create_actual(config: dict) -> Source:
     path = Path(config['directory'], 'actual.xlsx')
     try:
-        return CeiActual(path=path)
-    except LayoutError:
-        # TODO move standard to first option
         return StandardActual(path=path)
+    except LayoutError:
+        return CeiActual(path=path)
