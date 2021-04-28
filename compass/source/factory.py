@@ -23,5 +23,5 @@ def create_price(config: dict) -> Source:
     path = Path(directory, 'price.xlsx')
     try:
         return StandardPrice(path=path)
-    except (LayoutError, RuntimeError) as err:
+    except (FileNotFoundError, LayoutError):
         return YahooPrice(directory=directory)
