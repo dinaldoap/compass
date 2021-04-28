@@ -1,5 +1,5 @@
 from .base import Source
-from .file import StandardPrice
+from .file import StandardPrice, LayoutError
 from .http import YahooPrice
 
 from pathlib import Path
@@ -10,6 +10,5 @@ def create_price_source(config: dict) -> Source:
     path = Path(directory, 'price.xlsx')
     try:
         return StandardPrice(path=path)
-    # TODO change RuntimeError to LayoutError
-    except (FileNotFoundError, RuntimeError) as err:
+    except (LayoutError, RuntimeError) as err:
         return YahooPrice(directory=directory)

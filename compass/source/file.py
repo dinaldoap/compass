@@ -71,10 +71,14 @@ class StandardPrice(Source):
         return pd.read_excel(self.path)
 
 
+class LayoutError(Exception):
+    pass
+
+
 def _check_layout(path, columns):
     data = pd.read_excel(path)
     if not set(columns).issubset(set(data.columns)):
-        raise RuntimeError(
+        raise LayoutError(
             'Columns {} are expected in file {}.'.format(columns, path))
 
 # TODO move to factory.py
@@ -89,6 +93,6 @@ def create_actual(config: dict) -> Source:
     path = Path(config['directory'], 'actual.xlsx')
     try:
         return CeiActual(path=path)
-    except RuntimeError as err:
+    except LayoutError:
         # TODO move standard to first option
         return StandardActual(path=path)
