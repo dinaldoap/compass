@@ -78,6 +78,8 @@ def _check_layout(path, columns):
             'Columns {} are expected in file {}.'.format(columns, path))
 
 # TODO move to factory.py
+
+
 def create_target(config: dict) -> Source:
     path = Path(config['directory'], 'target.xlsx')
     return StandardTarget(path=path)
