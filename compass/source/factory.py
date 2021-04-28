@@ -5,7 +5,7 @@ from .http import YahooPrice
 from pathlib import Path
 
 
-def create_price_source(config: dict) -> Source:
+def create_price(config: dict) -> Source:
     directory = config['directory']
     path = Path(directory, 'price.xlsx')
     try:

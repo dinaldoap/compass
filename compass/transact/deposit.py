@@ -11,7 +11,7 @@ class Deposit(Transact):
         steps = [
             Target(source=source.create_target(config=self.config)),
             Actual(source=source.create_actual(config=self.config)),
-            Price(source=source.create_price_source(config=self.config)),
+            Price(source=source.create_price(config=self.config)),
             Change(value=self.config['value']),
             Action()
         ]
