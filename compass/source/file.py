@@ -56,6 +56,21 @@ class CeiActual(Source):
         return data
 
 
+class StandardPrice(Source):
+    '''
+    Excel sheet with Ticker and Price columns.
+
+    ...
+    '''
+
+    def __init__(self, path: Path):
+        self.path = path
+        _check_layout(self.path, ['Ticker', 'Price'])
+
+    def read(self, tickers=None):
+        return pd.read_excel(self.path)
+
+
 def _check_layout(path, columns):
     data = pd.read_excel(path)
     if not set(columns).issubset(set(data.columns)):

@@ -22,6 +22,7 @@ setup(name='compass',
                         'pandas==1.2.3',
                         'torch==1.8.1',
                         'openpyxl==3.0.7',
+                        'requests==2.25.1',
                         ],
       python_requires='>=3.9',
       zip_safe=True)
