@@ -14,6 +14,5 @@ def test_actual():
         'Target': [.2, .8],
         'Actual': [1, 2]
     })
-    # TODO let 3 tickers in actual_standard.xlsx to test the left join
     output = Actual(source=StandardActual(path='tests/data/actual_standard.xlsx')).run(input)
     assert_frame_equal(expected, output[['Ticker', 'Target', 'Actual']])
