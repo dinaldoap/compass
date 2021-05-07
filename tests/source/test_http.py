@@ -8,6 +8,6 @@ def test_YahooPrice():
     output = YahooPrice(Path('tests/data')).read(tickers=['BITO39'])
     expected = pd.DataFrame({
         'Ticker': ['BITO39'],
-        'Price': [53.28]
+        'Price': [53.22]
     })
     assert_frame_equal(expected, output[['Ticker', 'Price']])
