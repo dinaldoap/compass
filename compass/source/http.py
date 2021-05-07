@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 import requests
 import json
+import math
 
 
 class YahooPrice(Source):
@@ -29,14 +30,15 @@ class YahooPrice(Source):
 
 def _mean_price(json):
     indicators = {}
-    for indicator in ['low', 'open', 'high', 'close', 'volume']:
+    for indicator in ['low', 'open', 'high', 'close']:
         indicators.update(
             {indicator: json['chart']['result'][0]['indicators']['quote'][0][indicator]})
     price = pd.DataFrame(indicators)
     price = price.dropna()
-    price['volume'] = price['volume'].replace(to_replace=0, value=1)
+    decay_factor = .9998
+    price['weight'] = decay_factor ** price.index
     candle_price = price[['low', 'open', 'high', 'close']].mean(axis='columns')
-    price = (candle_price * price['volume']).sum() / price['volume'].sum()
+    price = (candle_price * price['weight']).sum() / price['weight'].sum()
     return price.round(2)
 
 
