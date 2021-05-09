@@ -112,10 +112,12 @@ def _read_html(path: Path) -> pd.DataFrame:
 
 
 def _check_layout(path: Path, columns: list) -> None:
-    try:
+    if path.suffix.endswith('xlsx'):
         data = pd.read_excel(path)
-    except:
+    elif path.suffix.endswith('html'):
         data = _read_html(path)
+    else:
+        assert 'File extension not supported: {}.'.format(path)
     if not set(columns).issubset(set(data.columns)):
         raise LayoutError(
             'Columns {} are expected in file {}.'.format(columns, path))
