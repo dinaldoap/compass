@@ -4,7 +4,6 @@ import pandas as pd
 from pathlib import Path
 import requests
 import json
-import math
 
 
 class YahooPrice(Source):
