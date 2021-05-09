@@ -1,5 +1,6 @@
 from .base import Source
 
+from datetime import date
 import pandas as pd
 from pathlib import Path
 
@@ -66,9 +67,10 @@ class CeiHtmlActual(Source):
     ...
     '''
 
-    def __init__(self, path: Path):
-        self.path = path
-        _check_layout(path, _CEI_COLUMNS)
+    def __init__(self, path: Path, date=date.today()):
+        self.path = Path(path)
+        _check_layout(self.path, _CEI_COLUMNS)
+        _check_last_update(self.path, date)
 
     def read(self) -> pd.DataFrame:
         data = _read_html(self.path)
@@ -99,6 +101,10 @@ class LayoutError(Exception):
     pass
 
 
+class LastUpdateError(Exception):
+    pass
+
+
 def _read_html(path: Path) -> pd.DataFrame:
     data = pd.read_html(path, thousands='.', decimal=',')
     data = filter(lambda df: set(
@@ -107,7 +113,6 @@ def _read_html(path: Path) -> pd.DataFrame:
     data = data.dropna()
     data = data.reset_index(drop=True)
     data['Qtde.'] = data['Qtde.'].astype(int)
-    print(data)
     return data
 
 
@@ -121,3 +126,12 @@ def _check_layout(path: Path, columns: list) -> None:
     if not set(columns).issubset(set(data.columns)):
         raise LayoutError(
             'Columns {} are expected in file {}.'.format(columns, path))
+
+
+def _check_last_update(path: Path, expected_date: date) -> None:
+    if expected_date is None:
+        return
+    last_update = date.fromtimestamp(path.stat().st_mtime)
+    if last_update < expected_date:
+        raise LastUpdateError(
+            '{} is out of date. Last update is expected to be at {} or later.'.format(path, expected_date))

@@ -1,7 +1,9 @@
 from compass.source.file import *
 
+from datetime import date
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import pytest
 
 def test_StandardTarget():
     output = StandardTarget('tests/data/target.xlsx').read()
@@ -29,12 +31,16 @@ def test_CEIActual():
     assert_frame_equal(expected, output[['Ticker', 'Actual']])
 
 def test_CEIHtmlActual():
-    output = CeiHtmlActual('tests/data/actual.html').read()
+    output = CeiHtmlActual('tests/data/actual.html', date=None).read()
     expected = pd.DataFrame({
         'Ticker': ['BITO39', 'BIEF39'],
         'Actual': [1, 2]
     })
     assert_frame_equal(expected, output[['Ticker', 'Actual']])    
+
+def test_CEIHtmlActual_LastUpdateError():
+    with pytest.raises(LastUpdateError):
+        CeiHtmlActual('tests/data/actual.html', date=date(9999, 1, 1))
 
 def test_StandardPrice():
     output = StandardPrice('tests/data/price.xlsx').read()
