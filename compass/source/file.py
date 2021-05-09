@@ -99,7 +99,7 @@ class LayoutError(Exception):
     pass
 
 
-def _read_html(path: str):
+def _read_html(path: Path) -> pd.DataFrame:
     data = pd.read_html(path, thousands='.', decimal=',')
     data = filter(lambda df: set(
         _CEI_COLUMNS).issubset(set(df.columns)), data)
@@ -111,7 +111,7 @@ def _read_html(path: str):
     return data
 
 
-def _check_layout(path: str, columns: list):
+def _check_layout(path: Path, columns: list) -> None:
     try:
         data = pd.read_excel(path)
     except:
