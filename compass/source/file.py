@@ -66,17 +66,15 @@ class CeiHtmlActual(Source):
 
     def __init__(self, path: Path):
         self.path = path
+        _check_layout(path, ['Cód. de Negociação', 'Qtde.'])
 
     def read(self) -> pd.DataFrame:
-        data = pd.read_html(self.path, thousands='.', decimal=',')
-        data = pd.concat(data)
-        data = data.dropna()
+        data = _read_html(self.path)
         data = data.rename({
             'Cód. de Negociação': 'Ticker',
             'Qtde.': 'Actual',
 
         }, axis='columns')
-        data = data.reset_index(drop=True)
         data['Actual'] = data['Actual'].astype(int)
         return data
 
@@ -100,8 +98,18 @@ class LayoutError(Exception):
     pass
 
 
-def _check_layout(path, columns):
-    data = pd.read_excel(path)
+def _read_html(path : str):
+    data = pd.read_html(path, thousands='.', decimal=',')
+    data = pd.concat(data)
+    data = data.dropna()
+    data = data.reset_index(drop=True)
+    return data
+
+def _check_layout(path : str, columns : list):
+    try:
+        data = pd.read_excel(path)
+    except:
+        data = _read_html(path)
     if not set(columns).issubset(set(data.columns)):
         raise LayoutError(
             'Columns {} are expected in file {}.'.format(columns, path))

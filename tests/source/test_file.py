@@ -34,8 +34,6 @@ def test_CEIHtmlActual():
         'Ticker': ['BITO39', 'BIEF39'],
         'Actual': [1, 2]
     })
-    print(expected['Ticker'])
-    print(output['Ticker'])
     assert_frame_equal(expected, output[['Ticker', 'Actual']])    
 
 def test_StandardPrice():
