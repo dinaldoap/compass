@@ -3,6 +3,8 @@ from .base import Source
 import pandas as pd
 from pathlib import Path
 
+_CEI_COLUMNS = ['Cód. de Negociação', 'Qtde.']
+
 
 class StandardTarget(Source):
     '''
@@ -44,7 +46,7 @@ class CeiActual(Source):
 
     def __init__(self, path: Path):
         self.path = path
-        _check_layout(self.path, ['Cód. de Negociação', 'Qtde.'])
+        _check_layout(self.path, _CEI_COLUMNS)
 
     def read(self) -> pd.DataFrame:
         data = pd.read_excel(self.path)
@@ -66,7 +68,7 @@ class CeiHtmlActual(Source):
 
     def __init__(self, path: Path):
         self.path = path
-        _check_layout(path, ['Cód. de Negociação', 'Qtde.'])
+        _check_layout(path, _CEI_COLUMNS)
 
     def read(self) -> pd.DataFrame:
         data = _read_html(self.path)
@@ -100,7 +102,7 @@ class LayoutError(Exception):
 def _read_html(path: str):
     data = pd.read_html(path, thousands='.', decimal=',')
     data = filter(lambda df: set(
-        ['Cód. de Negociação', 'Qtde.']).issubset(set(df.columns)), data)
+        _CEI_COLUMNS).issubset(set(df.columns)), data)
     data = pd.concat(data)
     data = data.dropna()
     data = data.reset_index(drop=True)
