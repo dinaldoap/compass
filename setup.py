@@ -23,6 +23,7 @@ setup(name='compass',
                         'torch==1.8.1',
                         'openpyxl==3.0.7',
                         'requests==2.25.1',
+                        'lxml==4.6.3',
                         ],
       python_requires='>=3.9',
       zip_safe=True)
