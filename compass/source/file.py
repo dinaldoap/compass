@@ -14,7 +14,7 @@ class StandardTarget(Source):
     '''
 
     def __init__(self, path: Path):
-        self.path = path
+        self.path = Path(path)
         _check_layout(self.path, ['Name', 'Ticker', 'Target'])
 
     def read(self):
@@ -29,7 +29,7 @@ class StandardActual(Source):
     '''
 
     def __init__(self, path: Path):
-        self.path = path
+        self.path = Path(path)
         _check_layout(self.path, ['Ticker', 'Actual'])
 
     def read(self):
@@ -45,7 +45,7 @@ class CeiActual(Source):
     '''
 
     def __init__(self, path: Path):
-        self.path = path
+        self.path = Path(path)
         _check_layout(self.path, _CEI_COLUMNS)
 
     def read(self) -> pd.DataFrame:
@@ -88,7 +88,7 @@ class StandardPrice(Source):
     '''
 
     def __init__(self, path: Path):
-        self.path = path
+        self.path = Path(path)
         _check_layout(self.path, ['Ticker', 'Price'])
 
     def read(self, tickers=None):
