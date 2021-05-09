@@ -97,15 +97,19 @@ class LayoutError(Exception):
     pass
 
 
-def _read_html(path : str):
+def _read_html(path: str):
     data = pd.read_html(path, thousands='.', decimal=',')
+    data = filter(lambda df: set(
+        ['Cód. de Negociação', 'Qtde.']).issubset(set(df.columns)), data)
     data = pd.concat(data)
     data = data.dropna()
     data = data.reset_index(drop=True)
     data['Qtde.'] = data['Qtde.'].astype(int)
+    print(data)
     return data
 
-def _check_layout(path : str, columns : list):
+
+def _check_layout(path: str, columns: list):
     try:
         data = pd.read_excel(path)
     except:
