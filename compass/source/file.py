@@ -75,7 +75,6 @@ class CeiHtmlActual(Source):
             'Qtde.': 'Actual',
 
         }, axis='columns')
-        data['Actual'] = data['Actual'].astype(int)
         return data
 
 
@@ -103,6 +102,7 @@ def _read_html(path : str):
     data = pd.concat(data)
     data = data.dropna()
     data = data.reset_index(drop=True)
+    data['Qtde.'] = data['Qtde.'].astype(int)
     return data
 
 def _check_layout(path : str, columns : list):
