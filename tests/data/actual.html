@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5 -->
+<html lang="pt-br" manifest="manifest/cei.appcache" class=" js no-touch svg inlinesvg svgclippaths no-ie8compat">
+
+<head id="ctl00_Head1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description"
+        content="O Canal Eletrônico do Investidor (CEI) é um serviço via Internet que permite ao investidor consultar informações sobre seus saldos e sobre o histórico de suas negociações na BM&amp;FBOVESPA.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        CEI Canal Eletrônico do Investidor
+    </title>
+    <script type="text/javascript" async="" src="./actual_files/analytics.js"></script>
+    <script async="" src="./actual_files/gtm.js"></script>
+    <script type="text/javascript" src="./actual_files/ruxitagentjs_ICA27SVfghjqrux_10213210506081349.js"
+        data-dtconfig="rid=RID_-185439490|rpid=-1429080864|domain=b3.com.br|reportUrl=/CEI_Responsivo/rb_8370fec7-c82e-413f-a2c6-777046ed9811|app=c2886cd336b72864|rcdec=1209600000|featureHash=ICA27SVfghjqrux|srsr=10000|vcv=2|rdnt=1|uxrgce=1|srcss=1|bp=3|srmcrv=10|cuc=qf4s7dpn|mel=100000|dpvc=1|md=mdcc1=a#ctl00_lblNome|ssv=4|lastModification=1620324393192|dtVersion=10213210506081349|srmcrl=1|tp=500,50,0,1|uxdcw=1500|vs=2|agentUri=/CEI_Responsivo/ruxitagentjs_ICA27SVfghjqrux_10213210506081349.js"></script>
+    <link rel="canonical" href="https://cei.bmfbovespa.com.br/">
+    <link rel="stylesheet" href="./actual_files/normalize.css">
+    <link rel="stylesheet" href="./actual_files/foundation.css">
+    <link rel="stylesheet" href="./actual_files/app.css">
+    <link rel="stylesheet" href="./actual_files/responsive-tables.css">
+    <link rel="stylesheet" href="./actual_files/jquery.ui.datepicker.css">
+
+    <script type="text/javascript" src="./actual_files/jquery.min.js"></script>
+    <script type="text/javascript" src="./actual_files/CEIUtil.js"></script>
+    <script type="text/javascript" src="./actual_files/CEIWeb.js"></script>
+    <script type="text/javascript" src="./actual_files/funcoes.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            if ($('.datepicker').length > 0) {
+                reloadDatePicker();
+            }
+        });
+
+        function reloadDatePicker() {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+
+            function EndRequestHandler(sender, args) {
+                $('.datepicker').datepicker({
+                    showOn: 'button',
+                    showButtonPanel: false,
+                    buttonImage: 'images/icons/calendar.png',
+                    buttonImageOnly: true,
+                    closeText: 'Fechar',
+                    prevText: '&#x3C;',
+                    nextText: '&#x3E;',
+                    currentText: 'Hoje',
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                        'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                    dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                    weekHeader: 'Sm',
+                    dateFormat: 'dd/mm/yy',
+                    firstDay: 0,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: '',
+                    defaultDate: null
+                });
+            }
+        }
+        function fnExcelById(tabelaID) {
+
+            var tab_text = "<table border='2px'><tr bgcolor=''>";
+            var textRange; var j = 0;
+            tab = document.getElementById(tabelaID); // id of table
+
+            for (j = 0; j < tab.rows.length; j++) {
+                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+            }
+
+            tab_text = tab_text + "</table>";
+            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //Remove links na tabela
+            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // Remove imagens na tabela
+            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // remove inmputs na tabela
+
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
+
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+            {
+                // No IE o sistema abre a opção para salvar como
+                fraExcel.document.open("txt/html", "replace");
+                fraExcel.document.write(tab_text);
+                fraExcel.document.close();
+                fraExcel.focus();
+                sa = fraExcel.document.execCommand("SaveAs", true, tabelaID + ".xls");
+            }
+            else {
+                //Outros navegadores abre direto no navegador.
+                sa = window.open('data:application/vnd.ms-excel,' + escape(tab_text));
+            }
+            return (sa);
+        }
+
+        function fnExcelByName(tabelaName) {
+
+            var tab_text = "";
+            var textRange; var j = 0;
+            var tab; //tabela de exportação            
+            //tab = document.getElementById(tabelaName); // id of table
+            var tables = document.getElementsByName(tabelaName);
+            for (i = 0; i < tables.length; i++) {
+                //Se tiver mais que uma tabela para apresentar gera uma linha de quebra entre as tabelas
+                if (i > 0) {
+                    tab_text = tab_text + "<table border='0px'></table>";
+                }
+                tab = tables[i];
+                tab_text = tab_text + "<table border='2px'><tr bgcolor=''>";
+                for (j = 0; j < tab.rows.length; j++) {
+                    tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+                }
+                tab_text = tab_text + "</table>";
+            }
+
+            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, ""); //Remove links na tabela
+            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // Remove imagens na tabela
+            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // remove inmputs na tabela
+
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
+
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+            {
+                // No IE o sistema abre a opção para salvar como
+                fraExcel.document.open("txt/html", "replace");
+                fraExcel.document.write(tab_text);
+                fraExcel.document.close();
+                fraExcel.focus();
+                sa = fraExcel.document.execCommand("SaveAs", true, tabelaName + ".xls");
+            }
+            else {
+                //Outros navegadores abre direto no navegador.
+                sa = window.open('data:application/vnd.ms-excel,' + escape(tab_text));
+            }
+            return (sa);
+        }
+    </script>
+    <meta class="foundation-mq-small">
+    <meta class="foundation-mq-medium">
+    <meta class="foundation-mq-large">
+    <style></style>
+</head>
+
+<body>
+    <!--Iframe para abrir excel em telas com botão exportar-->
+    <iframe id="fraExcel" style="display:none" src="./actual_files/saved_resource.html"></iframe>
+    <div id="CEIMessageDIV" class="row collapse">
+    </div>
+    <form name="aspnetForm" method="post"
+        action="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5" id="aspnetForm">
+        <div>
+            <input type="hidden" name="ctl00_ContentPlaceHolder1_ToolkitScriptManager1_HiddenField"
+                id="ctl00_ContentPlaceHolder1_ToolkitScriptManager1_HiddenField" value="">
+            <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
+            <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
+            <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE"
+                value="/wEPDwUJNTI5ODA0Nzk1D2QWAmYPZBYCAgMPZBYIAgEPDxYCHgRUZXh0BRZESU5BTERPIEFORFJBREUgUEVTU09BZGQCAw9kFgICAQ8WAh4HVmlzaWJsZWhkAgUPZBYEAgEPDxYCHwAFBkZ1bmRvc2RkAgMPZBYCAgMPDxYCHwAFHS8gIFBvc2nDp8OjbyBkZSBJbnZlc3RpbWVudG9zZGQCBw9kFgICBQ9kFgJmD2QWEgIBDw8WCB8ABQowNy8wNS8yMDIxHghDc3NDbGFzcwUHZXNjb25kZR4HRW5hYmxlZGgeBF8hU0ICAmRkAgMPDxYCHwAFCjA5LzAzLzIwMjFkZAIFDw8WAh8ABQowNy8wNS8yMDIxZGQCBw8PFgIfAWhkZAIJDw8WAh8BZ2RkAgsPDxYEHwAFRiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQXR1YWxpemFkbyBlbTogMDcvMDUvMjAyMSDDoHMgMDA6MDAfAWhkZAINDxYCHgtfIUl0ZW1Db3VudAIDFgZmD2QWBAIBDw8WAh8BaGRkAgMPFgIfBWZkAgEPZBYEAgEPDxYCHwAFIjgyMCAtIEJCIEJBTkNPIERFIElOVkVTVElNRU5UTyBTL0FkZAIDDxYCHwUCARYCZg9kFgYCAQ8PFgIfAAUJMTM3NDM5MS0xZGQCAw8WAh8FAgEWAmYPZBYGAgEPDxYCHwAFHUNhcnRlaXJhIDIxMDE2LUNBUlRFSVJBIExJVlJFZGQCAw88KwARAwAPFgQeC18hRGF0YUJvdW5kZx8FAgFkARAWBAICAgMCBAIGFgQ8KwAFAQAWAh4KSGVhZGVyVGV4dAUVQ8OzZC4gZGUgTmVnb2NpYcOnw6NvPCsABQEAFgIfBwUKQ8OzZC4gSVNJTjwrAAUBABYCHwcFC1ByZcOnbyhSJCkqPCsABQEAFgIfBwUPRmF0b3IgQ290YcOnw6NvFgRmZmZmDBQrAAAWAmYPZBYGZg8PFgIeDFRhYmxlU2VjdGlvbgsqKVN5c3RlbS5XZWIuVUkuV2ViQ29udHJvbHMuVGFibGVSb3dTZWN0aW9uAGRkAgEPZBYQZg8PFgIfAAUMRklJIEJCIEZPRiAgZGQCAQ8PFgIfAAUKQ0kgIEVSICAgIGRkAgIPDxYCHwAFDEJCRk8xMSAgICAgIGRkAgMPDxYCHwAFDEJSQkJGT0NURjAwNGRkAgQPDxYCHwAFBTg0LDY5ZGQCBQ8PFgIfAAUDMjAwZGQCBg8PFgIfAAUBMWRkAgcPDxYCHwAFCTE2LjkzOCwwMGRkAgIPDxYCHwgLKwQCZBYCAgcPDxYGHwAFDFIkIDE2LjkzOCwwMB4PSG9yaXpvbnRhbEFsaWduCyopU3lzdGVtLldlYi5VSS5XZWJDb250cm9scy5Ib3Jpem9udGFsQWxpZ24DHwQCgIAEZGQCBQ88KwARAwAPFgQfBmcfBWZkARAWABYAFgAMFCsAAGQCBQ8WAh8FZmQCAg9kFgQCAQ8PFgIfAWhkZAIDDxYCHwVmZAIPDxYCHwFoFgICAQ8PFgIfAAUaUiQgMTYuOTM4LDAwICAgICAgICAgICAgICBkZAIRDxYCHwFoZBgCBVtjdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJHJwdEFnZW50ZSRjdGwwMSRycHJDb250YSRjdGwwMCRycHJDYXJ0ZWlyYSRjdGwwMCRncmRNb3ZpbWVudGFjb2VzDzwrAAwBCGZkBV9jdGwwMCRDb250ZW50UGxhY2VIb2xkZXIxJHJwdEFnZW50ZSRjdGwwMSRycHJDb250YSRjdGwwMCRycHJDYXJ0ZWlyYSRjdGwwMCRncmRNb3ZpbWVudG9DdXN0b2RpYQ88KwAMAQgCAWRwDiPdj1Qkdm8WZWfZWh62tBL6Ng==">
+        </div>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            var theForm = document.forms['aspnetForm'];
+            if (!theForm) {
+                theForm = document.aspnetForm;
+            }
+            function __doPostBack(eventTarget, eventArgument) {
+                if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                    theForm.__EVENTTARGET.value = eventTarget;
+                    theForm.__EVENTARGUMENT.value = eventArgument;
+                    theForm.submit();
+                }
+            }
+//]]>
+        </script>
+
+
+        <script src="./actual_files/WebResource.axd" type="text/javascript"></script>
+
+
+        <script src="./actual_files/ScriptResource.axd" type="text/javascript"></script>
+        <script src="./actual_files/ScriptResource(1).axd" type="text/javascript"></script>
+        <div>
+
+            <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="9896688D">
+            <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION"
+                value="/wEdAANydy2IsjtCKCPHjZYn2zzMa0l5l+F10YvLI1FxAbpPDjlw62Jj6iurN0JSuDVWqxLW7nVll9IMEn0/XUtXADm9Btip0w==">
+        </div>
+        <div id="top">
+            <div class="row">
+                <div class="large-3 columns">
+                    <div id="logo-cei">
+                        <a href="https://cei.b3.com.br/CEI_Responsivo/home.aspx">
+                            <img src="./actual_files/logo-cei.png" alt="CEI"></a>
+                    </div>
+                </div>
+                <div class="large-9 columns">
+                    <div id="user-logoff-desktop">
+                        <p>
+                            Olá,
+                            <span id="ctl00_lblNome">NOME</span>
+                            <span>|</span> <a href="https://cei.b3.com.br/CEI_Responsivo/login.aspx?MSG=SESENC">Sair</a>
+                        </p>
+                    </div>
+                    <div id="logo-bvmf">
+                        <a href="http://www.b3.com.br/">
+                            <img src="./actual_files/logo-bvmf.png" alt="BM&amp;FBOVESPA"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="nav">
+            <div class="row">
+                <nav class="top-bar" data-options="is_hover:true">
+                    <ul class="title-area">
+                        <li class="name">
+                            <h1><a href="https://cei.b3.com.br/CEI_Responsivo/home.aspx"><img
+                                        src="./actual_files/logo-cei.png" alt="CEI"></a></h1>
+                        </li>
+                        <li class="toggle-topbar menu-icon"><a
+                                href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#"><span></span></a>
+                        </li>
+                    </ul>
+
+
+                    <section class="top-bar-section">
+                        <ul class="left">
+                            <li><a href="https://cei.b3.com.br/CEI_Responsivo/home.aspx">Início</a></li>
+                            <li class="divider"></li>
+                            <li class="has-dropdown not-click"><a
+                                    href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">Investimentos</a>
+                                <ul class="dropdown">
+                                    <li class="title back js-generated">
+                                        <h5><a
+                                                href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">voltar</a>
+                                        </h5>
+                                    </li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/ConsultarCarteiraAtivos.aspx">Carteira
+                                            de ativos</a></li>
+                                    <li class="divider"></li>
+                                    <li><a
+                                            href="https://cei.b3.com.br/CEI_Responsivo/ConsultarDerivativos.aspx">Derivativos</a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                    <li class="divider"></li>
+                                    <li id="ctl00_Menu_GarantiasNGA"><a
+                                            href="https://cei.b3.com.br/CEI_Responsivo/garantiasNGA.aspx">Garantias</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a
+                                            href="https://cei.b3.com.br/CEI_Responsivo/ConsultarProventos.aspx">Proventos</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/ConsultarBTC.aspx">Empréstimo de
+                                            ativos</a></li>
+                                    <li class="divider"></li>
+                                    <li class="has-dropdown not-click"><a
+                                            href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">Segmento
+                                            Cetip UTVM</a>
+                                        <ul class="dropdown">
+                                            <li class="title back js-generated">
+                                                <h5><a
+                                                        href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">voltar</a>
+                                                </h5>
+                                            </li>
+                                            <li><a href="https://cei.b3.com.br/CEI_Responsivo/ConsultarCertifica.aspx">Ativos
+                                                    financeiros</a></li>
+                                            <li class="divider"></li>
+                                            <li><a
+                                                    href="https://cei.b3.com.br/CEI_Responsivo/ConsultarValoresMobiliariosPorProduto.aspx">Valores
+                                                    Mobiliários / Derivativos</a></li>
+                                            <li class="divider"></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="has-dropdown not-click"><a
+                                    href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">Extratos
+                                    e Informativos</a>
+                                <ul class="dropdown">
+                                    <li class="title back js-generated">
+                                        <h5><a
+                                                href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">voltar</a>
+                                        </h5>
+                                    </li>
+                                    <li><a
+                                            href="https://cei.b3.com.br/CEI_Responsivo/configurar-envio-de-informativos.aspx">Configurar
+                                            envio de extratos</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/extrato-bmfbovespa.aspx">Extrato
+                                            BM&amp;FBOVESPA</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/extrato-bmf.aspx">Extrato
+                                            BM&amp;F</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/ConsultarExtratoCetip.aspx">Extrato
+                                            Cetip UTVM</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/extrato-tesouro-direto.aspx">Extrato
+                                            Tesouro Direto</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/aviso-de-transferencias.aspx">Aviso
+                                            de transferências</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/negociacao-de-ativos.aspx">Negociação
+                                            de ativos</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/ofertas-publicas.aspx">Ofertas
+                                            públicas</a></li>
+                                    <li class="divider"></li>
+                                    <li class="has-dropdown not-click"><a
+                                            href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">Empréstimos
+                                            de ativos</a>
+                                        <ul class="dropdown">
+                                            <li class="title back js-generated">
+                                                <h5><a
+                                                        href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">voltar</a>
+                                                </h5>
+                                            </li>
+                                            <li><a
+                                                    href="https://cei.b3.com.br/CEI_Responsivo/aviso-movimentacao-BTC.aspx">Aviso
+                                                    de movimentação</a></li>
+                                            <li class="divider"></li>
+                                            <li><a
+                                                    href="https://cei.b3.com.br/CEI_Responsivo/informe-reembolso-BTC.aspx">Informe
+                                                    de reembolso</a></li>
+                                            <li class="divider"></li>
+                                            <li><a
+                                                    href="https://cei.b3.com.br/CEI_Responsivo/informe-rendimento-BTC.aspx">Informe
+                                                    de rendimentos</a></li>
+                                            <li class="divider"></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="has-dropdown not-click"><a
+                                    href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">Senhas</a>
+                                <ul class="dropdown">
+                                    <li class="title back js-generated">
+                                        <h5><a
+                                                href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#">voltar</a>
+                                        </h5>
+                                    </li>
+                                    <li><a href="https://cei.b3.com.br/CEI_Responsivo/alterar-senha.aspx">Alteração de
+                                            senha de acesso ao CEI</a></li>
+                                    <li class="divider"></li>
+                                    <li id="ctl00_Menu_histSolicitSenha"><a
+                                            href="https://cei.b3.com.br/CEI_Responsivo/historico-de-solicitacoes.aspx">Histórico
+                                            de solicitações</a></li>
+                                    <li class="divider"></li>
+                                </ul>
+                            </li>
+                            <li id="user-logoff-mobile"><a
+                                    href="https://cei.b3.com.br/CEI_Responsivo/login.aspx?MSG=SESENC">Sair</a></li>
+                        </ul>
+                    </section>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h2>
+                    <span id="ctl00_Breadcrumbs_lblTituloPagina">Fundos</span>
+                </h2>
+                <div id="ctl00_Breadcrumbs_pnBreadcrumbs">
+
+                    <ul class="breadcrumbs">
+                        <li><a href="https://cei.b3.com.br/CEI_Responsivo/home.aspx">
+                                <span id="ctl00_Breadcrumbs_lblItemInicio">Início</span></a></li>
+                        <li class="current">
+                            <span id="ctl00_Breadcrumbs_lblItem">/ Posição de Investimentos</span>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+
+        <link href="./actual_files/modal.css" rel="stylesheet">
+
+        <script type="text/javascript">
+            reloadDatePicker();
+        </script>
+
+        <script type="text/javascript">
+            //<![CDATA[
+            Sys.WebForms.PageRequestManager._initialize('ctl00$ContentPlaceHolder1$ToolkitScriptManager1', 'aspnetForm', ['tctl00$ContentPlaceHolder1$pnlPanel', ''], [], [], 600, 'ctl00');
+//]]>
+        </script>
+
+        <div id="ctl00_ContentPlaceHolder1_UpdateProgress1" style="display:none;" role="status" aria-hidden="true">
+
+            <div class="modal">
+            </div>
+
+        </div>
+        <div id="ctl00_ContentPlaceHolder1_pnlPanel">
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <div class="filtro">
+
+                        <div class="row collapse">
+                            <div class="large-12">
+                                <div class="large-2 columns">
+                                    <label>
+                                        Período:</label>
+                                </div>
+                                <div class="large-3 columns left">
+                                    <input name="ctl00$ContentPlaceHolder1$txtDatePickerFiltro" type="text"
+                                        value="07/05/2021" maxlength="10"
+                                        onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$ContentPlaceHolder1$txtDatePickerFiltro\&#39;,\&#39;\&#39;)&#39;, 0)"
+                                        onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;javascript:return CEIUtil.FormatarData(this, true, event);"
+                                        id="ctl00_ContentPlaceHolder1_txtDatePickerFiltro" disabled="disabled"
+                                        class="esconde">
+                                </div>
+                                <div class="large-7 columns left">
+                                    <label class="periodo-disponivel">
+                                        Período disponível:
+                                        <span id="ctl00_ContentPlaceHolder1_lblPeriodoInicial">09/03/2021</span>
+                                        à
+                                        <span id="ctl00_ContentPlaceHolder1_lblPeriodoFinal">07/05/2021</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-2 columns large-centered">
+
+                        <input type="submit" name="ctl00$ContentPlaceHolder1$btnNovaConsulta" value="Nova Consulta"
+                            id="ctl00_ContentPlaceHolder1_btnNovaConsulta" class="button radius expand">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12">
+                    <div class="large-4 columns left">
+                        <p class="atualizado-em">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+
+                    <div>
+                        <h2>
+
+                        </h2>
+
+                    </div>
+
+
+                    <div>
+                        <h2>
+                            <span id="ctl00_ContentPlaceHolder1_rptAgente_ctl01_lblAgente">123 - BANCO</span>
+                        </h2>
+
+                    </div>
+
+                    <div>
+                        <p>
+                            Conta nº
+                            <span
+                                id="ctl00_ContentPlaceHolder1_rptAgente_ctl01_rprConta_ctl00_lblConta">1234567-8</span>
+                        </p>
+
+                    </div>
+                    <!--   NÍVEL 2  -->
+
+
+                    <div class="section-container accordion" data-section="accordion" data-section-small-style="true">
+                        <section class="active">
+
+                            <p class="title"><a
+                                    href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#"><span
+                                        id="ctl00_ContentPlaceHolder1_rptAgente_ctl01_rprConta_ctl00_rprCarteira_ctl00_lblCodCarteira">Carteira
+                                        12345-CARTEIRA LIVRE</span></a></p>
+                            <div class="content">
+                                <div>
+                                    <div>
+                                        <table class="responsive" cellspacing="0" border="0"
+                                            id="ctl00_ContentPlaceHolder1_rptAgente_ctl01_rprConta_ctl00_rprCarteira_ctl00_grdMovimentoCustodia"
+                                            style="border-style:None;border-collapse:collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Empresa</th>
+                                                    <th scope="col">Tipo</th>
+                                                    <th scope="col">Cód. de Negociação</th>
+                                                    <th scope="col">Cód. ISIN</th>
+                                                    <th scope="col">Preço(R$)*</th>
+                                                    <th scope="col">Qtde.</th>
+                                                    <th scope="col">Fator Cotação</th>
+                                                    <th scope="col">Valor(R$)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>iShares Core S&P Total US Stock Market ETF </td>
+                                                    <td>CI ER </td>
+                                                    <td>BITO39 </td>
+                                                    <td>BRBBFOCTF004</td>
+                                                    <td class="text-right">1.000,00</td>
+                                                    <td class="text-right">1</td>
+                                                    <td class="text-right">1</td>
+                                                    <td class="text-right">1.000,00</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="total">
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td align="right">R$ 1.000,00</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="section-container accordion" data-section="accordion" data-section-small-style="true">
+                        <section class="active">
+
+                            <p class="title"><a
+                                    href="https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5#"><span
+                                        id="ctl00_ContentPlaceHolder1_rptAgente_ctl01_rprConta_ctl00_rprCarteira_ctl00_lblCodCarteira">Carteira
+                                        12345-CARTEIRA LIVRE</span></a></p>
+                            <div class="content">
+                                <div>
+                                    <div>
+                                        <table class="responsive" cellspacing="0" border="0"
+                                            id="ctl00_ContentPlaceHolder1_rptAgente_ctl01_rprConta_ctl00_rprCarteira_ctl00_grdMovimentoCustodia"
+                                            style="border-style:None;border-collapse:collapse;">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Empresa</th>
+                                                    <th scope="col">Tipo</th>
+                                                    <th scope="col">Cód. de Negociação</th>
+                                                    <th scope="col">Cód. ISIN</th>
+                                                    <th scope="col">Preço(R$)*</th>
+                                                    <th scope="col">Qtde.</th>
+                                                    <th scope="col">Fator Cotação</th>
+                                                    <th scope="col">Valor(R$)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>iShares Core MSCI EAFE ETF </td>
+                                                    <td>CI ER </td>
+                                                    <td>BIEF39 </td>
+                                                    <td>BRBBFOCTF004</td>
+                                                    <td class="text-right">1.000,00</td>
+                                                    <td class="text-right">2</td>
+                                                    <td class="text-right">1</td>
+                                                    <td class="text-right">2.000,00</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="total">
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td>&nbsp;</td>
+                                                    <td align="right">R$ 2.000,00</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!--  CONTAS PARTICIPANTES DIFERENTES  -->
+
+
+
+                    <div>
+                        <h2>
+
+                        </h2>
+
+                    </div>
+
+
+                    <!-- Resumo -->
+
+                    <br>
+
+                    <br>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <script type="text/javascript" src="./actual_files/jquery.min(1).js"></script>
+
+        <script type="text/javascript" src="./actual_files/custom.modernizr.js"></script>
+
+        <script type="text/javascript" src="./actual_files/foundation.min.js"></script>
+
+        <script type="text/javascript" src="./actual_files/responsive-tables.js"></script>
+
+        <script type="text/javascript" src="./actual_files/jquery.ui.core.js"></script>
+
+        <script type="text/javascript" src="./actual_files/jquery.ui.datepicker.js"></script>
+
+        <script type="text/javascript" src="./actual_files/jquery.ui.datepicker-pt-BR.js"></script>
+
+        <script>
+            $(document).foundation();
+        </script>
+
+        <script type="text/javascript">
+            $('#start-jr').on('click', function () {
+                $(document).foundation('joyride', 'start');
+            });
+        </script>
+
+        <script type="text/javascript" src="./actual_files/controller-CEI.js"></script>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <div id="footer">
+                    <p class="atualizado-em">Versão 7.64.0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Tag Manager -->
+        <noscript>
+            <iframe src="//www.googletagmanager.com/ns.html?id=GTM-5X64WX" height="0" width="0"
+                style="display: none; visibility: hidden"></iframe>
+        </noscript>
+
+        <script>
+
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || []; w[l].push({
+                    'gtm.start':
+                        new Date().getTime(), event: 'gtm.js'
+                }); var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                        '//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-5X64WX');</script>
+
+        <!-- End Google Tag Manager -->
+
+
+
+        <script type="text/javascript">
+            //<![CDATA[
+            (function () { var fn = function () { $get("ctl00_ContentPlaceHolder1_ToolkitScriptManager1_HiddenField").value = ''; Sys.Application.remove_init(fn); }; Sys.Application.add_init(fn); })(); Sys.Application.add_init(function () {
+                $create(Sys.UI._UpdateProgress, { "associatedUpdatePanelId": "ctl00_ContentPlaceHolder1_pnlPanel", "displayAfter": 500, "dynamicLayout": true }, null, null, $get("ctl00_ContentPlaceHolder1_UpdateProgress1"));
+            });
+//]]>
+        </script>
+    </form>
+
+
+
+    <script>mendeleyWebImporter = {
+            downloadPdfs(t) { return this._call('downloadPdfs', [t]); },
+            open() { return this._call('open', []); },
+            _call(methodName, methodArgs) {
+                const id = Math.random();
+                window.postMessage({ id, token: '0.7576324051043981', methodName, methodArgs }, 'https://cei.b3.com.br');
+                return new Promise(resolve => {
+                    const listener = window.addEventListener('message', event => {
+                        const data = event.data;
+                        if (typeof data !== 'object' || !('result' in data) || data.id !== id) return;
+                        window.removeEventListener('message', listener);
+                        resolve(data.result);
+                    });
+                });
+            }
+        };</script>
+</body>
+
+</html>

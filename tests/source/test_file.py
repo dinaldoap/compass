@@ -28,6 +28,16 @@ def test_CEIActual():
     })
     assert_frame_equal(expected, output[['Ticker', 'Actual']])
 
+def test_CEIHtmlActual():
+    output = CeiHtmlActual('tests/data/actual.html').read()
+    expected = pd.DataFrame({
+        'Ticker': ['BITO39', 'BIEF39'],
+        'Actual': [1, 2]
+    })
+    print(expected['Ticker'])
+    print(output['Ticker'])
+    assert_frame_equal(expected, output[['Ticker', 'Actual']])    
+
 def test_StandardPrice():
     output = StandardPrice('tests/data/price.xlsx').read()
     expected = pd.DataFrame({

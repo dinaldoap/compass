@@ -56,6 +56,31 @@ class CeiActual(Source):
         return data
 
 
+class CeiHtmlActual(Source):
+    '''
+    HTML file with data from Home Page -> Carteira de ativos -> Fundos of Canal Eletrônico do Investidor (https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5).
+    The columns Cód. de Negociação and Qtde. are, respectivelly, renamed to Ticker and Actual. 
+
+    ...
+    '''
+
+    def __init__(self, path: Path):
+        self.path = path
+
+    def read(self) -> pd.DataFrame:
+        data = pd.read_html(self.path, thousands='.', decimal=',')
+        data = pd.concat(data)
+        data = data.dropna()
+        data = data.rename({
+            'Cód. de Negociação': 'Ticker',
+            'Qtde.': 'Actual',
+
+        }, axis='columns')
+        data = data.reset_index(drop=True)
+        data['Actual'] = data['Actual'].astype(int)
+        return data
+
+
 class StandardPrice(Source):
     '''
     Excel sheet with Ticker and Price columns.
