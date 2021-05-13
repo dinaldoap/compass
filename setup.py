@@ -25,5 +25,5 @@ setup(name='compass',
                         'requests==2.25.1',
                         'lxml==4.6.3',
                         ],
-      python_requires='>=3.9',
+      python_requires='>=3.8',
       zip_safe=True)
