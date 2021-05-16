@@ -5,11 +5,13 @@ RUN apt-get update -q && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
       openssh-client \
       git \
-      build-essential && \
-    rm -rf /var/lib/apt/lists/*
+      build-essential \
+      locales && \
+    rm -rf /var/lib/apt/lists/* && \
+    locale-gen en_US.UTF-8
 
 # Config locale
-ENV LC_ALL C.UTF-8
+ENV LC_ALL en_US.UTF-8
 
 # Config standard user
 ARG USERNAME=pytorch
