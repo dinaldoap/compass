@@ -12,7 +12,7 @@
                     "gmtoffset": -10800,
                     "timezone": "BRT",
                     "exchangeTimezoneName": "America/Sao_Paulo",
-                    "regularMarketPrice": 53.38,
+                    "regularMarketPrice": 53.40,
                     "chartPreviousClose": 53.05,
                     "previousClose": 53.05,
                     "scale": 3,
@@ -65,27 +65,27 @@
                         {
                             "low": [
                                 null,
-                                53.04999923706055,
+                                0,
                                 null,
-                                53.380001525878906
+                                0
                             ],
                             "open": [
                                 null,
-                                53.04999923706055,
+                                0,
                                 null,
-                                53.410001525878906
+                                0
                             ],
                             "high": [
                                 null,
-                                53.04999923706055,
+                                53.02999923706055,
                                 null,
-                                53.420001525878906
+                                0
                             ],
                             "close": [
                                 null,
-                                53.04999923706055,
+                                53.06999923706055,
                                 null,
-                                53.390001525878906                                
+                                0
                             ],
                             "volume": [
                                 null,
