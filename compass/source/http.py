@@ -32,12 +32,16 @@ def _mean_price(json):
     for indicator in ['low', 'open', 'high', 'close']:
         indicators.update(
             {indicator: json['chart']['result'][0]['indicators']['quote'][0][indicator]})
-    price = pd.DataFrame(indicators)
+    value = pd.DataFrame(indicators)
+    value = value[['low', 'open',
+                   'high', 'close']].mean(axis='columns')
+    value = value.interpolate(method='linear', limit_area='inside')
+    price = pd.DataFrame({'value': value})
     price = price.dropna()
     decay_factor = .9998
-    price['weight'] = decay_factor ** price.index
-    candle_price = price[['low', 'open', 'high', 'close']].mean(axis='columns')
-    price = (candle_price * price['weight']).sum() / price['weight'].sum()
+    distance = max(price.index.values) - price.index.values
+    price['weight'] = decay_factor ** distance
+    price = (price['value'] * price['weight']).sum() / price['weight'].sum()
     return price.round(2)
 
 
