@@ -1,5 +1,6 @@
 from .base import Source
 
+import numpy as np
 import pandas as pd
 from pathlib import Path
 import requests
@@ -33,8 +34,11 @@ def _mean_price(json):
         indicators.update(
             {indicator: json['chart']['result'][0]['indicators']['quote'][0][indicator]})
     value = pd.DataFrame(indicators)
+    value = value.replace(0, np.nan)
     value = value[['low', 'open',
                    'high', 'close']].mean(axis='columns')
+    current_value = json['chart']['result'][0]['meta']['regularMarketPrice']
+    value.iat[-1] = current_value
     value = value.interpolate(method='linear', limit_area='inside')
     price = pd.DataFrame({'value': value})
     price = price.dropna()
