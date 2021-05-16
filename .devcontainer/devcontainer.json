@@ -9,6 +9,7 @@
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/pytorch/.ssh",
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/pytorch/.gitconfig",
     "type=volume,source=compass_devcontainer_vscode-server,target=/home/pytorch/.vscode-server",
+    "type=volume,source=conda_cache,target=/opt/conda/pkgs",
   ],
   "runArgs": [
     "--gpus", "all"],
