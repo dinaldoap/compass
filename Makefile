@@ -1,4 +1,4 @@
-build: clean format install test
+build: clean format install test package run
 
 clean:
 	rm -rf compass.egg-info
@@ -12,5 +12,8 @@ install:
 test: 
 	pytest tests
 
+package:
+	bash package.sh
+
 run:
-	compass
+	./dist/compass --help
