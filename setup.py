@@ -24,6 +24,7 @@ setup(name='compass',
                         'openpyxl==3.0.7',
                         'requests==2.25.1',
                         'lxml==4.6.3',
+                        'babel==2.9.1',
                         ],
       python_requires='>=3.8',
       zip_safe=True)
