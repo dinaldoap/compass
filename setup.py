@@ -15,7 +15,7 @@ setup(name='compass',
       packages=find_packages(),
       entry_points={
           'console_scripts': [
-              'compass = compass.main:main',
+              'compass = compass.__main__:main',
           ]
       },
       install_requires=['numpy==1.20.2',

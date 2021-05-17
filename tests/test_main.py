@@ -1,4 +1,4 @@
-from compass.main import run
+from compass.__main__ import run
 
 def test_run():   
     run([
