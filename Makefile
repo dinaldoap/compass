@@ -7,7 +7,7 @@ format:
 	autopep8 --in-place --recursive compass setup.py
 
 install:
-	pip install -r requirements.txt
+	pip install --quiet -r requirements.txt
 
 test: 
 	pytest tests
