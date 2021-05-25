@@ -27,4 +27,4 @@ def create_price(config: dict) -> Source:
     try:
         return StandardPrice(path=path)
     except (FileNotFoundError, LayoutError):
-        return YahooPrice(directory=directory)
+        return YahooPrice(directory=directory, decay_factor=config['decay_factor'])
