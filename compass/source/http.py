@@ -9,8 +9,9 @@ import json
 
 class YahooPrice(Source):
 
-    def __init__(self, directory):
+    def __init__(self, directory, decay_factor):
         self.directory = directory
+        self.decay_factor = decay_factor
 
     def read(self, tickers):
         prices = []
@@ -20,7 +21,7 @@ class YahooPrice(Source):
                     Path(self.directory, '{}.json'.format(ticker)))
             except FileNotFoundError:
                 json = _read_http(ticker)
-            price = _mean_price(json)
+            price = _mean_price(json, self.decay_factor)
             prices.append(price)
         return pd.DataFrame({
             'Ticker': tickers,
@@ -28,7 +29,7 @@ class YahooPrice(Source):
         })
 
 
-def _mean_price(json):
+def _mean_price(json, decay_factor):
     indicators = {}
     for indicator in ['low', 'open', 'high', 'close']:
         indicators.update(
@@ -42,7 +43,6 @@ def _mean_price(json):
     value = value.interpolate(method='linear', limit_area='inside')
     price = pd.DataFrame({'value': value})
     price = price.dropna()
-    decay_factor = .9998
     distance = max(price.index.values) - price.index.values
     price['weight'] = decay_factor ** distance
     price = (price['value'] * price['weight']).sum() / price['weight'].sum()
