@@ -95,9 +95,10 @@ class WarrenHtmlActual(Source):
 
     def __init__(self, path: Path, date=date.today()):
         self.path = Path(path)
+        self.selection_pattern = r'class="selected">\s*QUANTIDADE'
         self.table_pattern = r'QUANTIDADE(.+)Favoritos'
         _check_pattern_layout(
-            self.path, 'https://warren.com.br/app/#/v3/trade', self.table_pattern)
+            self.path, 'https://warren.com.br/app/#/v3/trade', self.selection_pattern)
         _check_last_update(self.path, date)
 
     def read(self) -> pd.DataFrame:
