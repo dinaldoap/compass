@@ -1,5 +1,5 @@
 from .base import Source
-from .file import CeiActual, CeiHtmlActual, StandardActual, StandardPrice, StandardTarget, LayoutError
+from .file import CeiActual, CeiHtmlActual, StandardActual, StandardPrice, StandardTarget, LayoutError, WarrenHtmlActual
 from .http import YahooPrice
 
 from pathlib import Path
@@ -18,7 +18,10 @@ def create_actual(config: dict) -> Source:
         return CeiActual(path=path)
     except FileNotFoundError:
         path = Path(config['directory'], 'actual.html')
-        return CeiHtmlActual(path=path)
+        try:
+            return CeiHtmlActual(path=path)
+        except LayoutError:
+            return WarrenHtmlActual(path=path)
 
 
 def create_price(config: dict) -> Source:

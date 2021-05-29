@@ -3,6 +3,7 @@ from .base import Source
 from datetime import date
 import pandas as pd
 from pathlib import Path
+import re
 
 _CEI_COLUMNS = ['Cód. de Negociação', 'Qtde.']
 
@@ -61,7 +62,7 @@ class CeiActual(Source):
 
 class CeiHtmlActual(Source):
     '''
-    HTML file with data from Home Page -> Carteira de ativos -> Fundos of Canal Eletrônico do Investidor (https://cei.b3.com.br/CEI_Responsivo/ConsultarMovimentoCustodia.aspx?TP_VISUALIZACAO=5).
+    HTML file with data from Home Page -> Investimentos -> Carteira de ativos -> Consultar of Canal Eletrônico do Investidor (https://cei.b3.com.br/CEI_Responsivo/ConsultarCarteiraAtivos.aspx).
     The columns Cód. de Negociação and Qtde. are, respectivelly, renamed to Ticker and Actual. 
 
     ...
@@ -69,6 +70,8 @@ class CeiHtmlActual(Source):
 
     def __init__(self, path: Path, date=date.today()):
         self.path = Path(path)
+        _check_pattern_layout(
+            self.path, 'https://cei.b3.com.br/CEI_Responsivo/ConsultarCarteiraAtivos.aspx')
         _check_layout(self.path, _CEI_COLUMNS)
         _check_last_update(self.path, date)
 
@@ -79,6 +82,26 @@ class CeiHtmlActual(Source):
             'Qtde.': 'Actual',
 
         }, axis='columns')
+        return data
+
+
+class WarrenHtmlActual(Source):
+    '''
+    HTML file with data from Home Page -> Trade -> Meus ativos -> QUANTIDADE of Warren (https://warren.com.br/app/#/v3/trade).
+    The columns Cód. de Negociação and Qtde. are, respectivelly, renamed to Ticker and Actual. 
+
+    ...
+    '''
+
+    def __init__(self, path: Path, date=date.today()):
+        self.path = Path(path)
+        self.table_pattern = r'QUANTIDADE(.+)Favoritos'
+        _check_pattern_layout(
+            self.path, 'https://warren.com.br/app/#/v3/trade', self.table_pattern)
+        _check_last_update(self.path, date)
+
+    def read(self) -> pd.DataFrame:
+        data = _parse_html(self.path, self.table_pattern)
         return data
 
 
@@ -135,3 +158,38 @@ def _check_last_update(path: Path, expected_date: date) -> None:
     if last_update < expected_date:
         raise LastUpdateError(
             '{} is out of date. Last update is expected to be at {} or later.'.format(path, expected_date))
+
+
+def _parse_html(path: Path, table_pattern):
+    text = _clean_html(_read_content(path))
+    match = re.search(table_pattern, text)
+    assert len(match.groups()) == 1, 'It is expected only one table with quantities embraced by the pattern {} in the cleaned html {}.'.format(
+        table_pattern, text)
+    table = match.group(0)
+    ticker_pattern = r'(\w+) (\d+)'
+    data = []
+    for row in re.findall(ticker_pattern, table):
+        data.append(row)
+    data = pd.DataFrame(data, columns=['Ticker', 'Actual'])
+    data['Actual'] = data['Actual'].astype(int)
+    return data
+
+
+def _clean_html(html):
+    text = re.sub(r'<.*?>', '', html, flags=re.DOTALL)
+    text = re.sub(r'\s\s+', ' ', text)
+    return text
+
+
+def _check_pattern_layout(path: Path, *patterns):
+    content = _read_content(path)
+    for pattern in patterns:
+        match = re.search(pattern, content, flags=re.DOTALL)
+        if match is None:
+            raise LayoutError(
+                'Pattern {} is expected in file {}.'.format(pattern, path))
+
+
+def _read_content(path: Path):
+    with open(path, 'r') as file:
+        return file.read()
