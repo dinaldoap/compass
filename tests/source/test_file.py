@@ -38,6 +38,14 @@ def test_CEIHtmlActual():
     })
     assert_frame_equal(expected, output[['Ticker', 'Actual']])    
 
+def test_WarrenHtmlActual():
+    output = WarrenHtmlActual('tests/data/actual_warren.html', date=None).read()
+    expected = pd.DataFrame({
+        'Ticker': ['BITO39', 'BIEF39'],
+        'Actual': [1, 2]
+    })
+    assert_frame_equal(expected, output[['Ticker', 'Actual']])
+
 def test_CEIHtmlActual_LastUpdateError():
     with pytest.raises(LastUpdateError):
         CeiHtmlActual('tests/data/actual.html', date=date(9999, 1, 1))
