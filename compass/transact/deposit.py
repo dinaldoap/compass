@@ -18,4 +18,3 @@ class Deposit(Transact):
         data = None
         for step in steps:
             data = step.run(input=data)
-        print(data)
