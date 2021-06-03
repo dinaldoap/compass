@@ -7,8 +7,8 @@ import pytest
 
 @pytest.mark.parametrize("value, change", 
                         [(  7., [1, 3]), # exact change
-                         (  8., [1, 3]), # round below x.5
-                         (   6., [0, 2])]) # round above x.5
+                         (  8., [2, 3]), # round below x.5
+                         (   6., [0, 3])]) # round above x.5
 def test_deposit(value, change):
     data = {
         'Target': [.2, .8],
@@ -24,9 +24,9 @@ def test_deposit(value, change):
     assert_frame_equal(expected, output)
 
 @pytest.mark.parametrize("value, change", 
-                        [(  -9., [-1, -3]), # exact change
-                         (  -8., [-1, -3]), # round below x.5
-                         (   -7., [-1, -2])]) # round above x.5
+                        [(  -9., [-3, -3]), # exact change
+                         (  -8., [-2, -3]), # round below x.5
+                         (   -7., [-3, -2])]) # round above x.5
 def test_withdraw(value, change):
     data = {
         'Target': [.2, .8],
