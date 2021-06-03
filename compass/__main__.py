@@ -16,7 +16,7 @@ def run(argv):
                     These files can have additional columns beside the specified in the layout.
                 ''')
     parser.add_argument('value', type=monetary_to_float,
-                        help='Value of the deposit.')
+                        help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
     parser.add_argument('-d', '--directory', type=str,
                         help='Directory of the portfolio (default: data).', default='data')
     namespace = parser.parse_args(argv)
