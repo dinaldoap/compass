@@ -22,3 +22,21 @@ def test_deposit(value, change):
     })
     expected = pd.DataFrame(data)
     assert_frame_equal(expected, output)
+
+@pytest.mark.parametrize("value, change", 
+                        [(  -9., [-1, -3]), # exact change
+                         (  -8., [-1, -3]), # round below x.5
+                         (   -7., [-1, -2])]) # round above x.5
+def test_withdraw(value, change):
+    data = {
+        'Target': [.2, .8],
+        'Actual': [2, 4],
+        'Price': [1., 2.],
+    }
+    input = pd.DataFrame(data)
+    output = Change(value).run(input)
+    data.update({
+        'Change': change
+    })
+    expected = pd.DataFrame(data)
+    assert_frame_equal(expected, output)

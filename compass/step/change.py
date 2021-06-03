@@ -42,12 +42,16 @@ class Change(Step):
         actual = actual * price
         actual = actual / (actual.sum() + self.value)
         change = target - actual
-        assert np.any(
-            change > 0), 'Change is expected to have at least one value greater than zero: {}'.format(change)
-        change = np.maximum(change, [0.])
+        if self.value > 0:
+            change = np.maximum(change, [0.])
+        elif self.value < 0:
+            change = np.minimum(change, [0.])
         change = change / change.sum()
         change = (self.value * change)
-        change = change // price
+        deposit = change > 0
+        withdraw = change < 0
+        change[deposit] = np.floor(change[deposit] / price[deposit])
+        change[withdraw] = np.ceil(change[withdraw] / price[withdraw])
         change = change.astype(int)
         output = input.copy()
         output['Change'] = change
