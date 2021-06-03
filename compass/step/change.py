@@ -40,16 +40,26 @@ class Change(Step):
         actual = input['Actual'].values
         price = input['Price'].values
         actual = actual * price
-        actual = actual / (actual.sum() + self.value)
+        total = actual.sum() + self.value
+        assert total > 0, 'Full withdraw not supported.'
+        actual = actual / total
         change = target - actual
-        if self.value > 0:
-            change = np.maximum(change, [0.])
-        elif self.value < 0:
-            change = np.minimum(change, [0.])
-        change = change / change.sum()
-        change = (self.value * change)
+        if self.value == 0:
+            # amount changed per ticker
+            change = change * total
+        else:
+            # remove opposite transactions
+            if self.value > 0:
+                change = np.maximum(change, [0.])
+            elif self.value < 0:
+                change = np.minimum(change, [0.])
+            # redistribute percentages
+            change = change / change.sum()
+            # amount changed per ticker
+            change = (self.value * change)
         deposit = change > 0
         withdraw = change < 0
+        # units per ticker
         change[deposit] = np.floor(change[deposit] / price[deposit])
         change[withdraw] = np.ceil(change[withdraw] / price[withdraw])
         change = change.astype(int)
