@@ -11,9 +11,15 @@ class Action(Step):
 
     def run(self, input: pd.DataFrame):
         output = input.copy()
+        output['Before'] = output['Actual'] * output['Price']
+        output['Before'] = _to_percentage(output['Before'])
         output['After'] = (output['Actual'] +
                            output['Change']) * output['Price']
-        output['After'] = output['After'] / output['After'].sum()
-        output['After'] = output['After'].round(2)
+        output['After'] = _to_percentage(output['After'])
         self.target.write(output)
         return output
+
+
+def _to_percentage(series: pd.Series):
+    series = series / series.sum()
+    return series.round(2)
