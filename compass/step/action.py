@@ -1,5 +1,6 @@
 from .base import Step
 from .target import Target
+from babel.numbers import format_decimal
 
 import pandas as pd
 
@@ -16,6 +17,9 @@ class Action(Step):
         output['After'] = (output['Actual'] +
                            output['Change']) * output['Price']
         output['After'] = _to_percentage(output['After'])
+        print(output)
+        value = (output['Change'] * output['Price']).sum().round(2)
+        print('Value: ',  format_decimal(value))
         self.target.write(output)
         return output
 
