@@ -19,8 +19,6 @@ def run(argv):
                         help='Value of the deposit.')
     parser.add_argument('-d', '--directory', type=str,
                         help='Directory of the portfolio (default: data).', default='data')
-    parser.add_argument('-f', '--decay_factor', type=float,
-                        help='Decay factor for historical prices (default: 0.0).', default=.0)
     namespace = parser.parse_args(argv)
     args = dict(vars(namespace))
     Deposit(config=args).run()
