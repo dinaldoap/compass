@@ -63,11 +63,10 @@ class Change(Step):
         # avoid overflow
         change[deposit] = np.floor(change[deposit] / price[deposit])
         change[withdraw] = np.ceil(change[withdraw] / price[withdraw])
-        # use one ticker to approximate the value
-        ticker = _choose_ticker(change)
         remainder = self.value - (change * price).sum()
         remainder = np.sign(self.value) * remainder
-        # avoid overflow
+        # use one ticker to approximate the value
+        ticker = _choose_ticker(change, price, remainder)
         remainder = np.floor(remainder / price[ticker])
         remainder = np.sign(self.value) * remainder
         change[ticker] = change[ticker] + remainder
@@ -77,11 +76,13 @@ class Change(Step):
         return output
 
 
-def _choose_ticker(change: np.array):
+def _choose_ticker(change: np.array, price: np.array, remainder):
     # prioritize changed tickers
     mask = change != 0
     mask = mask if np.any(mask) else np.array([True] * len(mask))
     index = np.array(range(len(change)))
-    # first changed ticker
-    choice = index[mask][0]
+    # ticker that leaves less remainder
+    choice = remainder % price
+    choice = np.argmin(choice[mask])
+    choice = index[mask][choice]
     return choice
