@@ -8,7 +8,7 @@ import pytest
 @pytest.mark.parametrize("value, change", 
                         [(  7., [1, 3]), # exact change
                          (  8., [2, 3]), # round below x.5
-                         (   6., [0, 3])]) # round above x.5
+                         (   6., [2, 2])]) # round above x.5
 def test_deposit(value, change):
     data = {
         'Target': [.2, .8],

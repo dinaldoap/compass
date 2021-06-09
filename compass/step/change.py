@@ -67,7 +67,7 @@ class Change(Step):
         sign = np.copysign(1, self.value)
         remainder = sign * remainder
         # use one ticker to approximate the value
-        ticker = _choose_ticker(change, price, remainder)
+        ticker = _choose_ticker(price, remainder)
         remainder = np.floor(remainder / price[ticker])
         remainder = sign * remainder
         change[ticker] = change[ticker] + remainder
@@ -77,13 +77,8 @@ class Change(Step):
         return output
 
 
-def _choose_ticker(change: np.array, price: np.array, remainder):
-    # prioritize changed tickers
-    mask = change != 0
-    mask = mask if np.any(mask) else np.array([True] * len(mask))
-    index = np.array(range(len(change)))
+def _choose_ticker(price: np.array, remainder):
     # ticker that leaves less remainder
     choice = remainder % price
-    choice = np.argmin(choice[mask])
-    choice = index[mask][choice]
+    choice = np.argmin(choice)
     return choice
