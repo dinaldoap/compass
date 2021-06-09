@@ -57,3 +57,11 @@ def test_StandardPrice():
         'Price': [1, 2, 3]
     })
     assert_frame_equal(expected, output[['Ticker', 'Price']])
+
+def test_WarrenHtmlPrice():
+    output = WarrenHtmlPrice('tests/data/price_warren.html', date=None).read()
+    expected = pd.DataFrame({
+        'Ticker': ['BITO39', 'BIEF39'],
+        'Price': [1.11, 2.22]
+    })
+    assert_frame_equal(expected, output[['Ticker', 'Price']])

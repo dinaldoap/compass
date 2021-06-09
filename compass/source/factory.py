@@ -1,5 +1,5 @@
 from .base import Source
-from .file import CeiActual, CeiHtmlActual, StandardActual, StandardPrice, StandardTarget, LayoutError, WarrenHtmlActual
+from .file import CeiActual, CeiHtmlActual, StandardActual, StandardPrice, StandardTarget, LayoutError, WarrenHtmlActual, WarrenHtmlPrice
 from .http import YahooPrice
 
 from pathlib import Path
@@ -29,5 +29,9 @@ def create_price(config: dict) -> Source:
     path = Path(directory, 'price.xlsx')
     try:
         return StandardPrice(path=path)
-    except (FileNotFoundError, LayoutError):
-        return YahooPrice(directory=directory)
+    except FileNotFoundError:
+        path = Path(directory, 'price.html')
+        try:
+            return WarrenHtmlPrice(path=path)
+        except FileNotFoundError:
+            return YahooPrice(directory=directory)
