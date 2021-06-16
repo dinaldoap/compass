@@ -13,7 +13,7 @@ class Deposit(Transact):
             Target(source=source.create_target(config=self.config)),
             Actual(source=source.create_actual(config=self.config)),
             Price(source=source.create_price(config=self.config)),
-            Change(value=calculator.net),
+            Change(value=calculator.estimated_value),
             Action(target=target.create_action(
                 config=self.config), calculator=calculator)
         ]
