@@ -65,11 +65,9 @@ class Change(Step):
         change[withdraw] = np.ceil(change[withdraw] / price[withdraw])
         remainder = self.value - (change * price).sum()
         sign = np.copysign(1, self.value)
-        remainder = sign * remainder
         # use one ticker to approximate the value
         ticker = _choose_ticker(price, remainder)
         remainder = np.floor(remainder / price[ticker])
-        remainder = sign * remainder
         change[ticker] = change[ticker] + remainder
         change = change.astype(int)
         output = input.copy()
