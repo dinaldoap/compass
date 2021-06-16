@@ -21,12 +21,14 @@ class Action(Step):
         output['After'] = _to_percentage(output['After'])
         print(output)
         self.calculator.transaction = (
-            output['Change'] * output['Price']).sum().round(2)
-        print('============ Values ===============')
+            output['Change'] * output['Price']).abs().sum().round(2)
+        print('========== Estimates =============')
         print('      Gross:',  to_currency(self.calculator.gross))
-        print('        Fee:',  to_currency(self.calculator.fee))
+        print('        Fee:',  to_currency(self.calculator.estimated_fee))
         print('        Net:',  to_currency(self.calculator.net))
+        print('============ Final ===============')
         print('Transaction:',  to_currency(self.calculator.transaction))
+        print('        Fee:',  to_currency(self.calculator.actual_fee))
         print('  Remainder:',  to_currency(self.calculator.remainder))
         self.target.write(output)
         return output

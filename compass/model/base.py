@@ -1,15 +1,19 @@
+import math
+
+
 class Calculator():
     def __init__(self, gross: float, fee: float):
         self.gross = gross
+        self._sign = math.copysign(1, gross)
         self._fee = fee
         self._transaction = None
 
     @property
     def net(self) -> float:
-        return self.gross / (1 + self._fee)
+        return self.gross / (1 + self._sign * self._fee)
 
     @property
-    def fee(self) -> float:
+    def estimated_fee(self) -> float:
         return self.net * self._fee
 
     @property
@@ -22,5 +26,9 @@ class Calculator():
         self._transaction = transaction
 
     @property
+    def actual_fee(self) -> float:
+        return self.transaction * self._fee
+
+    @property
     def remainder(self):
-        return self.net - self.transaction
+        return self.net - self._sign * self.transaction
