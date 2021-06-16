@@ -32,9 +32,4 @@ class Calculator():
 
     @property
     def actual_remainder(self) -> float:
-        if self.value > 0:
-            return - self.value + self.actual_buy - self.actual_fee
-        elif self.value < 0:
-            return self.actual_sell - self.value - self.actual_fee
-        else:
-            return self.actual_sell + self.actual_buy - self.actual_fee
+        return - self.value + self.actual_buy + self.actual_sell - self.actual_fee
