@@ -2,20 +2,20 @@ import math
 
 
 class Calculator():
-    def __init__(self, value: float, fee: float):
+    def __init__(self, value: float, expense_ratio: float):
         self.value = value
         self._sign = math.copysign(1, value)
-        self.fee = fee
-        self.actual_buy = None
-        self.actual_sell = None
+        self.expense_ratio = expense_ratio
+        self.actual_deposit = None
+        self.actual_withdraw = None
 
     @property
     def estimated_transaction(self) -> float:
-        return abs(self.value / (1 + self._sign * self.fee))
+        return abs(self.value / (1 + self._sign * self.expense_ratio))
 
     @property
-    def estimated_fee(self) -> float:
-        return - self.estimated_transaction * self.fee
+    def estimated_expense(self) -> float:
+        return - self.estimated_transaction * self.expense_ratio
 
     @property
     def estimated_value(self) -> float:
@@ -23,13 +23,13 @@ class Calculator():
 
     @property
     def actual_transaction(self) -> float:
-        assert self.actual_buy is not None and self.actual_sell is not None, 'Buy and sell are expected to calculate actual transaction.'
-        return self.actual_buy + abs(self.actual_sell)
+        assert self.actual_deposit is not None and self.actual_withdraw is not None, 'Buy and sell are expected to calculate actual transaction.'
+        return self.actual_deposit + abs(self.actual_withdraw)
 
     @property
-    def actual_fee(self) -> float:
-        return - self.actual_transaction * self.fee
+    def actual_expense(self) -> float:
+        return - self.actual_transaction * self.expense_ratio
 
     @property
     def actual_remainder(self) -> float:
-        return - self.value + self.actual_buy + self.actual_sell - self.actual_fee
+        return - self.value + self.actual_deposit + self.actual_withdraw - self.actual_expense
