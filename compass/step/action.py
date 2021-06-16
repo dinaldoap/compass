@@ -22,21 +22,22 @@ class Action(Step):
         print(output)
         df_calc = output.copy()
         df_calc['Transaction'] = output['Change'] * output['Price']
-        self.calculator.actual_buy = df_calc[df_calc['Change'] > 0]['Transaction'].sum(
+        self.calculator.actual_deposit = df_calc[df_calc['Change'] > 0]['Transaction'].sum(
         )
-        self.calculator.actual_sell = df_calc[df_calc['Change'] < 0]['Transaction'].sum(
+        self.calculator.actual_withdraw = df_calc[df_calc['Change'] < 0]['Transaction'].sum(
         )
-        print('========== Input =============')
-        print('    Value:',  to_currency(self.calculator.value))
-        print('      Fee: {}%'.format(self.calculator.fee * 100))
+        print('=========== Input ===============')
+        print('        Value:',  to_currency(self.calculator.value))
+        print('Expense Ratio: {}%'.format(self.calculator.expense_ratio * 100))
         print('========== Estimate =============')
-        print('    Value:',  to_currency(self.calculator.estimated_value))
-        print('      Fee:',  to_currency(self.calculator.estimated_fee))
-        print('============ Final ===============')
-        print('      Buy:',  to_currency(self.calculator.actual_buy))
-        print('     Sell:',  to_currency(self.calculator.actual_sell))
-        print('      Fee:',  to_currency(self.calculator.actual_fee))
-        print('Remainder:',  to_currency(self.calculator.actual_remainder))
+        print('        Value:',  to_currency(self.calculator.estimated_value))
+        print('      Expense:',  to_currency(
+            self.calculator.estimated_expense))
+        print('=========== Final ===============')
+        print('      Deposit:',  to_currency(self.calculator.actual_deposit))
+        print('     Withdraw:',  to_currency(self.calculator.actual_withdraw))
+        print('      Expense:',  to_currency(self.calculator.actual_expense))
+        print('    Remainder:',  to_currency(self.calculator.actual_remainder))
         self.target.write(output)
         return output
 

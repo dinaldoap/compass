@@ -19,8 +19,8 @@ def run(argv):
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
     parser.add_argument('-d', '--directory', type=str,
                         help='Directory of the portfolio (default: data).', default='data')
-    parser.add_argument('-f', '--fee', type=float,
-                        help='Transaction fee in percentual terms (default: 0.03%%).', default=0.0003)
+    parser.add_argument('-e', '--expense-ratio', type=float,
+                        help='Expense ratio (default: 0.03%%).', default=0.0003)
     namespace = parser.parse_args(argv)
     args = dict(vars(namespace))
     Deposit(config=args).run()
