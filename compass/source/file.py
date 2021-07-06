@@ -7,6 +7,15 @@ from pathlib import Path
 import re
 
 _CEI_COLUMNS = ['Cód. de Negociação', 'Qtde.']
+_ALI_TYPES = {
+    'Código de Negociação': str,
+    'Quantidade': int,
+}
+_ALI_RENAME = {
+    'Código de Negociação': 'Ticker',
+    'Quantidade': 'Actual',
+}
+_ALI_COLUMNS = _ALI_RENAME.keys()
 
 
 class StandardTarget(Source):
@@ -58,6 +67,24 @@ class CeiActual(Source):
             'Qtde.': 'Actual',
 
         }, axis='columns')
+        return data
+
+
+class AliActual(Source):
+    '''
+    Excel sheet with data downloaded from Área Logada do Investidor (https://https://www.investidor.b3.com.br/).
+    The columns Código de Negociação and Quantidade are, respectivelly, renamed to Ticker and Actual. 
+
+    ...
+    '''
+
+    def __init__(self, path: Path):
+        self.path = Path(path)
+        _check_layout(self.path, _ALI_COLUMNS)
+
+    def read(self) -> pd.DataFrame:
+        data = _read_excel(self.path)
+        data = data.rename(_ALI_RENAME, axis='columns')
         return data
 
 
@@ -158,6 +185,18 @@ class LayoutError(Exception):
 
 class LastUpdateError(Exception):
     pass
+
+
+def _read_excel(path: Path) -> pd.DataFrame:
+    data = pd.read_excel(path, sheet_name=None)
+    data = data.values()
+    data = filter(lambda df: set(
+        _ALI_COLUMNS).issubset(set(df.columns)), data)
+    data = pd.concat(data)
+    data = data.dropna(subset=_ALI_COLUMNS)
+    data = data.reset_index(drop=True)
+    data = data.astype(_ALI_TYPES)
+    return data
 
 
 def _read_html(path: Path) -> pd.DataFrame:
