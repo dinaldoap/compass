@@ -9,7 +9,7 @@ class Price(Step):
         self.source = source
 
     def run(self, input: pd.DataFrame):
-        output = self.source.read(tickers=input['Ticker'])
+        output = self.source.read()
         output = output[['Ticker', 'Price']]
         output = input.join(output.set_index('Ticker'),
                             on='Ticker', how='inner')

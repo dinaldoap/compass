@@ -116,7 +116,7 @@ class RicoHtmlActualPrice(Source):
         _check_layout(self.path, _RICO_COLUMNS)
         _check_last_update(self.path, date)
 
-    def read(self, tickers=None) -> pd.DataFrame:
+    def read(self) -> pd.DataFrame:
         data = _read_html(self.path, _RICO_COLUMNS)
         data = data.rename(_RICO_RENAME, axis='columns')
         data = _convert_actual(data)
@@ -160,7 +160,7 @@ class StandardPrice(Source):
         self.path = Path(path)
         _check_layout(self.path, ['Ticker', 'Price'])
 
-    def read(self, tickers=None):
+    def read(self):
         return pd.read_excel(self.path)
 
 
@@ -182,7 +182,7 @@ class WarrenHtmlPrice(Source):
             self.path, 'https://warren.com.br/app/#/v3/trade', self.selection_pattern)
         _check_last_update(self.path, date)
 
-    def read(self, tickers=None) -> pd.DataFrame:
+    def read(self) -> pd.DataFrame:
         data = _parse_html(self.path, self.table_pattern,
                            self.ticker_pattern, 'Price')
         data['Price'] = data['Price'].apply(
