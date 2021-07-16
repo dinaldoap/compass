@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 
 _CEI_COLUMNS = ['Cód. de Negociação', 'Qtde.']
-_RICO_RENAME = {
+_convert_actual_RICO_RENAME = {
     'Código': 'Ticker',
     'Quantidade': 'Actual',
 }
@@ -99,6 +99,7 @@ class CeiHtmlActual(Source):
         data['Actual'] = data['Actual'].astype(int)
         return data
 
+
 class RicoHtmlActual(Source):
     '''
     HTML file with data from Home Page -> Ações e FIIs (https://www.rico.com.vc/arealogada/acoes).
@@ -118,7 +119,7 @@ class RicoHtmlActual(Source):
         data = _read_html(self.path, _RICO_COLUMNS)
         data = data.rename(_RICO_RENAME, axis='columns')
         data = _convert_actual(data)
-        return data        
+        return data
 
 
 class WarrenHtmlActual(Source):
@@ -216,12 +217,15 @@ def _read_html(path: Path, columns: list) -> pd.DataFrame:
     data = data.reset_index(drop=True)
     return data
 
+
 def _convert_actual(data: pd.DataFrame) -> pd.DataFrame:
     data = data.copy()
-    data['Actual'] = pd.to_numeric(data['Actual'], errors='coerce', downcast='float')
+    data['Actual'] = pd.to_numeric(
+        data['Actual'], errors='coerce', downcast='float')
     data = data.dropna(subset=['Actual'])
     data['Actual'] = data['Actual'].astype(int)
     return data
+
 
 def _check_layout(path: Path, columns: list) -> None:
     if path.suffix.endswith('xlsx'):
