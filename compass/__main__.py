@@ -3,6 +3,7 @@ from compass.number import parse_decimal
 
 import argparse
 import sys
+import configparser
 
 
 def run(argv):
@@ -21,9 +22,24 @@ def run(argv):
                         help='Directory of the portfolio (default: data).', default='data')
     parser.add_argument('-e', '--expense-ratio', type=float,
                         help='Expense ratio (default: 0.03%%).', default=0.0003)
-    namespace = parser.parse_args(argv)
+
+    configv_argv = _add_config(argv)
+    namespace = parser.parse_args(configv_argv)
     args = dict(vars(namespace))
     Deposit(config=args).run()
+
+
+def _add_config(argv):
+    config = configparser.ConfigParser()
+    config.read('data/config.ini')
+    config = dict(config['compass'])
+    configv = []
+    for (key, value) in config.items():
+        if key.startswith('--'):
+            configv.extend([key, value])
+        else:
+            configv.append(value)
+    return configv + argv
 
 
 def main():
