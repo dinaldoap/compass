@@ -33,8 +33,12 @@ def _read_file(path) -> str:
 
 
 def _read_http(ticker: str) -> str:
+    headers = {
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36'}
+    url = 'https://query1.finance.yahoo.com/v8/finance/chart/{}.SA?region=BR&lang=pt-BR&includePrePost=false&interval=1d&useYfid=true&range=1d&corsDomain=br.financas.yahoo.com&.tsrc=finance'.format(
+        ticker)
     response = requests.get(
-        'https://query1.finance.yahoo.com/v8/finance/chart/{}.SA?region=BR&lang=pt-BR&includePrePost=false&interval=1d&useYfid=true&range=1d&corsDomain=br.financas.yahoo.com&.tsrc=finance'.format(ticker))
+        url=url, headers=headers)
     assert 200 == response.status_code, 'Status code 200 expected from Yahoo Finance, but received: {}'.format(
         response.status_code)
     return response.json()
