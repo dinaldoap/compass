@@ -1,7 +1,7 @@
 from compass.transact import Deposit
+from compass.number import parse_decimal
 
 import argparse
-from babel.numbers import parse_decimal
 import sys
 
 
@@ -15,7 +15,7 @@ def run(argv):
                     (3) actual.html, with CEI's page (https://cei.b3.com.br/CEI_Responsivo/ConsultarCarteiraAtivos.aspx) or Warren's page showing QUANTIDADE on Meus ativos (https://warren.com.br/app/#/v3/trade)
                     These files can have additional columns beside the specified in the layout.
                 ''')
-    parser.add_argument('value', type=monetary_to_float,
+    parser.add_argument('value', type=parse_decimal,
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
     parser.add_argument('-d', '--directory', type=str,
                         help='Directory of the portfolio (default: data).', default='data')
@@ -24,10 +24,6 @@ def run(argv):
     namespace = parser.parse_args(argv)
     args = dict(vars(namespace))
     Deposit(config=args).run()
-
-
-def monetary_to_float(monetary: str):
-    return float(parse_decimal(monetary, strict=True))
 
 
 def main():
