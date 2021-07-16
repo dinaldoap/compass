@@ -10,13 +10,11 @@ class Source(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def read(self, tickers=None):
+    def read(self):
         '''Read data from the source.
 
         Parameters
         ----------
-        tickers : list or array-like
-            Tickers to use as filter.
 
         Returns
         -------

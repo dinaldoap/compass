@@ -37,4 +37,4 @@ def create_price(config: dict) -> Source:
             try:
                 return WarrenHtmlPrice(path=path)
             except FileNotFoundError:
-                return YahooPrice(directory=directory)
+                return YahooPrice(directory=directory, target=create_target(config))

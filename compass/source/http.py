@@ -1,6 +1,5 @@
 from .base import Source
 
-import numpy as np
 import pandas as pd
 from pathlib import Path
 import requests
@@ -9,11 +8,14 @@ import json
 
 class YahooPrice(Source):
 
-    def __init__(self, directory):
+    def __init__(self, directory, target: Source):
         self.directory = directory
+        self.target = target
 
-    def read(self, tickers):
+    def read(self):
         prices = []
+        tickers = self.target.read()
+        tickers = tickers['Ticker']
         for ticker in tickers:
             try:
                 json = _read_file(
