@@ -6,35 +6,22 @@ from pathlib import Path
 
 
 def create_target(config: dict) -> Source:
-    path = Path(config['directory'], 'target.xlsx')
-    return StandardTarget(path=path)
+    return StandardTarget(path=config['target'])
 
 
 def create_actual(config: dict) -> Source:
-    path = Path(config['directory'], 'actual.xlsx')
-    try:
-        return StandardActual(path=path)
-    except LayoutError:
-        return AliActual(path=path)
-    except FileNotFoundError:
-        path = Path(config['directory'], 'actual.html')
-        try:
-            return CeiHtmlActual(path=path)
-        except LayoutError:
-            return WarrenHtmlActual(path=path)
+    return _create_source(config['actual'], [StandardActual, AliActual, RicoHtmlActualPrice, CeiHtmlActual, WarrenHtmlActual])
 
 
 def create_price(config: dict) -> Source:
-    directory = config['directory']
-    path = Path(directory, 'price.xlsx')
-    try:
-        return StandardPrice(path=path)
-    except FileNotFoundError:
-        path = Path(directory, 'price.html')
+    # TODO: add YahooPrice
+    return _create_source(config['price'], [StandardPrice, RicoHtmlActualPrice, WarrenHtmlPrice])
+
+
+def _create_source(path, classes: list):
+    for class_ in classes:
         try:
-            return RicoHtmlActualPrice(path=path)
+            return class_(path=path)
         except LayoutError:
-            try:
-                return WarrenHtmlPrice(path=path)
-            except FileNotFoundError:
-                return YahooPrice(directory=directory, target=create_target(config))
+            continue
+    raise LayoutError('Layout not supported: {}.'.format(path))

@@ -5,5 +5,4 @@ from pathlib import Path
 
 
 def create_action(config: dict) -> Target:
-    path = Path(config['directory'], 'action.xlsx')
-    return StandardAction(path=path)
+    return StandardAction(path=config['output'])

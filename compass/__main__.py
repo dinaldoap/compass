@@ -18,8 +18,14 @@ def run(argv):
                 ''')
     parser.add_argument('value', type=parse_decimal,
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
-    parser.add_argument('-d', '--directory', type=str,
-                        help='Directory of the portfolio (default: data).', default='data')
+    parser.add_argument('-t', '--target', type=str,
+                        help='Target of the portfolio in terms of percentages per ticker (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
+    parser.add_argument('-a', '--actual', type=str,
+                        help='Actual portfolio in terms of units per ticker (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
+    parser.add_argument('-p', '--price', type=str,
+                        help='Prices of the tickers (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
+    parser.add_argument('-o', '--output', type=str,
+                        help='Output with changes to be done per ticker (default: data/output.xlsx).', default='data/output.xlsx')
     parser.add_argument('-e', '--expense-ratio', type=float,
                         help='Expense ratio (default: 0.03%%).', default=0.0003)
 

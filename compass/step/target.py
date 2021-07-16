@@ -9,4 +9,5 @@ class Target(Step):
         self.source = source
 
     def run(self, input: pd.DataFrame):
-        return self.source.read()
+        output = self.source.read()
+        return output[['Name', 'Ticker', 'Target']]
