@@ -1,18 +1,19 @@
 from pandas.core.tools.numeric import to_numeric
 from .base import Source
 
-from babel.numbers import parse_decimal
+from babel.numbers import NumberFormatError, parse_decimal
 from datetime import date
 import pandas as pd
 from pathlib import Path
 import re
 
 _CEI_COLUMNS = ['Cód. de Negociação', 'Qtde.']
-_convert_actual_RICO_RENAME = {
+_RICO_RENAME = {
     'Código': 'Ticker',
     'Quantidade': 'Actual',
+    'Preço': 'Price',
 }
-_RICO_COLUMNS = ['Código', 'Quantidade']
+_RICO_COLUMNS = _RICO_RENAME.keys()
 _ALI_TYPES = {
     'Código de Negociação': str,
     'Quantidade': int,
@@ -100,10 +101,10 @@ class CeiHtmlActual(Source):
         return data
 
 
-class RicoHtmlActual(Source):
+class RicoHtmlActualPrice(Source):
     '''
     HTML file with data from Home Page -> Ações e FIIs (https://www.rico.com.vc/arealogada/acoes).
-    The columns Código and Quantidade are, respectivelly, renamed to Ticker and Actual. 
+    The columns Código, Quantidade and Price are, respectivelly, renamed to Ticker, Actual and Price. 
 
     ...
     '''
@@ -115,10 +116,11 @@ class RicoHtmlActual(Source):
         _check_layout(self.path, _RICO_COLUMNS)
         _check_last_update(self.path, date)
 
-    def read(self) -> pd.DataFrame:
+    def read(self, tickers=None) -> pd.DataFrame:
         data = _read_html(self.path, _RICO_COLUMNS)
         data = data.rename(_RICO_RENAME, axis='columns')
         data = _convert_actual(data)
+        data = _convert_price(data)
         return data
 
 
@@ -225,6 +227,22 @@ def _convert_actual(data: pd.DataFrame) -> pd.DataFrame:
     data = data.dropna(subset=['Actual'])
     data['Actual'] = data['Actual'].astype(int)
     return data
+
+
+def _convert_price(data: pd.DataFrame) -> pd.DataFrame:
+    data = data.copy()
+    data['Price'] = data['Price'].apply(_parse_decimal)
+    data = data.dropna(subset=['Price'])
+    return data
+
+
+def _parse_decimal(text: str) -> float:
+    match = re.search(r'[\d,.]+', text)
+    if match:
+        decimal = match.group(0)
+        decimal = parse_decimal(decimal, locale='pt_BR', strict=True)
+        return float(decimal)
+    return None
 
 
 def _check_layout(path: Path, columns: list) -> None:
