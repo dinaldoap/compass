@@ -85,6 +85,8 @@ class AliActual(Source):
     def read(self) -> pd.DataFrame:
         data = _read_excel(self.path)
         data = data.rename(_ALI_RENAME, axis='columns')
+        data = data.groupby(by='Ticker', as_index=False,
+                            sort=False).agg({'Actual': 'sum'})
         return data
 
 
