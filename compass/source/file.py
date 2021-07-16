@@ -33,6 +33,7 @@ class StandardTarget(Source):
 
     def __init__(self, path: Path):
         self.path = Path(path)
+        _check_extension(self.path, 'xlsx')
         _check_layout(self.path, ['Name', 'Ticker', 'Target'])
 
     def read(self):
@@ -48,6 +49,7 @@ class StandardActual(Source):
 
     def __init__(self, path: Path):
         self.path = Path(path)
+        _check_extension(self.path, 'xlsx')
         _check_layout(self.path, ['Ticker', 'Actual'])
 
     def read(self):
@@ -64,6 +66,7 @@ class AliActual(Source):
 
     def __init__(self, path: Path):
         self.path = Path(path)
+        _check_extension(self.path, 'xlsx')
         _check_layout(self.path, _ALI_COLUMNS)
 
     def read(self) -> pd.DataFrame:
@@ -84,6 +87,7 @@ class CeiHtmlActual(Source):
 
     def __init__(self, path: Path, date=date.today()):
         self.path = Path(path)
+        _check_extension(self.path, 'html')
         _check_pattern_layout(
             self.path, 'https://cei.b3.com.br/CEI_Responsivo/ConsultarCarteiraAtivos.aspx')
         _check_layout(self.path, _CEI_COLUMNS)
@@ -110,6 +114,7 @@ class RicoHtmlActualPrice(Source):
 
     def __init__(self, path: Path, date=date.today()):
         self.path = Path(path)
+        _check_extension(self.path, 'html')
         _check_pattern_layout(
             self.path, 'https://www.rico.com.vc/arealogada/acoes')
         _check_layout(self.path, _RICO_COLUMNS)
@@ -157,6 +162,7 @@ class StandardPrice(Source):
 
     def __init__(self, path: Path):
         self.path = Path(path)
+        _check_extension(self.path, 'xlsx')
         _check_layout(self.path, ['Ticker', 'Price'])
 
     def read(self):
@@ -232,6 +238,12 @@ def _convert_price(data: pd.DataFrame) -> pd.DataFrame:
     data['Price'] = data['Price'].apply(parse_decimal, locale='pt_BR')
     data = data.dropna(subset=['Price'])
     return data
+
+
+def _check_extension(path, extension: str):
+    if not path.suffix.endswith(extension):
+        raise LayoutError(
+            'Extension {} is expected in file {}.'.format(extension, path))
 
 
 def _check_layout(path: Path, columns: list) -> None:
