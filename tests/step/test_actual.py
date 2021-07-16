@@ -4,6 +4,7 @@ from compass.source.file import StandardActual
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
+
 def test_actual():
     input = pd.DataFrame({
         'Ticker': ['BITO39', 'BIEF39'],
@@ -14,5 +15,6 @@ def test_actual():
         'Target': [.2, .8],
         'Actual': [1, 2]
     })
-    output = Actual(source=StandardActual(path='tests/data/actual.xlsx')).run(input)
+    output = Actual(source=StandardActual(
+        path='tests/data/actual.xlsx')).run(input)
     assert_frame_equal(expected, output[['Ticker', 'Target', 'Actual']])

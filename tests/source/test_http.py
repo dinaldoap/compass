@@ -4,6 +4,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 from pathlib import Path
 
+
 def test_YahooPrice():
     output = YahooPrice(Path('tests/data')).read(tickers=['BITO39'])
     expected = pd.DataFrame({

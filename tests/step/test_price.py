@@ -5,6 +5,7 @@ from compass.source.file import StandardPrice
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
+
 def test_price():
     input = pd.DataFrame({
         'Ticker': ['BITO39', 'BIEF39'],
