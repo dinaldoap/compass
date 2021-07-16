@@ -48,28 +48,6 @@ class StandardActual(Source):
         return pd.read_excel(self.path)
 
 
-class CeiActual(Source):
-    '''
-    Excel sheet with data copied from Carteira de ativos of Canal Eletrônico do Investidor (https://cei.b3.com.br/).
-    The columns Cód. de Negociação and Qtde. are, respectivelly, renamed to Ticker and Actual. 
-
-    ...
-    '''
-
-    def __init__(self, path: Path):
-        self.path = Path(path)
-        _check_layout(self.path, _CEI_COLUMNS)
-
-    def read(self) -> pd.DataFrame:
-        data = pd.read_excel(self.path)
-        data = data.rename({
-            'Cód. de Negociação': 'Ticker',
-            'Qtde.': 'Actual',
-
-        }, axis='columns')
-        return data
-
-
 class AliActual(Source):
     '''
     Excel sheet with data downloaded from Área Logada do Investidor (https://https://www.investidor.b3.com.br/).

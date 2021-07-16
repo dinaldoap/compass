@@ -14,5 +14,5 @@ def test_actual():
         'Target': [.2, .8],
         'Actual': [1, 2]
     })
-    output = Actual(source=StandardActual(path='tests/data/actual_standard.xlsx')).run(input)
+    output = Actual(source=StandardActual(path='tests/data/actual.xlsx')).run(input)
     assert_frame_equal(expected, output[['Ticker', 'Target', 'Actual']])
