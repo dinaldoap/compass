@@ -1,7 +1,6 @@
-from pandas.core.tools.numeric import to_numeric
 from .base import Source
+from compass.number import parse_decimal
 
-from babel.numbers import NumberFormatError, parse_decimal
 from datetime import date
 import pandas as pd
 from pathlib import Path
@@ -185,8 +184,7 @@ class WarrenHtmlPrice(Source):
     def read(self) -> pd.DataFrame:
         data = _parse_html(self.path, self.table_pattern,
                            self.ticker_pattern, 'Price')
-        data['Price'] = data['Price'].apply(
-            lambda str: float(parse_decimal(str, locale='pt_BR', strict=True)))
+        data['Price'] = data['Price'].apply(parse_decimal, locale='pt_BR')
         return data
 
 
@@ -231,18 +229,9 @@ def _convert_actual(data: pd.DataFrame) -> pd.DataFrame:
 
 def _convert_price(data: pd.DataFrame) -> pd.DataFrame:
     data = data.copy()
-    data['Price'] = data['Price'].apply(_parse_decimal)
+    data['Price'] = data['Price'].apply(parse_decimal, locale='pt_BR')
     data = data.dropna(subset=['Price'])
     return data
-
-
-def _parse_decimal(text: str) -> float:
-    match = re.search(r'[\d,.]+', text)
-    if match:
-        decimal = match.group(0)
-        decimal = parse_decimal(decimal, locale='pt_BR', strict=True)
-        return float(decimal)
-    return None
 
 
 def _check_layout(path: Path, columns: list) -> None:
