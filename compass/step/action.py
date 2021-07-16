@@ -1,8 +1,7 @@
 from .base import Step
 from compass.target import Target
 from compass.model import Calculator
-from babel.numbers import format_currency, format_percent, format_decimal
-
+from compass.number import format_currency
 import pandas as pd
 
 
@@ -27,23 +26,24 @@ class Action(Step):
         self.calculator.actual_withdraw = df_calc[df_calc['Change'] < 0]['Transaction'].sum(
         )
         print('=========== Input ===============')
-        print('        Value:',  to_currency(self.calculator.value))
+        print('        Value:',  format_currency(self.calculator.value))
         print('Expense Ratio: {}%'.format(self.calculator.expense_ratio * 100))
         print('========== Estimate =============')
-        print('        Value:',  to_currency(self.calculator.estimated_value))
-        print('      Expense:',  to_currency(
+        print('        Value:',  format_currency(
+            self.calculator.estimated_value))
+        print('      Expense:',  format_currency(
             self.calculator.estimated_expense))
         print('=========== Final ===============')
-        print('      Deposit:',  to_currency(self.calculator.actual_deposit))
-        print('     Withdraw:',  to_currency(self.calculator.actual_withdraw))
-        print('      Expense:',  to_currency(self.calculator.actual_expense))
-        print('    Remainder:',  to_currency(self.calculator.actual_remainder))
+        print('      Deposit:',  format_currency(
+            self.calculator.actual_deposit))
+        print('     Withdraw:',  format_currency(
+            self.calculator.actual_withdraw))
+        print('      Expense:',  format_currency(
+            self.calculator.actual_expense))
+        print('    Remainder:',  format_currency(
+            self.calculator.actual_remainder))
         self.target.write(output)
         return output
-
-
-def to_currency(value: float):
-    return format_currency(value, currency='BRL')
 
 
 def _to_percentage(series: pd.Series):
