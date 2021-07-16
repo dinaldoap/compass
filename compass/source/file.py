@@ -1,3 +1,4 @@
+from pandas.core.tools.numeric import to_numeric
 from .base import Source
 
 from babel.numbers import parse_decimal
@@ -7,6 +8,11 @@ from pathlib import Path
 import re
 
 _CEI_COLUMNS = ['Cód. de Negociação', 'Qtde.']
+_RICO_RENAME = {
+    'Código': 'Ticker',
+    'Quantidade': 'Actual',
+}
+_RICO_COLUMNS = ['Código', 'Quantidade']
 _ALI_TYPES = {
     'Código de Negociação': str,
     'Quantidade': int,
@@ -84,13 +90,35 @@ class CeiHtmlActual(Source):
         _check_last_update(self.path, date)
 
     def read(self) -> pd.DataFrame:
-        data = _read_html(self.path)
+        data = _read_html(self.path, _CEI_COLUMNS)
         data = data.rename({
             'Cód. de Negociação': 'Ticker',
             'Qtde.': 'Actual',
 
         }, axis='columns')
+        data['Actual'] = data['Actual'].astype(int)
         return data
+
+class RicoHtmlActual(Source):
+    '''
+    HTML file with data from Home Page -> Ações e FIIs (https://www.rico.com.vc/arealogada/acoes).
+    The columns Código and Quantidade are, respectivelly, renamed to Ticker and Actual. 
+
+    ...
+    '''
+
+    def __init__(self, path: Path, date=date.today()):
+        self.path = Path(path)
+        _check_pattern_layout(
+            self.path, 'https://www.rico.com.vc/arealogada/acoes')
+        _check_layout(self.path, _RICO_COLUMNS)
+        _check_last_update(self.path, date)
+
+    def read(self) -> pd.DataFrame:
+        data = _read_html(self.path, _RICO_COLUMNS)
+        data = data.rename(_RICO_RENAME, axis='columns')
+        data = _convert_actual(data)
+        return data        
 
 
 class WarrenHtmlActual(Source):
@@ -179,22 +207,27 @@ def _read_excel(path: Path) -> pd.DataFrame:
     return data
 
 
-def _read_html(path: Path) -> pd.DataFrame:
+def _read_html(path: Path, columns: list) -> pd.DataFrame:
     data = pd.read_html(path, thousands='.', decimal=',')
     data = filter(lambda df: set(
-        _CEI_COLUMNS).issubset(set(df.columns)), data)
+        columns).issubset(set(df.columns)), data)
     data = pd.concat(data)
-    data = data.dropna()
+    data = data.dropna(subset=columns)
     data = data.reset_index(drop=True)
-    data['Qtde.'] = data['Qtde.'].astype(int)
     return data
 
+def _convert_actual(data: pd.DataFrame) -> pd.DataFrame:
+    data = data.copy()
+    data['Actual'] = pd.to_numeric(data['Actual'], errors='coerce', downcast='float')
+    data = data.dropna(subset=['Actual'])
+    data['Actual'] = data['Actual'].astype(int)
+    return data
 
 def _check_layout(path: Path, columns: list) -> None:
     if path.suffix.endswith('xlsx'):
         data = pd.read_excel(path)
     elif path.suffix.endswith('html'):
-        data = _read_html(path)
+        data = _read_html(path, columns)
     else:
         assert 'File extension not supported: {}.'.format(path)
     if not set(columns).issubset(set(data.columns)):
