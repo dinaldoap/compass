@@ -38,6 +38,13 @@ def test_CEIHtmlActual():
         'Actual': [1, 2]
     })
     assert_frame_equal(expected, output[['Ticker', 'Actual']])    
+def test_RicoHtmlActual():
+    output = RicoHtmlActual('tests/data/actual_price_rico.html', date=None).read()
+    expected = pd.DataFrame({
+        'Ticker': ['BITO39', 'BIEF39'],
+        'Actual': [1, 2]
+    })
+    assert_frame_equal(expected, output[['Ticker', 'Actual']])
 
 def test_WarrenHtmlActual():
     output = WarrenHtmlActual('tests/data/actual_warren.html', date=None).read()
