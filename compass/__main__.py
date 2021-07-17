@@ -11,11 +11,13 @@ def run(argv):
     parser = argparse.ArgumentParser(
         description='Compass: Helping investors to stick with theirs plans.',
         epilog='''
-                    Files that must be maintained in --directory:
-                    (1) target.xlsx, with standard layout (Name, Ticker, Target);
-                    (2) actual.xlsx, with standard layout (Ticker, Actual) or CEI's layout (Cód. de Negociação, Qtde.);
-                    (3) actual.html, with CEI's page (https://cei.b3.com.br/CEI_Responsivo/ConsultarCarteiraAtivos.aspx) or Warren's page showing QUANTIDADE on Meus ativos (https://warren.com.br/app/#/v3/trade)
-                    These files can have additional columns beside the specified in the layout.
+                    A single spreadsheet (portolio.xlsx) must be maintained to the basic usage. The expected column layout is as follows:
+                    (1) Name: str, description of the ticker, e.g., iShares Core S&P 500 ETF.
+                    (2) Ticker: str, ticker name, e.g., IVV.
+                    (3) Target: float, target percentage for the ticker, e.g., 40%.
+                    (4) Actual: int, number of owned units of the ticker, e.g., 500.
+                    (5) Price: float, current price of the ticker, e.g., $100.
+                    Additional columns in the spreadsheet are ignored.
                 ''')
     parser.add_argument('value', type=parse_decimal,
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
