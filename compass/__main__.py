@@ -2,6 +2,7 @@ from compass.transact import Deposit
 from compass.number import parse_decimal
 
 import argparse
+import re
 import sys
 import configparser
 
@@ -20,7 +21,7 @@ def run(argv):
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
     parser.add_argument('-t', '--target', type=str,
                         help='Target of the portfolio in terms of percentages per ticker (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
-    parser.add_argument('-a', '--actual', type=str,
+    parser.add_argument('-a', '--actual', type=str, nargs='+',
                         help='Actual portfolio in terms of units per ticker (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
     parser.add_argument('-p', '--price', type=str,
                         help='Prices of the tickers (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
@@ -42,10 +43,17 @@ def _add_config(argv):
     configv = []
     for (key, value) in config.items():
         if key.startswith('--'):
-            configv.extend([key, value])
+            configv.extend([key] + _split_by_whitspace(value))
         else:
-            configv.append(value)
+            configv.append(_split_by_whitspace(value))
     return configv + argv
+
+
+def _split_by_whitspace(value: str):
+    if re.match(r'".*"', value) or re.match(r"'.*'", value):
+        return [value]
+    else:
+        return value.split(' ')
 
 
 def main():
