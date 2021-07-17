@@ -141,7 +141,7 @@ class WarrenHtmlActual(Source):
         self.selection_pattern = r'class="selected">\s*QUANTIDADE'
         self.table_pattern = r'QUANTIDADE(.+)Favoritos'
         self.ticker_pattern = r'(?:%| )(\w+) (\d+) '
-
+        _check_extension(self.path, 'html')
         _check_pattern_layout(
             self.path, 'https://warren.com.br/app/#/v3/trade', self.selection_pattern)
         _check_last_update(self.path, date)
@@ -182,7 +182,7 @@ class WarrenHtmlPrice(Source):
         self.selection_pattern = r'class="selected">\s*PREÇO ATUAL'
         self.table_pattern = r'PREÇO ATUAL(.+)Favoritos'
         self.ticker_pattern = r'(?:%| )(\w+) R\$ ([\d\.,]+) '
-
+        _check_extension(self.path, 'html')
         _check_pattern_layout(
             self.path, 'https://warren.com.br/app/#/v3/trade', self.selection_pattern)
         _check_last_update(self.path, date)
