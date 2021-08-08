@@ -179,8 +179,8 @@ class WarrenHtmlPrice(Source):
 
     def __init__(self, path: Path, date=date.today()):
         self.path = Path(path)
-        self.selection_pattern = r'class="selected">\s*PREÇO ATUAL'
-        self.table_pattern = r'PREÇO ATUAL(.+)Favoritos'
+        self.selection_pattern = r'Todos meus favoritos'
+        self.table_pattern = r'Todos meus favoritos([A-Z\d\$ \+-,%]+)'
         self.ticker_pattern = r'(?:%| )(\w+) R\$ ([\d\.,]+) '
         _check_extension(self.path, 'html')
         _check_pattern_layout(
