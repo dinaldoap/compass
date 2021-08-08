@@ -28,11 +28,14 @@ class Action(Step):
         print('=========== Input ===============')
         print('        Value:',  format_currency(self.calculator.value))
         print('Expense Ratio: {}%'.format(self.calculator.expense_ratio * 100))
+        print(' Spread Ratio: {}%'.format(self.calculator.spread_ratio * 100))
         print('========== Estimate =============')
         print('        Value:',  format_currency(
             self.calculator.estimated_value))
         print('      Expense:',  format_currency(
             self.calculator.estimated_expense))
+        print('       Spread:',  format_currency(
+            self.calculator.estimated_spread))
         print('=========== Final ===============')
         print('      Deposit:',  format_currency(
             self.calculator.actual_deposit))
@@ -40,6 +43,8 @@ class Action(Step):
             self.calculator.actual_withdraw))
         print('      Expense:',  format_currency(
             self.calculator.actual_expense))
+        print('       Spread:',  format_currency(
+            self.calculator.actual_spread))
         print('    Remainder:',  format_currency(
             self.calculator.actual_remainder))
         self.target.write(output)
