@@ -6,5 +6,6 @@ def test_run():
         '1,000.00',
         '--target', 'tests/data/portfolio.xlsx',
         '--actual', 'tests/data/portfolio.xlsx',
-        '--price', 'tests/data/portfolio.xlsx'
+        '--price', 'tests/data/portfolio.xlsx',
+        '--output', 'data/output.xlsx'
     ])
