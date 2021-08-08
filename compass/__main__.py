@@ -31,6 +31,8 @@ def run(argv):
                         help='Output with changes to be done per ticker (default: data/output.xlsx).', default='data/output.xlsx')
     parser.add_argument('-e', '--expense-ratio', type=float,
                         help='Expense ratio (default: 0.03%%).', default=0.0003)
+    parser.add_argument('-s', '--spread-ratio', type=float,
+                        help='Spread ratio (default: 0.00%%).', default=0.)
 
     configv_argv = _add_config(argv)
     namespace = parser.parse_args(configv_argv)
