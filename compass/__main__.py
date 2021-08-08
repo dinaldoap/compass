@@ -22,13 +22,13 @@ def run(argv):
     parser.add_argument('value', type=parse_decimal,
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
     parser.add_argument('-t', '--target', type=str,
-                        help='Target of the portfolio in terms of percentages per ticker (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
+                        help='Target of the portfolio in terms of percentages per ticker (default: portfolio.xlsx).', default='portfolio.xlsx')
     parser.add_argument('-a', '--actual', type=str, nargs='+',
-                        help='Actual portfolio in terms of units per ticker (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
+                        help='Actual portfolio in terms of units per ticker (default: portfolio.xlsx).', default='portfolio.xlsx')
     parser.add_argument('-p', '--price', type=str,
-                        help='Prices of the tickers (default: data/portfolio.xlsx).', default='data/portfolio.xlsx')
+                        help='Prices of the tickers (default: portfolio.xlsx).', default='portfolio.xlsx')
     parser.add_argument('-o', '--output', type=str,
-                        help='Output with changes to be done per ticker (default: data/output.xlsx).', default='data/output.xlsx')
+                        help='Output with changes to be done per ticker (default: output.xlsx).', default='output.xlsx')
     parser.add_argument('-e', '--expense-ratio', type=float,
                         help='Expense ratio (default: 0.03%%).', default=0.0003)
     parser.add_argument('-s', '--spread-ratio', type=float,
@@ -42,8 +42,8 @@ def run(argv):
 
 def _add_config(argv):
     config = configparser.ConfigParser()
-    config.read('data/config.ini')
-    config = dict(config['compass'])
+    config.read('config.ini')
+    config = dict(config['compass']) if config.has_section('compass') else {}
     configv = []
     for (key, value) in config.items():
         if key.startswith('--'):
