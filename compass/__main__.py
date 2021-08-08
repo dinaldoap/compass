@@ -42,7 +42,7 @@ def run(argv):
 
 def _add_config(argv):
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('compass.ini')
     config = dict(config['compass']) if config.has_section('compass') else {}
     configv = []
     for (key, value) in config.items():
