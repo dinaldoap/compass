@@ -9,7 +9,8 @@
             "type": "python",
             "request": "launch",
             "module": "compass",
-            "args": ["1000"]
+            "args": ["1000"],
+            "cwd": "${workspaceFolder}/data"
         }
     ]
 }
