@@ -2,6 +2,7 @@ from .base import Pipeline
 from compass import source, target, model
 from compass.step import Action, Actual, Change, Price, Target
 
+
 class Transaction(Pipeline):
     def __init__(self, config):
         self.config = config
