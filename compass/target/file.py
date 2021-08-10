@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 
-class StandardAction(Target):
+class Standard(Target):
     '''
     Excel sheet with all the received columns.
 
