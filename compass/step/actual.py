@@ -17,3 +17,11 @@ class Actual(Step):
         assert len(input) == len(output), 'output\'s length ({}) is expected to be the same as input\'s ({}).'.format(
             len(output), len(input))
         return output
+
+
+class ActualAddedChange(Step):
+    def run(self, input: pd.DataFrame) -> pd.DataFrame:
+        output = input.copy()
+        output['Actual'] += output['Change']
+        output = output[['Ticker', 'Actual']]
+        return output

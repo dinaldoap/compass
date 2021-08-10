@@ -16,6 +16,7 @@ setup(name='compass',
       entry_points={
           'console_scripts': [
               'compass = compass.__main__:main',
+              'compass-pos = compass.__main__:post',
           ]
       },
       install_requires=['numpy==1.20.2',

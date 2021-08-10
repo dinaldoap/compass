@@ -1,5 +1,5 @@
 from .base import Source
-from .file import AliActual, CeiHtmlActual, StandardActual, StandardPrice, StandardTarget, LayoutError, RicoHtmlActualPrice, WarrenHtmlActual, WarrenHtmlPrice
+from .file import AliActual, CeiHtmlActual, StandardActual, StandardPrice, StandardTarget, LayoutError, RicoHtmlActualPrice, StandardOutput, WarrenHtmlActual, WarrenHtmlPrice
 from .composite import CompositeActual
 from .http import YahooPrice
 
@@ -21,6 +21,10 @@ def create_actual(config: dict) -> Source:
 def create_price(config: dict) -> Source:
     # TODO: add YahooPrice
     return _create_source(config['price'], [StandardPrice, RicoHtmlActualPrice, WarrenHtmlPrice])
+
+
+def create_output(config: dict) -> Source:
+    return StandardOutput(config['output'])
 
 
 def _create_source(path, classes: list):
