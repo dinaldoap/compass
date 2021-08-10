@@ -181,7 +181,7 @@ class WarrenHtmlPrice(Source):
         self.path = Path(path)
         self.selection_pattern = r'Todos meus favoritos'
         self.table_pattern = r'Todos meus favoritos([A-Z\d\$ \+\-,%]+)'
-        self.ticker_pattern = r'(?:%| )(\w+) R\$ ([\d\.,]+) '
+        self.ticker_pattern = r'([A-Z\d]+) R\$ ([\d\.,]+) '
         _check_extension(self.path, 'html')
         _check_pattern_layout(
             self.path, 'https://warren.com.br/app/#/v3/trade', self.selection_pattern)
