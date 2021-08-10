@@ -1,10 +1,10 @@
 from compass.step.base import ReadSource
-from .base import Transact
+from .base import Pipeline
 from compass import source, target
 from compass.step import ReadSource, ActualAddedChange, WriteTarget
 
 
-class Post(Transact):
+class Post(Pipeline):
     def __init__(self, config):
         self.config = config
 

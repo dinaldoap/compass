@@ -1,16 +1,16 @@
 from abc import ABCMeta, abstractmethod
 
 
-class Transact(metaclass=ABCMeta):
+class Pipeline(metaclass=ABCMeta):
     """
-    A transaction.
+    A pipeline.
 
     ...
     """
 
     @abstractmethod
     def run(self):
-        """Run the transaction.
+        """Run the pipeline.
 
         """
         pass
