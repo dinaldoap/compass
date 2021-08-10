@@ -7,7 +7,7 @@ import sys
 import configparser
 
 
-def run(argv):
+def parse_args(argv):
     parser = argparse.ArgumentParser(
         description='Compass: Helping investors to stick with theirs plans.',
         epilog='''
@@ -37,7 +37,7 @@ def run(argv):
     configv_argv = _add_config(argv)
     namespace = parser.parse_args(configv_argv)
     args = dict(vars(namespace))
-    Deposit(config=args).run()
+    return args
 
 
 def _add_config(argv):
@@ -60,8 +60,9 @@ def _split_by_whitspace(value: str):
         return value.split(' ')
 
 
-def main():
-    run(sys.argv[1:])
+def main(argv=sys.argv[1:]):
+    args = parse_args(argv)
+    Deposit(config=args).run()
 
 
 if __name__ == '__main__':

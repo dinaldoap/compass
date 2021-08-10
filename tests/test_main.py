@@ -1,8 +1,8 @@
-from compass.__main__ import run
+from compass.__main__ import main
 
 
-def test_run():
-    run([
+def test_main():
+    main([
         '1,000.00',
         '--target', 'tests/data/portfolio.xlsx',
         '--actual', 'tests/data/portfolio.xlsx',
