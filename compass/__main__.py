@@ -23,7 +23,7 @@ def parse_args(argv):
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
     parser.add_argument('-t', '--target', type=str,
                         help='Target of the portfolio in terms of percentages per ticker (default: portfolio.xlsx).', default='portfolio.xlsx')
-    parser.add_argument('-a', '--actual', type=str, nargs='+',
+    parser.add_argument('-a', '--actual', type=str,
                         help='Actual portfolio in terms of units per ticker (default: portfolio.xlsx).', default='portfolio.xlsx')
     parser.add_argument('-p', '--price', type=str,
                         help='Prices of the tickers (default: portfolio.xlsx).', default='portfolio.xlsx')
@@ -58,6 +58,7 @@ def _split_by_whitspace(value: str):
         return [value]
     else:
         return value.split(' ')
+
 
 def main(argv=sys.argv[1:]):
     args = parse_args(argv)
