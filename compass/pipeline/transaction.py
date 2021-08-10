@@ -1,6 +1,6 @@
 from .base import Pipeline
 from compass import source, target, model
-from compass.step import Action, Actual, Change, Price, Target
+from compass.step import Actual, Change, Price, Target, Balance, Print, Report, WriteTarget
 
 
 class Transaction(Pipeline):
@@ -14,8 +14,11 @@ class Transaction(Pipeline):
             Actual(source=source.create_actual(config=self.config)),
             Price(source=source.create_price(config=self.config)),
             Change(value=calculator.estimated_value),
-            Action(target=target.create_action(
-                config=self.config), calculator=calculator)
+            Balance(),
+            Print(),
+            Report(calculator=calculator),
+            WriteTarget(target=target.create_output(
+                config=self.config))
         ]
         data = None
         for step in steps:

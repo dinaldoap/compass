@@ -1,26 +1,17 @@
 from .base import Step
-from compass.target import Target
 from compass.model import Calculator
 from compass.number import format_currency
 import pandas as pd
 
 
-class Action(Step):
+class Report(Step):
 
-    def __init__(self, target: Target, calculator: Calculator):
-        self.target = target
+    def __init__(self, calculator: Calculator):
         self.calculator = calculator
 
     def run(self, input: pd.DataFrame):
-        output = input.copy()
-        output['Before'] = output['Actual'] * output['Price']
-        output['Before'] = _to_percentage(output['Before'])
-        output['After'] = (output['Actual'] +
-                           output['Change']) * output['Price']
-        output['After'] = _to_percentage(output['After'])
-        print(output)
-        df_calc = output.copy()
-        df_calc['Transaction'] = output['Change'] * output['Price']
+        df_calc = input.copy()
+        df_calc['Transaction'] = df_calc['Change'] * df_calc['Price']
         self.calculator.actual_deposit = df_calc[df_calc['Change'] > 0]['Transaction'].sum(
         )
         self.calculator.actual_withdraw = df_calc[df_calc['Change'] < 0]['Transaction'].sum(
@@ -47,10 +38,4 @@ class Action(Step):
             self.calculator.actual_spread))
         print('    Remainder:',  format_currency(
             self.calculator.actual_remainder))
-        self.target.write(output)
-        return output
-
-
-def _to_percentage(series: pd.Series):
-    series = series / series.sum()
-    return series.round(2)
+        return input
