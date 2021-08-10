@@ -9,4 +9,4 @@ def create_action(config: dict) -> Target:
 
 
 def create_actual(config: dict) -> Target:
-    return Standard(path=config['actual'][0])
+    return Standard(path=config['actual'])

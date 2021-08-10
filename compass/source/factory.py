@@ -1,6 +1,5 @@
 from .base import Source
 from .file import AliActual, CeiHtmlActual, StandardActual, StandardPrice, StandardTarget, LayoutError, RicoHtmlActualPrice, StandardOutput, WarrenHtmlActual, WarrenHtmlPrice
-from .composite import CompositeActual
 from .http import YahooPrice
 
 from pathlib import Path
@@ -11,11 +10,9 @@ def create_target(config: dict) -> Source:
 
 
 def create_actual(config: dict) -> Source:
-    paths = config['actual']
     classes = [StandardActual, AliActual,
                RicoHtmlActualPrice, CeiHtmlActual, WarrenHtmlActual]
-    actuals = map(lambda path: _create_source(path, classes), paths)
-    return CompositeActual(actuals=actuals)
+    return _create_source(config['actual'], classes)
 
 
 def create_price(config: dict) -> Source:
