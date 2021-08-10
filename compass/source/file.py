@@ -194,6 +194,22 @@ class WarrenHtmlPrice(Source):
         return data
 
 
+class StandardOutput(Source):
+    '''
+    Excel sheet outputted by Transaction pipeline, which includes Ticker, Actual and Change columns.
+
+    ...
+    '''
+
+    def __init__(self, path: Path):
+        self.path = Path(path)
+        _check_extension(self.path, 'xlsx')
+        _check_layout(self.path, ['Ticker', 'Actual', 'Change'])
+
+    def read(self):
+        return pd.read_excel(self.path)
+
+
 class LayoutError(Exception):
     pass
 
