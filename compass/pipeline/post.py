@@ -1,4 +1,3 @@
-from compass.step.base import ReadSource
 from .base import Pipeline
 from compass import source, target
 from compass.step import ReadSource, ActualAddedChange, WriteTarget

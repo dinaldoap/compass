@@ -1,4 +1,4 @@
-from compass.transact import Transaction, Post
+from compass.pipeline import Transaction, Post
 from compass.number import parse_decimal
 
 import argparse
