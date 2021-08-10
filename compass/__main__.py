@@ -62,11 +62,16 @@ def _split_by_whitspace(value: str):
 
 def main(argv=sys.argv[1:]):
     args = parse_args(argv)
+    transaction(args)
+    input('Press Enter to add Change to Actual or Ctrl+C to cancel...')
+    post(args)
+
+
+def transaction(args):
     Transaction(config=args).run()
 
 
-def post(argv=sys.argv[1:]):
-    args = parse_args(argv)
+def post(args):
     Post(config=args).run()
 
 
