@@ -1,4 +1,4 @@
-from compass.transact import Deposit, Post
+from compass.transact import Transaction, Post
 from compass.number import parse_decimal
 
 import argparse
@@ -59,10 +59,9 @@ def _split_by_whitspace(value: str):
     else:
         return value.split(' ')
 
-
 def main(argv=sys.argv[1:]):
     args = parse_args(argv)
-    Deposit(config=args).run()
+    Transaction(config=args).run()
 
 
 def post(argv=sys.argv[1:]):

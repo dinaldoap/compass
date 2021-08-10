@@ -1,2 +1,2 @@
-from .deposit import Deposit
+from .deposit import Transaction
 from .post import Post
