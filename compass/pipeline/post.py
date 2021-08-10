@@ -1,6 +1,6 @@
 from .base import Pipeline
 from compass import source, target
-from compass.step import ReadSource, ActualAddedChange, WriteTarget
+from compass.step import ReadSource, ActualAddedChange, WriteTarget, Print
 
 
 class Post(Pipeline):
@@ -11,6 +11,7 @@ class Post(Pipeline):
         steps = [
             ReadSource(source=source.create_output(config=self.config)),
             ActualAddedChange(),
+            Print(),
             WriteTarget(target=target.create_actual(config=self.config)),
         ]
         data = None
