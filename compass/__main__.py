@@ -21,6 +21,8 @@ def parse_args(argv):
                 ''')
     parser.add_argument('value', type=parse_decimal,
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
+    parser.add_argument('-r', '--rebalance',
+                        action='store_true', help='Rebalance the porfolio.')
     parser.add_argument('-t', '--target', type=str,
                         help='Target of the portfolio in terms of percentages per ticker (default: portfolio.xlsx).', default='portfolio.xlsx')
     parser.add_argument('-a', '--actual', type=str,
