@@ -17,7 +17,7 @@ def test_deposit(value, change):
         'Price': [1., 2.],
     }
     input = pd.DataFrame(data)
-    output = Change(value).run(input)
+    output = Change(value, False).run(input)
     data.update({
         'Change': change
     })
@@ -36,7 +36,7 @@ def test_withdraw(value, change):
         'Price': [1., 2.],
     }
     input = pd.DataFrame(data)
-    output = Change(value).run(input)
+    output = Change(value, False).run(input)
     data.update({
         'Change': change
     })
@@ -54,7 +54,7 @@ def test_rebalance(value, change):
         'Price': [1., 2.],
     }
     input = pd.DataFrame(data)
-    output = Change(value).run(input)
+    output = Change(value, True).run(input)
     data.update({
         'Change': change
     })

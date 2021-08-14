@@ -11,8 +11,9 @@ class Change(Step):
     ...
     '''
 
-    def __init__(self, value):
+    def __init__(self, value, rebalance):
         self.value = value
+        self.rebalance = rebalance
 
     def run(self, input: pd.DataFrame):
         '''Calculate the change.
@@ -44,7 +45,7 @@ class Change(Step):
         assert total > 0, 'Full withdraw not supported.'
         actual = actual / total
         change = target - actual
-        if self.value == 0:
+        if self.rebalance:
             # amount changed per ticker
             change = change * total
         else:

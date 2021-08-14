@@ -2,6 +2,7 @@ from compass.__main__ import parse_args, post, transaction
 
 _EXPECTED_ARGS = {
     'value': 1000.,
+    'rebalance': False,
     'target': 'tests/data/portfolio.xlsx',
     'actual': 'tests/data/portfolio.xlsx',
     'price': 'tests/data/portfolio.xlsx',
