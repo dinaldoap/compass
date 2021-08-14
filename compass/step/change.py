@@ -58,21 +58,30 @@ class Change(Step):
             change = change / change.sum()
             # amount changed per ticker
             change = (self.value * change)
-        # units per ticker without overflow
-        deposit = change > 0
-        withdraw = change < 0
-        # avoid overflow
-        change[deposit] = np.floor(change[deposit] / price[deposit])
-        change[withdraw] = np.ceil(change[withdraw] / price[withdraw])
-        remainder = self.value - (change * price).sum()
-        # use one ticker to approximate the value
-        ticker = _choose_ticker(price, remainder)
-        remainder = np.floor(remainder / price[ticker])
-        change[ticker] = change[ticker] + remainder
-        change = change.astype(int)
         output = input.copy()
         output['Change'] = change
+        output = _discretize(self.value, output)
         return output
+
+
+def _discretize(value: float, input: pd.DataFrame):
+    output = input.copy()
+    price = output['Price'].values
+    change = output['Change'].values
+    # units per ticker without overflow
+    deposit = change > 0
+    withdraw = change < 0
+    # avoid overflow
+    change[deposit] = np.floor(change[deposit] / price[deposit])
+    change[withdraw] = np.ceil(change[withdraw] / price[withdraw])
+    remainder = value - (change * price).sum()
+    # use one ticker to approximate the value
+    ticker = _choose_ticker(price, remainder)
+    remainder = np.floor(remainder / price[ticker])
+    change[ticker] = change[ticker] + remainder
+    change = change.astype(int)
+    output['Change'] = change
+    return output
 
 
 def _choose_ticker(price: np.array, remainder):
