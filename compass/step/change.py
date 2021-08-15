@@ -37,32 +37,33 @@ class Change(Step):
                     Number of asset's units to buy or sell represented, repectivelly, by a positive or negative value.
 
         '''
-        target = input['Target'].values
-        actual = input['Actual'].values
-        price = input['Price'].values
-        actual = actual * price
-        total = actual.sum() + self.value
+        percentage = input.copy()        
+        percentage['Actual'] = percentage['Actual'] * percentage['Price']
+        total = percentage['Actual'].sum() + self.value
         assert total > 0, 'Full withdraw not supported.'
-        actual = actual / total
-        change = target - actual
-        if self.rebalance:
-            # amount changed per ticker
-            change = change * total
-        else:
-            # remove opposite transactions
-            if self.value > 0:
-                change = np.maximum(change, [0.])
-            elif self.value < 0:
-                change = np.minimum(change, [0.])
-            # redistribute percentages
-            change = change / change.sum()
-            # amount changed per ticker
-            change = (self.value * change)
+        percentage['Actual'] = percentage['Actual'] / total
+        change = _change(self.value, total, self.rebalance, percentage)
         output = input.copy()
         output['Change'] = change
         output = _discretize(self.value, output)
         return output
 
+def _change(value: float, total: float, rebalance: bool, percentage: pd.DataFrame):
+    change = percentage['Target'] - percentage['Actual']
+    if rebalance:
+        # amount changed per ticker
+        change = change * total
+    else:
+        # remove opposite transactions
+        if value > 0:
+            change = np.maximum(change, [0.])
+        elif value < 0:
+            change = np.minimum(change, [0.])
+        # redistribute percentages
+        change = change / change.sum()
+        # amount changed per ticker
+        change = (value * change)
+    return change
 
 def _discretize(value: float, input: pd.DataFrame):
     output = input.copy()
