@@ -20,8 +20,11 @@ class Actual(Step):
 
 
 class ActualAddedChange(Step):
+    def __init__(self, source: Source):
+        self.source = source
+
     def run(self, input: pd.DataFrame) -> pd.DataFrame:
         output = input.copy()
-        output['Actual'] += output['Change']
-        output = output[['Ticker', 'Actual']]
+        change = self.source.read()
+        output['Actual'] += change['Change']
         return output

@@ -9,8 +9,8 @@ class Post(Pipeline):
 
     def run(self):
         steps = [
-            ReadSource(source=source.create_output(config=self.config)),
-            ActualAddedChange(),
+            ReadSource(source=source.create_actual(config=self.config)),
+            ActualAddedChange(source=source.create_output(config=self.config)),
             Print(),
             WriteTarget(target=target.create_actual(config=self.config)),
         ]
