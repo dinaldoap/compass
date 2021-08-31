@@ -22,8 +22,9 @@ def test_actual():
 
 def test_actual_added_change():
     input = pd.DataFrame({
-        'Ticker': ['BITO39', 'BIEF39'],
-        'Actual': [1, 2],
+        'Ticker': ['BIEF39', 'BITO39'],
+        'Actual': [2, 1],
+        'Change': [20, 10],
     })
     expected = pd.DataFrame({
         'Ticker': ['BITO39', 'BIEF39'],
