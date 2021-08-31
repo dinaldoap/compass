@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+import pandas as pd
 
 
 class Source(metaclass=ABCMeta):
@@ -9,7 +10,7 @@ class Source(metaclass=ABCMeta):
     """
 
     @abstractmethod
-    def read(self):
+    def read(self) -> pd.DataFrame:
         '''Read data from the source.
 
         Parameters
