@@ -24,7 +24,12 @@ class ActualAddedChange(Step):
         self.source = source
 
     def run(self, input: pd.DataFrame) -> pd.DataFrame:
-        output = input.copy()
+        actual = input.copy()
+        actual = actual.drop('Change', axis='columns', errors='ignore')
         change = self.source.read()
-        output['Actual'] += change['Change']
+        change = change[['Ticker', 'Change']]
+        output = change.join(actual.set_index('Ticker'), on='Ticker')
+        output['Actual'] = output['Actual'].fillna(0).astype(int)
+        output['Actual'] += output['Change']
+        output = output[actual.columns]
         return output
