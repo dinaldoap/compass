@@ -10,4 +10,4 @@ class Target(Step):
 
     def run(self, input: pd.DataFrame):
         output = self.source.read()
-        return output[['Name', 'Ticker', 'Target']]
+        return output[['Name', 'Ticker', 'Target', 'Group']]

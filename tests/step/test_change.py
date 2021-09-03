@@ -50,11 +50,12 @@ def test_withdraw(group, value, change):
     assert_frame_equal(expected, output)
 
 
-@pytest.mark.parametrize("value, change", [
-                         (0.,    [-2, 1]),  # exact change
+@pytest.mark.parametrize("group,         value, change", [
+                         (['A',   None], 0.,    [-2, 1]),  # exact change
                          ])
-def test_rebalance(value, change):
+def test_rebalance(group, value, change):
     data = {
+        'Group': group,
         'Ticker': ['BITO39', 'BIEF39'],
         'Target': [.2, .8],
         'Actual': [4, 3],

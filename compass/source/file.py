@@ -34,7 +34,7 @@ class StandardTarget(Source):
     def __init__(self, path: Path):
         self.path = Path(path)
         _check_extension(self.path, 'xlsx')
-        _check_layout(self.path, ['Name', 'Ticker', 'Target'])
+        _check_layout(self.path, ['Name', 'Ticker', 'Target', 'Group'])
 
     def read(self):
         return pd.read_excel(self.path)
