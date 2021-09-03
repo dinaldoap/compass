@@ -54,8 +54,6 @@ class Change(Step):
 
 def _add_group(percentage: pd.DataFrame):
     group = percentage.copy()
-    if 'Group' not in group.columns:
-        group['Group'] = None
     has_group = ~pd.isna(group['Group'])
     group.loc[has_group, 'Group'] = group.loc[has_group,
                                               'Group'] + '/' + group.loc[has_group, 'Ticker']

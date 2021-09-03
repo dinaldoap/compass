@@ -11,9 +11,10 @@ def test_StandardTarget():
     expected = pd.DataFrame({
         'Name': ['iShares Core S&P Total US Stock Market ETF', 'iShares Core MSCI EAFE ETF'],
         'Ticker': ['BITO39', 'BIEF39'],
-        'Target': [.2, .8]
+        'Target': [.2, .8],
+        'Group': ['A', None],
     })
-    assert_frame_equal(expected, output[['Name', 'Ticker', 'Target']])
+    assert_frame_equal(expected, output[['Name', 'Ticker', 'Target', 'Group']])
 
 
 def test_StandardActual():
