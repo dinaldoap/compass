@@ -92,7 +92,9 @@ def _hierarchy_change(levels: list, value: float, total: float, rebalance: bool,
 
 def _parent_group_change(level: int, total: float, rebalance: bool, parent_percentage: pd.DataFrame):
     parent_value = parent_percentage['Change_{}'.format(level-1)].iat[0]
-    return _group_change(level, parent_value, total, rebalance, parent_percentage)
+    multiple_targets = (parent_percentage['Target'] > 0).sum() > 1
+    parent_rebalance = rebalance and multiple_targets
+    return _group_change(level, parent_value, total, parent_rebalance, parent_percentage)
 
 
 def _group_change(level: int, value: float, total: float, rebalance: bool, parent_percentage: pd.DataFrame):
