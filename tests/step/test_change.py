@@ -51,15 +51,18 @@ def test_withdraw(group, value, change):
 
 
 @pytest.mark.parametrize("group,         value, change", [
-                         (['A',   None], 0.,    [-2, 1]),  # exact change
+                         # BITO40 is sold for rebalancing outside group A, but not inside since only BITO39 has a target
+                         (['A', 'A', None], 0.,    [0, -2, 1]),
                          ])
 def test_rebalance(group, value, change):
     data = {
         'Group': group,
-        'Ticker': ['BITO39', 'BIEF39'],
-        'Target': [.2, .8],
-        'Actual': [4, 3],
-        'Price': [1., 2.],
+        # BITO40 is a legacy ETF grouped with BITO39
+        'Ticker': ['BITO39', 'BITO40', 'BIEF39'],
+        'Target': [.2, .0, .8],
+        # There are 3 BITO40, but only 2 will be sold for rebalancing
+        'Actual': [1,  3,  3],
+        'Price':  [1., 1., 2.],
     }
     input = pd.DataFrame(data)
     output = Change(value, True).run(input)
