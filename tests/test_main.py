@@ -9,6 +9,8 @@ _EXPECTED_ARGS = {
     'output': 'data/output.xlsx',
     'expense_ratio': .0003,
     'spread_ratio': 0.,
+    'absolute_distance': .05,
+    'relative_distance': .25,
 }
 
 

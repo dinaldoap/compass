@@ -23,6 +23,10 @@ def parse_args(argv):
                         help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
     parser.add_argument('-r', '--rebalance',
                         action='store_true', help='Rebalance the porfolio.')
+    parser.add_argument('-b', '--absolute-distance', type=float,
+                        help='Absolute distance allowed between the actual and the target allocation of each ticker and group (default: 5%%).', default=.05)
+    parser.add_argument('-l', '--relative-distance', type=float,
+                        help='Relative distance allowed between the actual and the target allocation of each ticker and group (default: 25%%).', default=.25)
     parser.add_argument('-t', '--target', type=str,
                         help='Target of the portfolio in terms of percentages per ticker (default: portfolio.xlsx).', default='portfolio.xlsx')
     parser.add_argument('-a', '--actual', type=str,
