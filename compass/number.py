@@ -1,5 +1,10 @@
 from babel import numbers
 import re
+from distutils.util import strtobool
+
+
+def parse_bool(text: str):
+    return bool(strtobool(text))
 
 
 def parse_decimal(text: str, locale=numbers.LC_NUMERIC) -> float:
