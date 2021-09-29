@@ -50,11 +50,17 @@ def test_withdraw(group, value, change):
     assert_frame_equal(expected, output)
 
 
-@pytest.mark.parametrize("group,         value, change", [
+@pytest.mark.parametrize("group,         value, abs_dist, rel_dist,     change", [
                          # BITO40 is sold for rebalancing outside group A, but not inside since only BITO39 has a target
-                         (['A', 'A', None], 0.,    [0, -2, 1]),
+                         (['A', 'A', None], 0.,       0.,       0., [0, -2, 1]),
+                         # Value is used to buy BIEF39. Then, BITO40 is sold for rebalancing outside group A, but not inside since only BITO39 has a target
+                         (['A', 'A', None], 3.,       0.,       0., [0, -1, 2]),
+                         # No rebalancing is done due to the allowed absolute distance range
+                         (['A', 'A', None], 0.,      .20,       .0, [0,  0, 0]),
+                         # No rebalancing is done due to the allowed relative distance range
+                         (['A', 'A', None], 0.,       .0,       1., [0,  0, 0]),
                          ])
-def test_rebalance(group, value, change):
+def test_rebalance(group, value, abs_dist, rel_dist, change):
     data = {
         'Group': group,
         # BITO40 is a legacy ETF grouped with BITO39
@@ -65,7 +71,8 @@ def test_rebalance(group, value, change):
         'Price':  [1., 1., 2.],
     }
     input = pd.DataFrame(data)
-    output = Change(value, True).run(input)
+    output = Change(value, True, abs_dist,
+                    rel_dist).run(input)
     data.update({
         'Change': change
     })
