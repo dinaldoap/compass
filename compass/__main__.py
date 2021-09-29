@@ -20,9 +20,10 @@ def parse_args(argv):
                     Additional columns in the spreadsheet are ignored.
                 ''')
     parser.add_argument('value', type=parse_decimal,
-                        help='Value to be deposited (positive number) or withdrawed (negative number). When value is zero, the portfolio is rebalanced.')
+                        help='Value to be deposited (greater than zero) or withdrawed (less than zero). Zero also can be used when only rebalancing is required.')
     parser.add_argument('-r', '--rebalance',
-                        action='store_true', help='Rebalance the porfolio.')
+                        action='store_true', help='''Allow rebalancing. A rebalancing is done when one distance is exceeded (see --absolute-distance and --relative-distance).
+                                                     A rebalancing moves the portfolio up to the point where the exceeded distance goes back to the allowed range.''')
     parser.add_argument('-b', '--absolute-distance', type=float,
                         help='Absolute distance allowed between the actual and the target allocation of each ticker and group (default: 5%%).', default=.05)
     parser.add_argument('-l', '--relative-distance', type=float,
