@@ -11,9 +11,11 @@ class Change(Step):
     ...
     '''
 
-    def __init__(self, value, rebalance):
+    def __init__(self, value, rebalance, absolute_distance=0., relative_distance=0.):
         self.value = value
         self.rebalance = rebalance
+        self.absolute_distance = absolute_distance
+        self.relative_distance = relative_distance
 
     def run(self, input: pd.DataFrame):
         '''Calculate the change.
@@ -45,7 +47,7 @@ class Change(Step):
         percentage = _add_group(percentage)
         percentage, levels = _add_hierarchy(percentage)
         change = _hierarchy_change(
-            levels, self.value, total, self.rebalance, percentage)
+            levels, self.value, total, self.rebalance, self.absolute_distance, self.relative_distance, percentage)
         output = input.copy()
         output['Change'] = change
         output = _discretize(self.value, output)
@@ -74,35 +76,35 @@ def _add_hierarchy(percentage: pd.DataFrame):
     return hierarchy, levels
 
 
-def _hierarchy_change(levels: list, value: float, total: float, rebalance: bool, percentage: pd.DataFrame):
+def _hierarchy_change(levels: list, value: float, total: float, rebalance: bool, absolute_distance: float, relative_distance: float, percentage: pd.DataFrame):
     change = pd.Series(index=percentage.index, dtype=np.float64)
     for level in levels:
         if level == 0:
             percentage = _group_change(
-                level, value, total, rebalance, percentage)
+                level, value, total, rebalance, absolute_distance, relative_distance, percentage)
         else:
             parent_group_column = 'Group_{}'.format(level-1)
             group_percentage = percentage.groupby(parent_group_column)
             percentage = group_percentage.apply(lambda parent_percentage, : _parent_group_change(
-                level, total, rebalance, parent_percentage))
+                level, total, rebalance, absolute_distance, relative_distance, parent_percentage))
         leaf = percentage['Group'] == percentage['Group_{}'.format(level)]
         change.loc[leaf] = percentage.loc[leaf, 'Change_{}'.format(level)]
     return change
 
 
-def _parent_group_change(level: int, total: float, rebalance: bool, parent_percentage: pd.DataFrame):
+def _parent_group_change(level: int, total: float, rebalance: bool, absolute_distance: float, relative_distance: float, parent_percentage: pd.DataFrame):
     parent_value = parent_percentage['Change_{}'.format(level-1)].iat[0]
     multiple_targets = (parent_percentage['Target'] > 0).sum() > 1
     parent_rebalance = rebalance and multiple_targets
-    return _group_change(level, parent_value, total, parent_rebalance, parent_percentage)
+    return _group_change(level, parent_value, total, parent_rebalance, absolute_distance, relative_distance, parent_percentage)
 
 
-def _group_change(level: int, value: float, total: float, rebalance: bool, parent_percentage: pd.DataFrame):
+def _group_change(level: int, value: float, total: float, rebalance: bool, absolute_distance: float, relative_distance: float, parent_percentage: pd.DataFrame):
     group_column = 'Group_{}'.format(level)
     group_percentage = parent_percentage.groupby(
         group_column).agg({'Target': 'sum', 'Actual': 'sum'})
     group_percentage['Change_{}'.format(level)] = _change(
-        value, total, rebalance, group_percentage)
+        value, total, rebalance, absolute_distance, relative_distance, group_percentage)
     group_percentage = group_percentage.rename({'Target': 'Target_{}'.format(
         level), 'Actual': 'Actual_{}'.format(level)}, axis='columns')
     group_percentage = parent_percentage.join(
@@ -110,23 +112,61 @@ def _group_change(level: int, value: float, total: float, rebalance: bool, paren
     return group_percentage
 
 
-def _change(value: float, total: float, rebalance: bool, percentage: pd.DataFrame):
-    change = percentage['Target'] - percentage['Actual']
-    if rebalance:
+def _change(value: float, total: float, rebalance: bool, absolute_distance: float, relative_distance: float, percentage: pd.DataFrame):
+    # percentage per ticker
+    target = percentage['Target'].copy()
+    actual = percentage['Actual'].copy()
+    # amount changed per ticker
+    accum_change = pd.Series(np.zeros(len(target)), index=target.index)
+
+    # deposit or withdraw
+    if value != 0:
+        change = target - actual
+        # remove opposite changes
+        if value > 0:
+            change = np.maximum(change, [0.])
+        elif value < 0:
+            change = np.minimum(change, [0.])
+        # redistribute percentages
+        change = change / change.sum()
         # amount changed per ticker
-        change = change * total
+        change = value * change
     else:
-        if value != 0:
-            # remove opposite changes
-            if value > 0:
-                change = np.maximum(change, [0.])
-            elif value < 0:
-                change = np.minimum(change, [0.])
-            # redistribute percentages
-            change = change / change.sum()
-        # amount changed per ticker
-        change = (value * change)
-    return change
+        change = pd.Series(np.zeros(len(target)), index=target.index)
+
+    accum_change += change
+    actual = actual * total + change
+    actual = actual / actual.sum()
+
+    # rebalancing
+    if rebalance:
+        change = target - actual
+        # allowed range
+        greatest_distance = np.maximum(
+            absolute_distance, target * relative_distance)
+        min_target = target - greatest_distance
+        max_target = target + greatest_distance
+        # step to go back to allowed range per ticker
+        step_to_range = (actual < min_target) * (min_target - actual)
+        step_to_range += (max_target < actual) * (max_target - actual)
+        if (step_to_range != 0).any():
+            step_to_range = step_to_range / change
+            assert (step_to_range >= 0).all(
+            ), 'All steps are expected to be positive.'
+            # greatest step
+            greatest_step_index = np.argmax(step_to_range)
+            greatest_step = step_to_range[greatest_step_index]
+            # move to the nearest point inside the range
+            change = greatest_step * change
+            # amount changed per ticker
+            change += total * change
+        else:
+            change = pd.Series(np.zeros(len(target)), index=target.index)
+    else:
+        change = pd.Series(np.zeros(len(target)), index=target.index)
+
+    accum_change += change
+    return accum_change
 
 
 def _discretize(value: float, input: pd.DataFrame):
