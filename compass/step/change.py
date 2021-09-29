@@ -150,7 +150,8 @@ def _change(value: float, total: float, rebalance: bool, absolute_distance: floa
         step_to_range = (actual < min_target) * (min_target - actual)
         step_to_range += (max_target < actual) * (max_target - actual)
         if (step_to_range != 0).any():
-            step_to_range = step_to_range / change
+            not_zero = (change != 0)
+            step_to_range[not_zero] /= change[not_zero]
             assert (step_to_range >= 0).all(
             ), 'All steps are expected to be positive.'
             # greatest step
