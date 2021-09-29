@@ -1,5 +1,7 @@
 from compass.__main__ import parse_args, post, transaction
 
+import pandas as pd
+
 _EXPECTED_ARGS = {
     'value': 1000.,
     'rebalance': False,
@@ -30,6 +32,8 @@ def test_transaction():
 
 
 def test_post():
+    pd.DataFrame(columns=['Ticker', 'Actual']).to_excel(
+        'data/actual_added_change.xlsx')
     post({
         'actual': 'data/actual_added_change.xlsx',
         'output': 'tests/data/output.xlsx',
