@@ -4,7 +4,7 @@ import pandas as pd
 
 _EXPECTED_ARGS = {
     'value': 1000.,
-    'rebalance': False,
+    'rebalance': True,
     'target': 'tests/data/portfolio.xlsx',
     'actual': 'tests/data/portfolio.xlsx',
     'price': 'tests/data/portfolio.xlsx',
