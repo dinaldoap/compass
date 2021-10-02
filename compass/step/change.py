@@ -135,8 +135,7 @@ def _change(value: float, total: float, rebalance: bool, absolute_distance: floa
         change = pd.Series(np.zeros(len(target)), index=target.index)
 
     accum_change += change
-    actual = actual * total + change
-    actual = actual / actual.sum()
+    actual = actual + change / total
 
     # rebalancing
     if rebalance:
