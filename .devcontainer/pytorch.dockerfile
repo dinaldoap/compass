@@ -41,7 +41,8 @@ RUN mkdir "${HOME}/.vscode-server" && \
   chown -R ${USERNAME}:${USERNAME} "${HOME}/.vscode-server"
 
 # Config workspace
-RUN chown -R ${USERNAME}:${USERNAME} "/workspace"
+RUN mkdir /workspace && \
+    chown -R ${USERNAME}:${USERNAME} /workspace
     
 # Set the default user
 USER $USERNAME
