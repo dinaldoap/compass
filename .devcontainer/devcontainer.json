@@ -39,6 +39,7 @@
     // Python
     "python.languageServer": "Pylance",
     "python.pythonPath": "/home/pytorch/.conda/envs/pytorch/bin/python",
+    "python.terminal.activateEnvInCurrentTerminal": true,
     // pytest
     "python.testing.pytestArgs": [
         "tests"
