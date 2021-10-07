@@ -1,4 +1,4 @@
-name: pytorch
+name: compass
 dependencies:
   - python=3.9
   - pip=21.0.1
