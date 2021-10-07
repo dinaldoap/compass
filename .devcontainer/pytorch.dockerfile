@@ -7,8 +7,10 @@ RUN apt-get update -q && \
       git \
       build-essential \
       locales && \
-    rm -rf /var/lib/apt/lists/* && \
-    locale-gen en_US.UTF-8
+    rm -rf /var/lib/apt/lists/*
+
+RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && \
+    locale-gen
 
 # Config locale
 ENV LC_ALL en_US.UTF-8
