@@ -1,16 +1,16 @@
 {
   "name": "compass",  
   // Use docker while docker-compose doesn't support --gpus
-  "dockerFile": "pytorch.dockerfile",
+  "dockerFile": "miniconda.dockerfile",
   "context": "..",  
   "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
   "workspaceFolder": "/workspace",
   "mounts": [
-    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/pytorch/.ssh",
-    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/pytorch/.gitconfig",
-    "type=volume,source=compass_vscode-server,target=/home/pytorch/.vscode-server",
+    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/miniconda/.ssh",
+    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/miniconda/.gitconfig",
+    "type=volume,source=compass_vscode-server,target=/home/miniconda/.vscode-server",
     "type=volume,source=conda-cache,target=/opt/conda/pkgs",
-    "type=volume,source=pip-cache,target=/home/pytorch/.cache/pip",
+    "type=volume,source=pip-cache,target=/home/miniconda/.cache/pip",
   ],
   "extensions": [
     "ms-python.vscode-pylance",
@@ -38,7 +38,7 @@
     },
     // Python
     "python.languageServer": "Pylance",
-    "python.pythonPath": "/home/pytorch/.conda/envs/pytorch/bin/python",
+    "python.pythonPath": "/home/miniconda/.conda/envs/miniconda/bin/python",
     "python.terminal.activateEnvInCurrentTerminal": true,
     // pytest
     "python.testing.pytestArgs": [
