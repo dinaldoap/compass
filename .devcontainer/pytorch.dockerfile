@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
+FROM continuumio/miniconda3:4.10.3
 
 # Install Linux tools
 RUN apt-get update -q && \
