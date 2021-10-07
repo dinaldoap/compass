@@ -16,7 +16,7 @@ RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && \
 ENV LC_ALL en_US.UTF-8
 
 # Config standard user
-ARG USERNAME=pytorch
+ARG USERNAME=miniconda
 
 # Or your actual UID, GID on Linux if not the default 1000
 ARG USER_UID=1000
@@ -60,9 +60,9 @@ USER $USERNAME
 ENV SHELL /bin/bash
 
 # Install python dependencies
-ADD --chown=pytorch:pytorch conda.yml /workspace/
-ADD --chown=pytorch:pytorch requirements.txt /workspace/
-ADD --chown=pytorch:pytorch setup.py /workspace/
+ADD --chown=miniconda:miniconda conda.yml /workspace/
+ADD --chown=miniconda:miniconda requirements.txt /workspace/
+ADD --chown=miniconda:miniconda setup.py /workspace/
 RUN cd /workspace && \
     conda env create --file conda.yml && \
     conda clean --all && \
