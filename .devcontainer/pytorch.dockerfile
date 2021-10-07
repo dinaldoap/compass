@@ -40,6 +40,10 @@ ENV HOME /home/$USERNAME
 RUN mkdir "${HOME}/.vscode-server" && \
   chown -R ${USERNAME}:${USERNAME} "${HOME}/.vscode-server"
 
+# Config pip cache for rootless user mounting
+RUN mkdir --parents /home/pytorch/.cache/pip && \
+    chown -R ${USERNAME}:${USERNAME} /home/pytorch/.cache/pip
+
 # Config workspace
 RUN mkdir /workspace && \
     chown -R ${USERNAME}:${USERNAME} /workspace
