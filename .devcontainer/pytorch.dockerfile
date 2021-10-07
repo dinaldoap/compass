@@ -40,6 +40,9 @@ ENV HOME /home/$USERNAME
 RUN mkdir "${HOME}/.vscode-server" && \
   chown -R ${USERNAME}:${USERNAME} "${HOME}/.vscode-server"
 
+# Config conda for rootless user
+RUN chown -R ${USERNAME}:${USERNAME} /opt/conda
+
 # Config pip cache for rootless user mounting
 RUN mkdir --parents /home/pytorch/.cache/pip && \
     chown -R ${USERNAME}:${USERNAME} /home/pytorch/.cache/pip
