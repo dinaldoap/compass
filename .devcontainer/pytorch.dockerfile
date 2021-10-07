@@ -36,7 +36,7 @@ RUN groupadd --gid $USER_GID $USERNAME && \
 # Technically optional
 ENV HOME /home/$USERNAME
 
-# Config VS Code server directory
+# Config VS Code server directory for rootless user mount
 RUN mkdir "${HOME}/.vscode-server" && \
   chown -R ${USERNAME}:${USERNAME} "${HOME}/.vscode-server"
 
@@ -45,9 +45,9 @@ RUN mkdir --parents /opt/conda/pkgs && \
     chown -R ${USERNAME}:${USERNAME} /opt/conda/pkgs && \
     chown -R ${USERNAME}:${USERNAME} /opt/conda/envs
 
-# Config pip cache for rootless user mounting
-RUN mkdir --parents /home/pytorch/.cache/pip && \
-    chown -R ${USERNAME}:${USERNAME} /home/pytorch/.cache/pip
+# Config pip cache for rootless user mount
+RUN mkdir --parents "${HOME}/.cache/pip" && \
+    chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache/pip"
 
 # Config workspace
 RUN mkdir /workspace && \
