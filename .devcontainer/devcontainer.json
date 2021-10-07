@@ -12,8 +12,6 @@
     "type=volume,source=conda-cache,target=/opt/conda/pkgs",
     "type=volume,source=pip-cache,target=/home/pytorch/.cache/pip",
   ],
-  "runArgs": [
-    "--gpus", "all"],
   "extensions": [
     "ms-python.vscode-pylance",
     "VisualStudioExptTeam.vscodeintellicode",
