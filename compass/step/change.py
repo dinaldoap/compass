@@ -50,7 +50,7 @@ class Change(Step):
             levels, self.value, total, self.rebalance, self.absolute_distance, self.relative_distance, percentage)
         output = input.copy()
         output['Change'] = change
-        output = _discretize(self.value, output)
+        output = _discretize(output)
         return output
 
 
@@ -169,7 +169,7 @@ def _change(value: float, total: float, rebalance: bool, absolute_distance: floa
     return accum_change
 
 
-def _discretize(value: float, input: pd.DataFrame):
+def _discretize(input: pd.DataFrame):
     output = input.copy()
     price = output['Price'].values
     change = output['Change'].values
@@ -179,18 +179,6 @@ def _discretize(value: float, input: pd.DataFrame):
     # avoid overflow
     change[deposit] = np.floor(change[deposit] / price[deposit])
     change[withdraw] = np.ceil(change[withdraw] / price[withdraw])
-    remainder = value - (change * price).sum()
-    # use one ticker to approximate the value
-    ticker = _choose_ticker(price, remainder)
-    remainder = np.floor(remainder / price[ticker])
-    change[ticker] = change[ticker] + remainder
     change = change.astype(int)
     output['Change'] = change
     return output
-
-
-def _choose_ticker(price: np.array, remainder):
-    # ticker that leaves less remainder
-    choice = remainder % price
-    choice = np.argmin(choice)
-    return choice

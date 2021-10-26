@@ -8,8 +8,8 @@ import pytest
 
 @pytest.mark.parametrize("group,         value, change", [
                          ([None,  None], 7.,    [1, 3]),  # exact change
-                         (['A',   None], 8.,    [2, 3]),  # round below x.5
-                         (['A/a', 'B'], 6.,    [2, 2]),  # round above x.5
+                         (['A',   None], 8.,    [1, 3]),  # round below x.5
+                         (['A/a', 'B'], 6.,    [0, 2]),  # round above x.5
                          ])
 def test_deposit(group, value, change):
     data = {
@@ -29,9 +29,9 @@ def test_deposit(group, value, change):
 
 
 @pytest.mark.parametrize("group,         value, change", [
-                         ([None,  None], -9.,   [-3, -3]),  # exact change
-                         (['A',   None], -8.,   [-2, -3]),  # round below x.5
-                         (['A/a', 'B'], -7.,   [-3, -2]),  # round above x.5
+                         ([None,  None], -9.,   [-1, -3]),  # exact change
+                         (['A',   None], -8.,   [-1, -3]),  # round below x.5
+                         (['A/a', 'B'], -7.,   [-1, -2]),  # round above x.5
                          ])
 def test_withdraw(group, value, change):
     data = {
@@ -81,8 +81,8 @@ def test_rebalance(group, value, abs_dist, rel_dist, change):
 
 
 @pytest.mark.parametrize("group,            value, change", [
-                         (['A',  'B', 'B'],   4.,  [3,  1,  0]),  # exact change
-                         (['A',  'B', 'B'], -10.,  [-1, -1, -8]),  # exact change
+                         (['A',  'B', 'B'],   4.,  [2,  1,  0]),  # exact change
+                         (['A',  'B', 'B'], -10.,  [0, -1, -8]),  # exact change
                          ])
 def test_group(group, value, change):
     data = {
