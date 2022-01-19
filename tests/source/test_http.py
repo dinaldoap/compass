@@ -7,15 +7,11 @@ from pathlib import Path
 
 
 class MockTargetSource(Source):
-
     def read(self) -> pd.DataFrame:
-        return pd.DataFrame({'Ticker': ['BITO39']})
+        return pd.DataFrame({"Ticker": ["BITO39"]})
 
 
 def test_YahooPrice():
-    output = YahooPrice(Path('tests/data'), target=MockTargetSource()).read()
-    expected = pd.DataFrame({
-        'Ticker': ['BITO39'],
-        'Price': [53.40]
-    })
-    assert_frame_equal(expected, output[['Ticker', 'Price']])
+    output = YahooPrice(Path("tests/data"), target=MockTargetSource()).read()
+    expected = pd.DataFrame({"Ticker": ["BITO39"], "Price": [53.40]})
+    assert_frame_equal(expected, output[["Ticker", "Price"]])

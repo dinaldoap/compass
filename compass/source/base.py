@@ -11,15 +11,15 @@ class Source(metaclass=ABCMeta):
 
     @abstractmethod
     def read(self) -> pd.DataFrame:
-        '''Read data from the source.
+        """Read data from the source.
 
         Parameters
         ----------
 
         Returns
         -------
-        pandas.DataFrame    
+        pandas.DataFrame
             DataFrame with the columns specified by each implementation.
 
-        '''
+        """
         pass

@@ -5,11 +5,11 @@ from pathlib import Path
 
 
 class Standard(Target):
-    '''
+    """
     Excel sheet with all the received columns.
 
     ...
-    '''
+    """
 
     def __init__(self, path: Path):
         self.path = Path(path)
