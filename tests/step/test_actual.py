@@ -1,4 +1,4 @@
-from compass.step import Actual, ActualAddedChange
+from compass.step import Actual
 from compass.source.file import StandardActual, StandardOutput
 
 import pandas as pd
@@ -18,18 +18,3 @@ def test_actual():
     output = Actual(source=StandardActual(
         path='tests/data/actual.xlsx')).run(input)
     assert_frame_equal(expected, output[['Ticker', 'Target', 'Actual']])
-
-
-def test_actual_added_change():
-    input = pd.DataFrame({
-        'Ticker': ['BIEF39', 'BITO39'],
-        'Actual': [2, 1],
-        'Change': [20, 10],
-    })
-    expected = pd.DataFrame({
-        'Ticker': ['BITO39', 'BIEF39'],
-        'Actual': [2, 4]
-    })
-    output = ActualAddedChange(source=StandardOutput(
-        'tests/data/output.xlsx')).run(input)
-    assert_frame_equal(expected, output[['Ticker', 'Actual']])

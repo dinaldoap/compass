@@ -1,4 +1,4 @@
-from compass.__main__ import parse_args, post, transaction
+from compass.__main__ import parse_args, transaction
 
 import pandas as pd
 
@@ -29,12 +29,3 @@ def test_parse_args():
 
 def test_transaction():
     transaction(_EXPECTED_ARGS)
-
-
-def test_post():
-    pd.DataFrame(columns=['Ticker', 'Actual']).to_excel(
-        'data/actual_added_change.xlsx')
-    post({
-        'actual': 'data/actual_added_change.xlsx',
-        'output': 'tests/data/output.xlsx',
-    })
