@@ -13,7 +13,7 @@
     "type=volume,source=pip-cache,target=/home/miniconda/.cache/pip",
   ],
   "extensions": [
-    "ms-python.vscode-pylance",
+    "ms-python.python",
     "VisualStudioExptTeam.vscodeintellicode",
     "mhutchie.git-graph"
   ],
