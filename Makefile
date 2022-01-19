@@ -4,7 +4,7 @@ clean:
 	rm -rf compass.egg-info
 
 format:
-	autopep8 --in-place --recursive compass setup.py tests
+	black compass setup.py tests
 
 install:
 	pip install --quiet -r requirements.txt

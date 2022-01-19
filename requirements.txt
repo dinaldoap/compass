@@ -1,7 +1,7 @@
 # Dependencies for development
 -e .
 pylint==2.7.4
-autopep8==1.5.6
+black==21.12b0
 pytest==6.2.3
 jupyter==1.0.0
 PyInstaller==4.2
