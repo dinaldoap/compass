@@ -1,7 +1,7 @@
 build: clean format install test package run
 
 clean:
-	rm -rf compass.egg-info
+	rm -rf compass.egg-info build dist
 
 format:
 	black compass setup.py tests
@@ -17,7 +17,7 @@ package:
 
 run:
 	./dist/compass --help
-	pip install --quiet dist/compass-0.1.0-py2.py3-none-any.whl
+	pip install --quiet dist/compass*.whl
 	compass --help
 	pip install --quiet -r requirements.txt
 

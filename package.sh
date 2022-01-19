@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python setup.py bdist_wheel --universal --quiet
+pip wheel --no-deps --wheel-dir dist .
 pyinstaller compass/__main__.py --onefile --name compass \
                                     --exclude-module tkinter \
                                     --hidden-import cmath \
