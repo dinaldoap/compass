@@ -42,8 +42,8 @@ RUN mkdir "${HOME}/.vscode-server" && \
 
 # Config conda for rootless user mount
 RUN mkdir --parents /opt/conda/pkgs && \
-    chown -R ${USERNAME}:${USERNAME} /opt/conda/pkgs && \
-    chown -R ${USERNAME}:${USERNAME} /opt/conda/envs
+    chown -R ${USERNAME}:${USERNAME} /opt/conda/pkgs
+ENV CONDA_ENVS_PATH /workspace/.conda/envs
 
 # Config pip cache for rootless user mount
 RUN mkdir --parents "${HOME}/.cache/pip" && \
@@ -55,20 +55,5 @@ RUN mkdir /workspace && \
     
 # Set the default user
 USER $USERNAME
-
-# Set the default shell to bash instead of sh
-ENV SHELL /bin/bash
-
-# Install python dependencies
-ADD --chown=miniconda:miniconda conda.yml /workspace/
-ADD --chown=miniconda:miniconda requirements.txt /workspace/
-ADD --chown=miniconda:miniconda setup.py /workspace/
-RUN cd /workspace && \
-    conda env create --file conda.yml && \
-    conda clean --all && \
-    pip cache purge && \    
-    rm conda.yml && \
-    rm requirements.txt && \
-    rm setup.py
 
 CMD ["/bin/bash"]

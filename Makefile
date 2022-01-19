@@ -20,3 +20,6 @@ run:
 	pip install --quiet dist/compass-0.1.0-py2.py3-none-any.whl
 	compass --help
 	pip install --quiet -r requirements.txt
+
+init:
+	conda env update --file conda.yml --prune
