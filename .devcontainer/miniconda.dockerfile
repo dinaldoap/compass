@@ -1,5 +1,8 @@
 FROM continuumio/miniconda3:4.10.3
 
+# Set the default shell to bash instead of sh
+ENV SHELL /bin/bash
+
 # Install Linux tools
 RUN apt-get update -q && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
