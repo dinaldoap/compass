@@ -15,7 +15,9 @@
   "extensions": [
     "ms-python.python",
     "VisualStudioExptTeam.vscodeintellicode",
-    "mhutchie.git-graph"
+    "GitHub.vscode-pull-request-github",
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
   ],
   "settings": {
     // Save
