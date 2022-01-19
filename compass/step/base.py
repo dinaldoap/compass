@@ -14,9 +14,7 @@ class Step(metaclass=ABCMeta):
 
     @abstractmethod
     def run(self, input: pd.DataFrame):
-        """Run one step of a transaction.
-
-        """
+        """Run one step of a transaction."""
         pass
 
 

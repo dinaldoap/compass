@@ -11,7 +11,7 @@ class Target(metaclass=ABCMeta):
 
     @abstractmethod
     def write(self, data: pd.DataFrame) -> None:
-        '''Write data into the target.
+        """Write data into the target.
 
         Parameters
         ----------
@@ -21,5 +21,5 @@ class Target(metaclass=ABCMeta):
         Returns
         -------
 
-        '''
+        """
         pass
