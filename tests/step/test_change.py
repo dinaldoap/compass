@@ -58,6 +58,10 @@ def test_withdraw(group, value, change):
         ([0, 10, 0], [0.2, 0.0, 0.8], ["A", "A", None], 0.0, 0.0, 0.0, [0, -8, 8]),
         # Value is used to buy BIEF39. Then, BITO40 is sold for rebalancing outside group A, but not inside since only BITO39 has a target
         ([0, 8, 0], [0.2, 0.0, 0.8], ["A", "A", None], 2.0, 0.0, 0.0, [0, -6, 8]),
+        # BITO40 is sold for rebalancing inside group A
+        ([0, 2, 8], [0.1, 0.1, 0.8], ["A", "A", None], 0.0, 0.0, 0.0, [1, -1, 0]),
+        # Rebalancing is done to the allowed absolute distance range inside and outside group A
+        ([0, 10, 0], [0.1, 0.1, 0.8], ["A", "A", None], 0.0, 0.1, 0.0, [1, -8, 7]),
         # No rebalancing is done due to the allowed absolute distance range
         ([0, 4, 6], [0.2, 0.0, 0.8], ["A", "A", None], 0.0, 0.2, 0.0, [0, 0, 0]),
         # No rebalancing is done due to the allowed relative distance range
