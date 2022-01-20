@@ -2,12 +2,11 @@ from compass.pipeline import Transaction
 from compass.number import parse_bool, parse_decimal
 
 import argparse
-import re
 import sys
 import configparser
 
 
-def parse_args(argv):
+def parse_args(argv, file="compass.ini"):
     parser = argparse.ArgumentParser(
         description="Compass: Helping investors to stick with theirs plans.",
         epilog="""
@@ -90,30 +89,21 @@ def parse_args(argv):
         default=0.0,
     )
 
-    configv_argv = _add_config(argv)
+    configv_argv = _add_config(argv, file)
     namespace = parser.parse_args(configv_argv)
     args = dict(vars(namespace))
     return args
 
 
-def _add_config(argv):
-    config = configparser.ConfigParser()
-    config.read("compass.ini")
-    config = dict(config["compass"]) if config.has_section("compass") else {}
-    configv = []
-    for (key, value) in config.items():
-        if key.startswith("--"):
-            configv.extend([key] + _split_by_whitspace(value))
-        else:
-            configv.append(_split_by_whitspace(value))
+def _add_config(argv, file):
+    config_parser = configparser.ConfigParser()
+    config_parser.read(file)
+    configv = (
+        dict(config_parser["compass"]) if config_parser.has_section("compass") else {}
+    )
+    configv = configv["compass_args"] if "compass_args" in configv else ""
+    configv = configv.split()
     return configv + argv
-
-
-def _split_by_whitspace(value: str):
-    if re.match(r'".*"', value) or re.match(r"'.*'", value):
-        return [value]
-    else:
-        return value.split(" ")
 
 
 def main(argv=sys.argv[1:]):
