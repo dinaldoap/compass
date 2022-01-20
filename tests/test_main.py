@@ -1,7 +1,5 @@
 from compass.__main__ import parse_args, transaction, _add_config
 
-import os
-
 _EXPECTED_ARGS = {
     # command line
     "value": 1000.0,
