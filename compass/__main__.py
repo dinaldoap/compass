@@ -81,13 +81,6 @@ def parse_args(argv, file="compass.ini"):
         help="Expense ratio (default: 0.03%%).",
         default=0.0003,
     )
-    parser.add_argument(
-        "-s",
-        "--spread-ratio",
-        type=float,
-        help="Spread ratio (default: 0.00%%).",
-        default=0.0,
-    )
 
     configv_argv = _add_config(argv, file)
     namespace = parser.parse_args(configv_argv)
