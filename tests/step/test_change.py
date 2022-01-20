@@ -52,27 +52,27 @@ def test_withdraw(group, value, change):
 
 
 @pytest.mark.parametrize(
-    "group,         value, abs_dist, rel_dist,     change",
+    "actual, target, group,         value, abs_dist, rel_dist,     change",
     [
         # BITO40 is sold for rebalancing outside group A, but not inside since only BITO39 has a target
-        (["A", "A", None], 0.0, 0.0, 0.0, [0, -2, 1]),
+        ([0, 10, 0], [0.2, 0.0, 0.8], ["A", "A", None], 0.0, 0.0, 0.0, [0, -8, 8]),
         # Value is used to buy BIEF39. Then, BITO40 is sold for rebalancing outside group A, but not inside since only BITO39 has a target
-        (["A", "A", None], 3.0, 0.0, 0.0, [0, -1, 2]),
+        ([0, 8, 0], [0.2, 0.0, 0.8], ["A", "A", None], 2.0, 0.0, 0.0, [0, -6, 8]),
         # No rebalancing is done due to the allowed absolute distance range
-        (["A", "A", None], 0.0, 0.20, 0.0, [0, 0, 0]),
+        ([0, 4, 6], [0.2, 0.0, 0.8], ["A", "A", None], 0.0, 0.2, 0.0, [0, 0, 0]),
         # No rebalancing is done due to the allowed relative distance range
-        (["A", "A", None], 0.0, 0.0, 1.0, [0, 0, 0]),
+        ([0, 4, 6], [0.2, 0.0, 0.8], ["A", "A", None], 0.0, 0.0, 1.4, [0, 0, 0]),
     ],
 )
-def test_rebalance(group, value, abs_dist, rel_dist, change):
+def test_rebalance(actual, target, group, value, abs_dist, rel_dist, change):
     data = {
         "Group": group,
         # BITO40 is a legacy ETF grouped with BITO39
         "Ticker": ["BITO39", "BITO40", "BIEF39"],
-        "Target": [0.2, 0.0, 0.8],
+        "Target": target,
         # There are 3 BITO40, but only 2 will be sold for rebalancing
-        "Actual": [1, 3, 3],
-        "Price": [1.0, 1.0, 2.0],
+        "Actual": actual,
+        "Price": [1.0, 1.0, 1.0],
     }
     input = pd.DataFrame(data)
     output = Change(value, True, abs_dist, rel_dist).run(input)
