@@ -1,4 +1,3 @@
-from pandas.io import pytables
 from compass.step import Change
 
 import pandas as pd
