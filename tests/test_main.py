@@ -1,4 +1,4 @@
-from compass.__main__ import parse_args, transaction, _add_config
+from compass.__main__ import parse_args, transaction
 
 _EXPECTED_ARGS = {
     # command line
@@ -10,7 +10,6 @@ _EXPECTED_ARGS = {
     "output": "data/output.xlsx",
     # configuration (compass.ini)
     "expense_ratio": 0.1,
-    "spread_ratio": 0.2,
     # default
     "absolute_distance": 0.05,
     "relative_distance": 0.25,
