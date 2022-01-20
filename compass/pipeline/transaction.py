@@ -17,20 +17,22 @@ class Transaction(Pipeline):
         self.config = config
 
     def run(self):
-        calculator = model.create_calculator(config=self.config)
         steps = [
             Target(source=source.create_target(config=self.config)),
             Actual(source=source.create_actual(config=self.config)),
             Price(source=source.create_price(config=self.config)),
             Change(
-                value=calculator.estimated_value,
+                value=self.config["value"],
                 rebalance=self.config["rebalance"],
                 absolute_distance=self.config["absolute_distance"],
                 relative_distance=self.config["relative_distance"],
             ),
             Balance(),
+            Report(
+                rebalance=self.config["rebalance"],
+                calculator=model.create_calculator(config=self.config),
+            ),
             Print(),
-            Report(calculator=calculator),
             WriteTarget(target=target.create_output(config=self.config)),
         ]
         data = None

@@ -1,53 +1,24 @@
-import math
+import pandas as pd
 
 
 class Calculator:
-    def __init__(self, value: float, expense_ratio: float, spread_ratio: float):
+    def __init__(self, value: float, expense_ratio: float):
         self.value = value
-        self._sign = math.copysign(1, value)
         self.expense_ratio = expense_ratio
-        self.spread_ratio = spread_ratio
-        self.actual_deposit = None
-        self.actual_withdraw = None
+
+    def calculate(self, df_change: pd.DataFrame):
+        df_calc = df_change.copy()
+        df_calc["Transaction"] = df_calc["Change"] * df_calc["Price"]
+        self.deposit = df_calc[df_calc["Change"] > 0]["Transaction"].sum()
+        self.withdraw = df_calc[df_calc["Change"] < 0]["Transaction"].sum()
 
     @property
-    def estimated_transaction(self) -> float:
-        return abs(
-            self.value / (1 + self._sign * (self.expense_ratio + self.spread_ratio))
-        )
-
-    @property
-    def estimated_expense(self) -> float:
-        return -self.estimated_transaction * self.expense_ratio
-
-    @property
-    def estimated_spread(self) -> float:
-        return -self.estimated_transaction * self.spread_ratio
-
-    @property
-    def estimated_value(self) -> float:
-        return self._sign * self.estimated_transaction
-
-    @property
-    def actual_transaction(self) -> float:
+    def transaction(self) -> float:
         assert (
-            self.actual_deposit is not None and self.actual_withdraw is not None
+            self.deposit is not None and self.withdraw is not None
         ), "Buy and sell are expected to calculate actual transaction."
-        return self.actual_deposit + abs(self.actual_withdraw)
+        return self.deposit + abs(self.withdraw)
 
     @property
-    def actual_expense(self) -> float:
-        return -self.actual_transaction * self.expense_ratio
-
-    @property
-    def actual_spread(self) -> float:
-        return -self.actual_transaction * self.spread_ratio
-
-    @property
-    def actual_remainder(self) -> float:
-        return (
-            -self.value
-            + self.actual_deposit
-            + self.actual_withdraw
-            - self.actual_expense
-        )
+    def expense(self) -> float:
+        return -self.transaction * self.expense_ratio
