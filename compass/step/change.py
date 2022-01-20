@@ -56,7 +56,7 @@ class Change(Step):
             percentage,
         )
         output = input.copy()
-        output["Change"] = change
+        output["Change"] = change.round(2)
         output = _discretize(output)
         return output
 
