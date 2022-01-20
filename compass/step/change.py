@@ -203,7 +203,6 @@ def _change(
 
     # rebalancing
     if rebalance:
-        change = target - actual
         # allowed range
         greatest_distance = np.maximum(absolute_distance, target * relative_distance)
         min_target = target - greatest_distance
@@ -212,16 +211,12 @@ def _change(
         step_to_range = (actual < min_target) * (min_target - actual)
         step_to_range += (max_target < actual) * (max_target - actual)
         if (step_to_range != 0).any():
-            not_zero = change != 0
-            step_to_range[not_zero] /= change[not_zero]
-            assert (step_to_range >= 0).all(), "All steps are expected to be positive."
-            # greatest step
-            greatest_step_index = np.argmax(step_to_range)
-            greatest_step = step_to_range[greatest_step_index]
-            # move to the nearest point inside the range
-            change = greatest_step * change
+            # minimum step
+            min_step = np.min(np.abs(step_to_range))
+            # move towards the allowed range
+            step_to_range = np.sign(step_to_range) * min_step
             # amount changed per ticker
-            change += total * change
+            change = total * step_to_range
         else:
             change = pd.Series(np.zeros(len(target)), index=target.index)
     else:
