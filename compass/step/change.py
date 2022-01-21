@@ -211,12 +211,18 @@ def _change(
         step_to_range = (actual < min_target) * (min_target - actual)
         step_to_range += (max_target < actual) * (max_target - actual)
         if (step_to_range != 0).any():
-            # minimum step
-            min_step = np.min(np.abs(step_to_range))
-            # move towards the allowed range
-            step_to_range = np.sign(step_to_range) * min_step
+            # percentages relative to group
+            change = _normalize(target) - _normalize(actual)
+            # greatest step
+            greatest_step_index = np.argmax(np.abs(step_to_range))
+            # divide by actual so that the step become relative to group
+            greatest_step = step_to_range[greatest_step_index] / actual.sum()
+            # step and change are relative to group
+            scale_factor = greatest_step / change[greatest_step_index]
+            # move to the nearest point inside the range
+            change = scale_factor * change
             # amount changed per ticker
-            change = total * step_to_range
+            change = (actual.sum() * total) * change
         else:
             change = pd.Series(np.zeros(len(target)), index=target.index)
     else:
@@ -224,6 +230,10 @@ def _change(
 
     accum_change += change
     return accum_change
+
+
+def _normalize(input: np.array):
+    return input / input.sum()
 
 
 def _discretize(input: pd.DataFrame):

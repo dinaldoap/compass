@@ -61,11 +61,11 @@ def test_withdraw(group, value, change):
         # BITO40 is sold for rebalancing inside group A
         ([0, 2, 8], [0.1, 0.1, 0.8], ["A", "A", None], 0.0, 0.0, 0.0, [1, -1, 0]),
         # Rebalancing is done to the allowed absolute distance range inside and outside group A
-        ([1, 8, 1], [0.3, 0.1, 0.6], ["A", "A", None], 0.0, 0.1, 0.0, [1, -5, 4]),
+        ([1, 8, 1], [0.3, 0.1, 0.6], ["A", "A", None], 0.0, 0.1, 0.0, [2, -6, 4]),
         # No rebalancing is done due to the allowed absolute distance range
-        ([0, 4, 6], [0.2, 0.0, 0.8], ["A", "A", None], 0.0, 0.2, 0.0, [0, 0, 0]),
+        ([0, 4, 6], [0.2, 0.2, 0.6], ["A", "A", None], 0.0, 0.2, 0.0, [0, 0, 0]),
         # No rebalancing is done due to the allowed relative distance range
-        ([0, 4, 6], [0.2, 0.0, 0.8], ["A", "A", None], 0.0, 0.0, 1.4, [0, 0, 0]),
+        ([1, 1, 8], [0.2, 0.2, 0.6], ["A", "A", None], 0.0, 0.0, 0.5, [0, 0, 0]),
     ],
 )
 def test_rebalance(actual, target, group, value, abs_dist, rel_dist, change):
