@@ -205,8 +205,8 @@ def _change(
     if rebalance:
         # allowed range
         greatest_distance = np.maximum(absolute_distance, target * relative_distance)
-        min_target = target - greatest_distance
-        max_target = target + greatest_distance
+        min_target = np.maximum(target - greatest_distance, 0.0)
+        max_target = np.minimum(target + greatest_distance, 1.0)
         # step to go back to allowed range per ticker
         step_to_range = (actual < min_target) * (min_target - actual)
         step_to_range += (max_target < actual) * (max_target - actual)
