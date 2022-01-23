@@ -1,4 +1,4 @@
-from compass.pipeline import Transaction
+from compass.pipeline import Transaction, Report
 from compass.number import parse_bool, parse_decimal
 
 import argparse
@@ -106,6 +106,10 @@ def main(argv=sys.argv[1:]):
 
 def transaction(args):
     Transaction(config=args).run()
+
+
+def report():
+    Report().run()
 
 
 if __name__ == "__main__":

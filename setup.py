@@ -17,6 +17,7 @@ setup(
     entry_points={
         "console_scripts": [
             "compass = compass.__main__:main",
+            "compass-report = compass.__main__:report",
         ]
     },
     install_requires=[
