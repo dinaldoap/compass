@@ -1,4 +1,4 @@
-from .base import ReadSource, WriteTarget
+from .base import ReadSource, WriteTarget, Join
 from .actual import Actual
 from .change import Change
 from .price import Price
