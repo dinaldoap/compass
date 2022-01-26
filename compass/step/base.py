@@ -32,3 +32,26 @@ class WriteTarget(Step):
 
     def run(self, input: pd.DataFrame):
         return self.target.write(input)
+
+
+class Join(Step):
+    def __init__(self, source: Source, on, how="left", fillna={}):
+        self.source = source
+        self.on = on
+        self.how = how
+        self.fillna = fillna
+        self.type = {key: type(value) for key, value in fillna.items()}
+
+    def run(self, input: pd.DataFrame) -> pd.DataFrame:
+        source = self.source.read()
+        output = (
+            input.join(source.set_index("Ticker"), on="Ticker", how="left")
+            .pipe(lambda df: df.fillna(self.fillna))
+            .pipe(lambda df: df.astype(self.type))
+        )
+        assert len(input) == len(
+            output
+        ), "output's length ({}) is expected to be the same as input's ({}).".format(
+            len(output), len(input)
+        )
+        return output
