@@ -1,16 +1,5 @@
 from .base import Source
-from .file import (
-    AliActual,
-    CeiHtmlActual,
-    StandardActual,
-    StandardPrice,
-    StandardTarget,
-    LayoutError,
-    RicoHtmlActualPrice,
-    StandardOutput,
-    WarrenHtmlActual,
-    WarrenHtmlPrice,
-)
+from .file import *
 from .http import YahooPrice
 
 from pathlib import Path
@@ -49,3 +38,7 @@ def _create_source(path, classes: list):
         except LayoutError:
             continue
     raise LayoutError("Layout not supported: {}.".format(path))
+
+
+def create_transaction(config: dict):
+    return Transaction(config["transaction"])

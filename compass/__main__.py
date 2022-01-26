@@ -108,8 +108,8 @@ def transaction(args):
     Transaction(config=args).run()
 
 
-def report():
-    Report().run()
+def report(config):
+    Report(config=config).run()
 
 
 if __name__ == "__main__":

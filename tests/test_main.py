@@ -1,4 +1,4 @@
-from compass.__main__ import parse_args, transaction
+from compass.__main__ import parse_args, report, transaction
 
 _EXPECTED_ARGS = {
     # command line
@@ -36,3 +36,13 @@ def test_parse_args():
 
 def test_transaction():
     transaction(_EXPECTED_ARGS)
+
+
+def test_report():
+    report(
+        {
+            "transaction": "tests/data/transaction.xlsx",
+            "target": "tests/data/target.xlsx",
+            "output": "data/report.xlsx",
+        }
+    )
