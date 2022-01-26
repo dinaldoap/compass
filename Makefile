@@ -16,7 +16,7 @@ package:
 	bash package.sh
 
 run:
-	./dist/compass --help
+#	./dist/compass --help
 	pip install --quiet dist/compass*.whl
 	compass --help
 	pip install --quiet -r requirements.txt
