@@ -1,5 +1,4 @@
 from compass.source import Source
-from compass.target import Target
 
 from abc import ABCMeta, abstractmethod
 import pandas as pd
@@ -35,23 +34,27 @@ class WriteTarget(Step):
 
 
 class Join(Step):
-    def __init__(self, source: Source, on, how="left", fillna={}):
+    def __init__(self, source: Source, on, how="left", fillna={}, strict=False):
         self.source = source
         self.on = on
         self.how = how
         self.fillna = fillna
         self.type = {key: type(value) for key, value in fillna.items()}
+        self.strict = strict
 
     def run(self, input: pd.DataFrame) -> pd.DataFrame:
         source = self.source.read()
         output = (
-            input.join(source.set_index("Ticker"), on="Ticker", how="left")
+            input.join(source.set_index(self.on), on=self.on, how=self.how)
             .pipe(lambda df: df.fillna(self.fillna))
             .pipe(lambda df: df.astype(self.type))
         )
-        assert len(input) == len(
-            output
-        ), "output's length ({}) is expected to be the same as input's ({}).".format(
-            len(output), len(input)
-        )
+        if self.strict and len(input) != len(output):
+            raise LengthChangedError(
+                f"Output's length ({len(output)}) is expected to be the same as input's ({len(input)})."
+            )
         return output
+
+
+class LengthChangedError(Exception):
+    pass
