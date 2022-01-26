@@ -40,5 +40,5 @@ def _create_source(path, classes: list):
     raise LayoutError("Layout not supported: {}.".format(path))
 
 
-def create_transaction(config: dict):
-    return Transaction(config["transaction"])
+def create_change(config: dict):
+    return Change(config["change"])

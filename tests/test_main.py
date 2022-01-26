@@ -41,7 +41,7 @@ def test_transaction():
 def test_report():
     report(
         {
-            "transaction": "tests/data/transaction.xlsx",
+            "change": "tests/data/change.xlsx",
             "target": "tests/data/target.xlsx",
             "output": "data/report.xlsx",
         }

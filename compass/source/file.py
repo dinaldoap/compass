@@ -22,7 +22,7 @@ _ALI_RENAME = {
     "Quantidade": "Actual",
 }
 _ALI_COLUMNS = _ALI_RENAME.keys()
-_TRANSACTION_RENAME = {
+_CHANGE_RENAME = {
     "Entrada/Saída": "Transaction",  # Credito == Deposit and Debito == Withdraw
     "Data": "Date",
     "Movimentação": "Type",
@@ -30,8 +30,8 @@ _TRANSACTION_RENAME = {
     "Quantidade": "Change",
     "Preço unitário": "Price",
 }
-_TRANSACTION_COLUMNS = _TRANSACTION_RENAME.keys()
-_TRANSACTION_TYPES = {
+_CHANGE_COLUMNS = _CHANGE_RENAME.keys()
+_CHANGE_TYPES = {
     "Change": int,
     "Price": float,
 }
@@ -227,7 +227,7 @@ class StandardOutput(Source):
         return pd.read_excel(self.path)
 
 
-class Transaction(Source):
+class Change(Source):
     """
     Excel sheet with data downloaded from Área Logada do Investidor (https://https://www.investidor.b3.com.br/).
     The columns Data, Produto, Quantidade and Preço unitário are, respectivelly, renamed to Date, Ticker, Change and Price.
@@ -238,17 +238,17 @@ class Transaction(Source):
     def __init__(self, path: Path, date=date.today()):
         self.path = Path(path)
         _check_extension(self.path, "xlsx")
-        _check_layout(self.path, _TRANSACTION_COLUMNS)
+        _check_layout(self.path, _CHANGE_COLUMNS)
 
     def read(self) -> pd.DataFrame:
         data = (
             pd.read_excel(self.path)
-            .pipe(lambda df: df[_TRANSACTION_COLUMNS])
-            .rename(_TRANSACTION_RENAME, axis="columns")
+            .pipe(lambda df: df[_CHANGE_COLUMNS])
+            .rename(_CHANGE_RENAME, axis="columns")
             .pipe(lambda df: df[df["Change"].str.fullmatch(r"\d+")])
             .pipe(lambda df: df[df["Price"] != "-"])
             .query("Type == 'Transferência - Liquidação'")
-            .astype(_TRANSACTION_TYPES)
+            .astype(_CHANGE_TYPES)
             .assign(
                 Change=lambda df: (
                     (df["Transaction"] == "Credito")
