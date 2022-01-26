@@ -13,7 +13,7 @@ class Report(Pipeline):
 
     def run(self):
         steps = [
-            ReadSource(source=source.create_transaction(config=self.config)),
+            ReadSource(source=source.create_change(config=self.config)),
             Join(
                 source=source.create_target(config=self.config),
                 on="Ticker",

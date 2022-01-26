@@ -73,8 +73,8 @@ def test_WarrenHtmlPrice():
     assert_frame_equal(expected, output[["Ticker", "Price"]])
 
 
-def test_Transaction():
-    output = Transaction("tests/data/transaction.xlsx", date=None).read()
+def test_Change():
+    output = Change("tests/data/change.xlsx", date=None).read()
     expected = pd.DataFrame(
         {
             "Date": ["01/02/2021", "02/02/2021", "01/01/2021", "02/01/2021"],
