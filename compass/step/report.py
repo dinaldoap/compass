@@ -38,7 +38,7 @@ class ChangeHistoryReport(Step):
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
                 * (df["Price"] - df["AvgPrice"])
             )
-            .assign(Taxes=lambda df: df["CapitalGain"] * self.tax_rate)
+            .assign(Tax=lambda df: df["CapitalGain"] * self.tax_rate)
             .sort_values("Date")
             .reset_index(drop=True)
         )

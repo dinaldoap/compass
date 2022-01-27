@@ -23,7 +23,7 @@ def test_change_history():
         input.assign(AvgPrice=[50.0, 100.0, 100.0, 150.0, 90])
         .assign(Expense=[0.5, 1.5, 2.0, 2.0, 0.9])
         .assign(CapitalGain=[0.0, 0.0, 100.0, 0.0, 0.0])
-        .assign(Taxes=[0.0, 0.0, 15.0, 0.0, 0.0])
+        .assign(Tax=[0.0, 0.0, 15.0, 0.0, 0.0])
     )
     output = ChangeHistoryReport(expense_ratio=0.01, tax_rate=0.15).run(input)
     assert_frame_equal(expected, output)
