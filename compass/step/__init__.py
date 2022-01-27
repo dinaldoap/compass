@@ -4,5 +4,5 @@ from .change import Change
 from .price import Price
 from .balance import Balance
 from .print import Print
-from .report import Report
+from .report import *
 from .target import Target
