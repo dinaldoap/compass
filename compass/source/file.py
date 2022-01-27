@@ -35,6 +35,7 @@ _CHANGE_TYPES = {
     "Change": int,
     "Price": float,
 }
+_WARREN_PATTERN = r"https://warren.com.br/app/#[\/\w]*/trade"
 
 
 class StandardTarget(Source):
@@ -159,9 +160,7 @@ class WarrenHtmlActual(Source):
         self.table_pattern = r"QUANTIDADE(.+)Favoritos"
         self.ticker_pattern = r"(?:%| )(\w+) (\d+) "
         _check_extension(self.path, "html")
-        _check_pattern_layout(
-            self.path, "https://warren.com.br/app/#/v3/trade", self.selection_pattern
-        )
+        _check_pattern_layout(self.path, _WARREN_PATTERN, self.selection_pattern)
         _check_last_update(self.path, date)
 
     def read(self) -> pd.DataFrame:
@@ -196,13 +195,11 @@ class WarrenHtmlPrice(Source):
 
     def __init__(self, path: Path, date=date.today()):
         self.path = Path(path)
-        self.selection_pattern = r"Todos meus favoritos"
-        self.table_pattern = r"Todos meus favoritos([A-Z\d\$ \+\-,%]+)"
+        self.selection_pattern = r"class=\"selected\">\s*PREÇO ATUAL"
+        self.table_pattern = r"PREÇO ATUAL(.+)Favoritos"
         self.ticker_pattern = r"([A-Z\d]+) R\$ ([\d\.,]+) "
         _check_extension(self.path, "html")
-        _check_pattern_layout(
-            self.path, "https://warren.com.br/app/#/v3/trade", self.selection_pattern
-        )
+        _check_pattern_layout(self.path, _WARREN_PATTERN, self.selection_pattern)
         _check_last_update(self.path, date)
 
     def read(self) -> pd.DataFrame:
@@ -343,8 +340,8 @@ def _parse_html(path: Path, table_pattern, ticker_pattern, value_column):
     text = _clean_html(_read_content(path))
     match = re.search(table_pattern, text)
     assert (
-        len(match.groups()) == 1
-    ), "It is expected only one table with values embraced by the pattern {} in the cleaned html {}.".format(
+        match is not None
+    ), "It is expected one table with values embraced by the pattern {} in the cleaned html {}.".format(
         table_pattern, text
     )
     table = match.group(0)

@@ -69,7 +69,7 @@ def test_StandardPrice():
 
 def test_WarrenHtmlPrice():
     output = WarrenHtmlPrice("tests/data/price_warren.html", date=None).read()
-    expected = pd.DataFrame({"Ticker": ["BIEF39", "BITO39"], "Price": [2.22, 1.11]})
+    expected = pd.DataFrame({"Ticker": ["BITO39", "BIEF39"], "Price": [1.11, 2.22]})
     assert_frame_equal(expected, output[["Ticker", "Price"]])
 
 
