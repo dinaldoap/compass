@@ -21,3 +21,26 @@ class Report(Step):
         print("      Expense:", format_currency(self.calculator.expense))
         print("=================================")
         return input
+
+
+class ChangeHistoryReport(Step):
+    def run(self, input: pd.DataFrame):
+        output = (
+            input.groupby("Ticker")
+            .apply(lambda df_group: df_group.assign(AvgPrice=_avg_price))
+            .sort_values("Date")
+            .reset_index(drop=True)
+        )
+        return output
+
+
+def _avg_price(input: pd.DataFrame):
+    count = 0
+    value = 0
+    avg_prices = []
+    for _, row in input.iterrows():
+        count += row["Change"]
+        value += row["Change"] * (row["Price"] if row["Change"] >= 0 else avg_price)
+        avg_price = value / count
+        avg_prices.append(avg_price)
+    return avg_prices
