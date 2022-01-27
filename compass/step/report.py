@@ -2,6 +2,7 @@ from .base import Step
 from compass.model import Calculator
 from compass.number import format_currency
 import pandas as pd
+import numpy as np
 
 
 class Report(Step):
@@ -28,6 +29,10 @@ class ChangeHistoryReport(Step):
         output = (
             input.groupby("Ticker")
             .apply(lambda df_group: df_group.assign(AvgPrice=_avg_price))
+            .assign(
+                CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
+                * (df["Price"] - df["AvgPrice"])
+            )
             .sort_values("Date")
             .reset_index(drop=True)
         )
