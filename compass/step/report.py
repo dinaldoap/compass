@@ -25,6 +25,9 @@ class Report(Step):
 
 
 class ChangeHistoryReport(Step):
+    def __init__(self, tax_rate: float):
+        self.tax_rate = tax_rate
+
     def run(self, input: pd.DataFrame):
         output = (
             input.groupby("Ticker")
@@ -33,6 +36,7 @@ class ChangeHistoryReport(Step):
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
                 * (df["Price"] - df["AvgPrice"])
             )
+            .assign(Taxes=lambda df: df["CapitalGain"] * self.tax_rate)
             .sort_values("Date")
             .reset_index(drop=True)
         )
