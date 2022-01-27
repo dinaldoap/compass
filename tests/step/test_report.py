@@ -20,8 +20,9 @@ def test_change_history():
         }
     )
     expected = (
-        input.assign(AvgPrice=[50.0, 100.0, 100.0, 150.0, 90])
-        .assign(Expense=[0.5, 1.5, 2.0, 2.0, 0.9])
+        input.assign(Expense=[0.5, 1.5, 2.0, 2.0, 0.9])
+        .assign(AvgPrice=[50.0, 100.0, 100.0, 150.0, 90])
+        .assign(AvgExpense=[0.5, 1.0, 1.0, 1.5, 0.9])
         .assign(CapitalGain=[0.0, 0.0, 100.0, 0.0, 0.0])
         .assign(Tax=[0.0, 0.0, 15.0, 0.0, 0.0])
     )
