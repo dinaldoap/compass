@@ -22,6 +22,7 @@ _ALI_RENAME = {
     "Quantidade": "Actual",
 }
 _ALI_COLUMNS = _ALI_RENAME.keys()
+_WARREN_PATTERN = r"https://warren.com.br/app/#[\/\w]*/trade"
 
 
 class StandardTarget(Source):
@@ -146,9 +147,7 @@ class WarrenHtmlActual(Source):
         self.table_pattern = r"QUANTIDADE(.+)Favoritos"
         self.ticker_pattern = r"(?:%| )(\w+) (\d+) "
         _check_extension(self.path, "html")
-        _check_pattern_layout(
-            self.path, "https://warren.com.br/app/#/v3/trade", self.selection_pattern
-        )
+        _check_pattern_layout(self.path, _WARREN_PATTERN, self.selection_pattern)
         _check_last_update(self.path, date)
 
     def read(self) -> pd.DataFrame:
@@ -187,9 +186,7 @@ class WarrenHtmlPrice(Source):
         self.table_pattern = r"Todos meus favoritos([A-Z\d\$ \+\-,%]+)"
         self.ticker_pattern = r"([A-Z\d]+) R\$ ([\d\.,]+) "
         _check_extension(self.path, "html")
-        _check_pattern_layout(
-            self.path, "https://warren.com.br/app/#/v3/trade", self.selection_pattern
-        )
+        _check_pattern_layout(self.path, _WARREN_PATTERN, self.selection_pattern)
         _check_last_update(self.path, date)
 
     def read(self) -> pd.DataFrame:
