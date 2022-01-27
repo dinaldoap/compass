@@ -25,13 +25,15 @@ class Report(Step):
 
 
 class ChangeHistoryReport(Step):
-    def __init__(self, tax_rate: float):
+    def __init__(self, expense_ratio: float, tax_rate: float):
+        self.expense_ratio = expense_ratio
         self.tax_rate = tax_rate
 
     def run(self, input: pd.DataFrame):
         output = (
             input.groupby("Ticker")
             .apply(lambda df_group: df_group.assign(AvgPrice=_avg_price))
+            .assign(Expense=lambda df: df["Price"] * self.expense_ratio)
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
                 * (df["Price"] - df["AvgPrice"])
