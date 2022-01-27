@@ -31,9 +31,13 @@ class ChangeHistoryReport(Step):
 
     def run(self, input: pd.DataFrame):
         output = (
-            input.groupby("Ticker")
-            .apply(lambda df_group: df_group.assign(AvgPrice=_avg_price))
-            .assign(Expense=lambda df: df["Price"] * self.expense_ratio)
+            input.assign(Expense=lambda df: df["Price"] * self.expense_ratio)
+            .groupby("Ticker")
+            .apply(
+                lambda df_group: df_group.assign(AvgPrice=_avg_price).assign(
+                    AvgExpense=lambda df: _cum_avg(df, "Expense")
+                )
+            )
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
                 * (df["Price"] - df["AvgPrice"])
@@ -55,3 +59,15 @@ def _avg_price(input: pd.DataFrame):
         avg_price = value / count
         avg_prices.append(avg_price)
     return avg_prices
+
+
+def _cum_avg(input: pd.DataFrame, column):
+    count = 0
+    value = 0
+    avgs = []
+    for _, row in input.iterrows():
+        count += row["Change"]
+        value += row["Change"] * (row[column] if row["Change"] >= 0 else avg)
+        avg = value / count
+        avgs.append(avg)
+    return avgs
