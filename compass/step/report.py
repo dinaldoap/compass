@@ -32,7 +32,7 @@ class ChangeHistoryReport(Step):
     def run(self, input: pd.DataFrame):
         output = (
             input.assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
-            .assign(Value=lambda df: df["Price"] + df["Expense"])
+            .assign(Value=lambda df: df["Price"] + ((df['Change'] >= 0).astype(int) - (df['Change'] < 0).astype(int)) * df["Expense"])
             .groupby("Ticker")
             .apply(
                 lambda df_group: df_group.assign(
@@ -47,9 +47,9 @@ class ChangeHistoryReport(Step):
             )
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
-                * ((df["Price"] - df["Expense"]) - df["CumAvgValue"])
+                * np.maximum(df["Value"] - df["CumAvgValue"], 0.)
             )
-            .assign(Tax=lambda df: df["CapitalGain"] * self.tax_rate)
+            .assign(Tax=lambda df: (df["CapitalGain"] * self.tax_rate).round(2))
             .sort_values("Date")
             .reset_index(drop=True)
         )
@@ -63,6 +63,6 @@ def _cum_avg(input: pd.DataFrame, column):
     for _, row in input.iterrows():
         count += row["Change"]
         value += row["Change"] * (row[column] if row["Change"] >= 0 else avg)
-        avg = value / count
+        avg = round(value / count, 2) if count > 0 else avg
         avgs.append(avg)
     return avgs
