@@ -19,6 +19,54 @@ def parse_args(argv, file="compass.ini"):
                     Additional columns in the spreadsheet are ignored.
                 """,
     )
+    subparsers = parser.add_subparsers(dest="subcommand")
+    subcommands = []
+    subcommands.append(_add_subcommand_change(subparsers))
+    subcommands.append(_add_subcommand_report(subparsers))
+
+    configv_argv = _add_config(argv, file, subcommands)
+    namespace = parser.parse_args(configv_argv)
+    config = dict(vars(namespace))
+    return config
+
+
+def _add_config(argv: list, file: str, subcommands: list):
+    if len(argv) == 0 or argv[0] not in subcommands:
+        return argv
+    subcommand = argv[0]
+    subcommand_config = f"{subcommand}_args"
+    config_parser = configparser.ConfigParser()
+    config_parser.read(file)
+    configv = (
+        dict(config_parser[subcommand]) if config_parser.has_section(subcommand) else {}
+    )
+    configv = configv[subcommand_config] if subcommand_config in configv else ""
+    configv = configv.split()
+    return argv[:1] + configv + argv[1:]
+
+
+def main(argv=sys.argv[1:]):
+    config = parse_args(argv)
+    subcommand = config["subcommand"]
+    routes = {
+        "change": _run_change,
+        "report": _run_report,
+    }
+    assert subcommand in routes, f"Subcommad {subcommand} not expected."
+    routes[subcommand](config)
+
+
+def _run_change(config):
+    Transaction(config=config).run()
+
+
+def _run_report(config):
+    Report(config=config).run()
+
+
+def _add_subcommand_change(subparsers):
+    subcommand = "change"
+    parser = subparsers.add_parser(subcommand)
     parser.add_argument(
         "value",
         type=parse_decimal,
@@ -81,35 +129,48 @@ def parse_args(argv, file="compass.ini"):
         help="Expense ratio (default: 0.03%%).",
         default=0.0003,
     )
-
-    configv_argv = _add_config(argv, file)
-    namespace = parser.parse_args(configv_argv)
-    args = dict(vars(namespace))
-    return args
+    return subcommand
 
 
-def _add_config(argv, file):
-    config_parser = configparser.ConfigParser()
-    config_parser.read(file)
-    configv = (
-        dict(config_parser["compass"]) if config_parser.has_section("compass") else {}
+def _add_subcommand_report(subparsers):
+    subcommand = "report"
+    parser = subparsers.add_parser(subcommand)
+    parser.add_argument(
+        "-c",
+        "--change",
+        type=str,
+        help="Change history (default: change.xlsx).",
+        default="change.xlsx",
     )
-    configv = configv["compass_args"] if "compass_args" in configv else ""
-    configv = configv.split()
-    return configv + argv
-
-
-def main(argv=sys.argv[1:]):
-    args = parse_args(argv)
-    transaction(args)
-
-
-def transaction(args):
-    Transaction(config=args).run()
-
-
-def report(config):
-    Report(config=config).run()
+    parser.add_argument(
+        "-t",
+        "--target",
+        type=str,
+        help="Target of the portfolio in terms of percentages per ticker (default: portfolio.xlsx).",
+        default="portfolio.xlsx",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        help="Output with changes to be done per ticker (default: output.xlsx).",
+        default="output.xlsx",
+    )
+    parser.add_argument(
+        "-e",
+        "--expense-ratio",
+        type=float,
+        help="Expense ratio (default: 0.03%%).",
+        default=0.0003,
+    )
+    parser.add_argument(
+        "-x",
+        "--tax-rate",
+        type=float,
+        help="Tax rate (default: 15.0%%).",
+        default=0.15,
+    )
+    return subcommand
 
 
 if __name__ == "__main__":
