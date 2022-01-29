@@ -1,24 +1,20 @@
-from compass.__main__ import parse_args, report, transaction
+from compass.__main__ import main, parse_args, _run_report, _run_change
 
-_EXPECTED_ARGS = {
-    # command line
-    "value": 1000.0,
-    "rebalance": True,
-    "target": "tests/data/portfolio.xlsx",
-    "actual": "tests/data/portfolio.xlsx",
-    "price": "tests/data/portfolio.xlsx",
-    "output": "data/output.xlsx",
-    # configuration (compass.ini)
-    "expense_ratio": 0.1,
-    # default
-    "absolute_distance": 0.05,
-    "relative_distance": 0.25,
-}
+from pathlib import Path
+import pytest
 
 
-def test_parse_args():
+def test_main():
+    with pytest.raises(SystemExit, match="0"):
+        main(["--help"])
+
+
+def test_parse_args_change():
+    output = _create_output(".")
+    expected_args = _create_config_change(output)
     args = parse_args(
         [
+            "change",
             "1,000.00",
             "--target",
             "tests/data/portfolio.xlsx",
@@ -27,22 +23,76 @@ def test_parse_args():
             "--price",
             "tests/data/portfolio.xlsx",
             "--output",
-            "data/output.xlsx",
+            str(output),
         ],
         "tests/data/compass.ini",
     )
-    assert _EXPECTED_ARGS == args
+    assert expected_args == args
 
 
-def test_transaction():
-    transaction(_EXPECTED_ARGS)
+def test_change(temp_dir):
+    output = _create_output(temp_dir)
+    _run_change(_create_config_change(output))
+    assert output.exists()
 
 
-def test_report():
-    report(
-        {
-            "change": "tests/data/change.xlsx",
-            "target": "tests/data/target.xlsx",
-            "output": "data/report.xlsx",
-        }
+def test_parse_args_report():
+    output = _create_output(".")
+    expected_config = _create_config_report(output)
+    args = parse_args(
+        [
+            "report",
+            "--change",
+            "tests/data/change.xlsx",
+            "--target",
+            "tests/data/target.xlsx",
+            "--output",
+            str(output),
+            "--expense-ratio",
+            "0.03",
+            "--tax-rate",
+            "0.01",
+        ],
+        "tests/data/compass.ini",
     )
+    assert expected_config == args
+
+
+def test_report(temp_dir):
+    output = Path(temp_dir).joinpath("report.xlsx")
+    _run_report(_create_config_report(output))
+    assert output.exists()
+
+
+def _create_output(temp_dir: str):
+    output = Path(temp_dir).joinpath("output.xlsx")
+    return output
+
+
+def _create_config_change(output: Path):
+    return {
+        # command line
+        "subcommand": "change",
+        "value": 1000.0,
+        "rebalance": True,
+        "target": "tests/data/portfolio.xlsx",
+        "actual": "tests/data/portfolio.xlsx",
+        "price": "tests/data/portfolio.xlsx",
+        "output": str(output),
+        # configuration (compass.ini)
+        "expense_ratio": 0.1,
+        # default
+        "absolute_distance": 0.05,
+        "relative_distance": 0.25,
+    }
+
+
+def _create_config_report(output: Path):
+    return {
+        "subcommand": "report",
+        "change": "tests/data/change.xlsx",
+        "target": "tests/data/target.xlsx",
+        "output": str(output),
+        "expense_ratio": 0.03,
+        "tax_rate": 0.01,
+    }

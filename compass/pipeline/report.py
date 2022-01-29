@@ -1,8 +1,9 @@
 from .base import Pipeline
 from compass import source, target
 from compass.step import (
-    ReadSource,
     Join,
+    ReadSource,
+    ChangeHistoryReport,
     WriteTarget,
 )
 
