@@ -33,3 +33,8 @@ def test_join():
         output = Join(source=SourceMock(), on="Ticker", how="inner", strict=True).run(
             input
         )
+    # Filter input by input.Ticker in source.Tickers
+    output = Join(source=SourceMock(), on="Ticker", add=[], how="inner").run(input)
+    assert_frame_equal(
+        expected.query("Ticker == 'BITO39'").pipe(lambda df: df[input.columns]), output
+    )

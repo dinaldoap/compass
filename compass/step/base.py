@@ -34,16 +34,21 @@ class WriteTarget(Step):
 
 
 class Join(Step):
-    def __init__(self, source: Source, on, how="left", fillna={}, strict=False):
+    def __init__(
+        self, source: Source, on, add: list = None, how="left", fillna={}, strict=False
+    ):
         self.source = source
         self.on = on
+        self.add = add
         self.how = how
         self.fillna = fillna
         self.type = {key: type(value) for key, value in fillna.items()}
         self.strict = strict
 
     def run(self, input: pd.DataFrame) -> pd.DataFrame:
-        source = self.source.read()
+        source = self.source.read().pipe(
+            lambda df: df if self.add is None else df[[self.on] + self.add]
+        )
         output = (
             input.join(source.set_index(self.on), on=self.on, how=self.how)
             .pipe(lambda df: df.fillna(self.fillna))
