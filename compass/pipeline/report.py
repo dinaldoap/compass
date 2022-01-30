@@ -20,7 +20,10 @@ class Report(Pipeline):
                 on="Ticker",
                 how="inner",
             ),
-            ChangeHistoryReport(expense_ratio=self.config['expense_ratio'],tax_rate=self.config['tax_rate']),
+            ChangeHistoryReport(
+                expense_ratio=self.config["expense_ratio"],
+                tax_rate=self.config["tax_rate"],
+            ),
             WriteTarget(target=target.create_output(config=self.config)),
         ]
         data = None
