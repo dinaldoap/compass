@@ -57,4 +57,6 @@ class ChangeHistoryView(Step):
         ]
         input_columns = set(input.columns)
         columns = [column for column in columns if column in input_columns]
-        return input.pipe(lambda df: df[columns])
+        return input.assign(Date=lambda df: df["Date"].dt.date).pipe(
+            lambda df: df[columns]
+        )
