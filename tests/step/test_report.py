@@ -1,6 +1,6 @@
 from compass.step import ChangeHistoryReport
 
-import numpy as np
+from datetime import datetime
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -8,7 +8,8 @@ from pandas.testing import assert_frame_equal
 def test_change_history():
     input = pd.DataFrame(
         {
-            "Date": [f"{i:02}/01/2022" for i in range(1, 7)],
+            "Date": [datetime(2022, 1, i) for i in range(1, 5)]
+            + [datetime(2022, 2, i) for i in range(1, 3)],
             "Ticker": [
                 "BITO39",
                 "BITO39",

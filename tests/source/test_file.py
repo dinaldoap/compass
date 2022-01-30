@@ -1,6 +1,6 @@
 from compass.source.file import *
 
-from datetime import date
+from datetime import date, datetime
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import pytest
@@ -77,7 +77,12 @@ def test_Change():
     output = Change("tests/data/change.xlsx", date=None).read()
     expected = pd.DataFrame(
         {
-            "Date": ["01/02/2021", "02/02/2021", "01/01/2021", "02/01/2021"],
+            "Date": [
+                datetime(2021, 2, 1),
+                datetime(2021, 2, 2),
+                datetime(2021, 1, 1),
+                datetime(2021, 1, 2),
+            ],
             "Ticker": ["BIEF39", "BIEF39", "BITO39", "BITO39"],
             "Change": [2, -2, 1, -1],
             "Price": [2.22, 2.22, 1.11, 1.11],

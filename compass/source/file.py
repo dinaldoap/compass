@@ -1,7 +1,7 @@
 from .base import Source
 from compass.number import parse_decimal
 
-from datetime import date
+from datetime import date, datetime
 import pandas as pd
 from pathlib import Path
 import re
@@ -239,7 +239,11 @@ class Change(Source):
 
     def read(self) -> pd.DataFrame:
         data = (
-            pd.read_excel(self.path)
+            pd.read_excel(
+                self.path,
+                parse_dates=["Data"],
+                date_parser=lambda txt: datetime.strptime(txt, "%d/%m/%Y"),
+            )
             .pipe(lambda df: df[_CHANGE_COLUMNS])
             .rename(_CHANGE_RENAME, axis="columns")
             .pipe(lambda df: df[df["Change"].str.fullmatch(r"\d+")])
