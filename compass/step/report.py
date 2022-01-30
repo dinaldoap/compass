@@ -40,18 +40,16 @@ class ChangeHistoryReport(Step):
             .groupby("Ticker")
             .apply(
                 lambda df_group: df_group.assign(
-                    CumSumChange=lambda df: df["Change"].cumsum()
+                    Actual=lambda df: df["Change"].cumsum()
                 )
-                .assign(CumAvgExpense=lambda df: _cum_avg(df, "Expense"))
-                .assign(
-                    CumSumExpense=lambda df: df["CumSumChange"] * df["CumAvgExpense"]
-                )
-                .assign(CumAvgValue=lambda df: _cum_avg(df, "Value"))
-                .assign(CumSumValue=lambda df: df["CumSumChange"] * df["CumAvgValue"])
+                .assign(AvgExpense=lambda df: _cum_avg(df, "Expense"))
+                .assign(TotalExpense=lambda df: df["Actual"] * df["AvgExpense"])
+                .assign(AvgValue=lambda df: _cum_avg(df, "Value"))
+                .assign(TotalValue=lambda df: df["Actual"] * df["AvgValue"])
             )
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
-                * np.maximum(df["Value"] - df["CumAvgValue"], 0.0)
+                * np.maximum(df["Value"] - df["AvgValue"], 0.0)
             )
             .assign(Tax=lambda df: (df["CapitalGain"] * self.tax_rate).round(2))
             .sort_values("Date")
