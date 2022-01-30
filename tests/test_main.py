@@ -48,10 +48,6 @@ def test_parse_args_report():
             "tests/data/target.xlsx",
             "--output",
             str(output),
-            "--expense-ratio",
-            "0.03",
-            "--tax-rate",
-            "0.01",
         ],
         "tests/data/compass.ini",
     )
@@ -93,6 +89,8 @@ def _create_config_report(output: Path):
         "change": "tests/data/change.xlsx",
         "target": "tests/data/target.xlsx",
         "output": str(output),
-        "expense_ratio": 0.03,
-        "tax_rate": 0.01,
+        # configuration (compass.ini)
+        "expense_ratio": 0.2,
+        # default
+        "tax_rate": 0.15,
     }
