@@ -34,3 +34,27 @@ class Print(Step):
             )
         print(formatted[columns])
         return input
+
+
+class ChangeHistoryView(Step):
+    def run(self, input: pd.DataFrame):
+        # Columns order
+        columns = [
+            "Date",
+            "Name",
+            "Ticker",
+            "Change",
+            "Actual",
+            "Price",
+            "Expense",
+            "Value",
+            "AvgExpense",
+            "AvgValue",
+            "TotalExpense",
+            "TotalValue",
+            "CapitalGain",
+            "Tax",
+        ]
+        input_columns = set(input.columns)
+        columns = [column for column in columns if column in input_columns]
+        return input.pipe(lambda df: df[columns])

@@ -4,6 +4,7 @@ from compass.step import (
     Join,
     ReadSource,
     ChangeHistoryReport,
+    ChangeHistoryView,
     WriteTarget,
 )
 
@@ -25,6 +26,7 @@ class Report(Pipeline):
                 expense_ratio=self.config["expense_ratio"],
                 tax_rate=self.config["tax_rate"],
             ),
+            ChangeHistoryView(),
             WriteTarget(target=target.create_output(config=self.config)),
         ]
         data = None
