@@ -65,8 +65,9 @@ def _cum_avg(input: pd.DataFrame, column):
     value = 0
     avgs = []
     for _, row in input.iterrows():
-        count += row["Change"]
-        value += row["Change"] * (row[column] if row["Change"] >= 0 else avg)
-        avg = round(value / count, 2) if count > 0 else avg
+        change = row["Change"]
+        count += change
+        value += change * (row[column] if change >= 0 else avg)
+        avg = round(value / count, 2) if change >= 0 else avg
         avgs.append(avg)
     return avgs
