@@ -38,7 +38,7 @@ def _add_config(argv: list, file: str, subcommands: list):
     config_parser = configparser.ConfigParser()
     config_parser.read(file)
     configv = (
-        dict(config_parser[subcommand]) if config_parser.has_section(subcommand) else {}
+        dict(config_parser["compass"]) if config_parser.has_section("compass") else {}
     )
     configv = configv[subcommand_config] if subcommand_config in configv else ""
     configv = configv.split()
