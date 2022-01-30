@@ -32,7 +32,11 @@ class ChangeHistoryReport(Step):
     def run(self, input: pd.DataFrame):
         output = (
             input.assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
-            .assign(Value=lambda df: df["Price"] + ((df['Change'] >= 0).astype(int) - (df['Change'] < 0).astype(int)) * df["Expense"])
+            .assign(
+                Value=lambda df: df["Price"]
+                + ((df["Change"] >= 0).astype(int) - (df["Change"] < 0).astype(int))
+                * df["Expense"]
+            )
             .groupby("Ticker")
             .apply(
                 lambda df_group: df_group.assign(
@@ -47,7 +51,7 @@ class ChangeHistoryReport(Step):
             )
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
-                * np.maximum(df["Value"] - df["CumAvgValue"], 0.)
+                * np.maximum(df["Value"] - df["CumAvgValue"], 0.0)
             )
             .assign(Tax=lambda df: (df["CapitalGain"] * self.tax_rate).round(2))
             .sort_values("Date")
