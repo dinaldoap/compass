@@ -60,3 +60,24 @@ class ChangeHistoryView(Step):
         return input.assign(Date=lambda df: df["Date"].dt.date).pipe(
             lambda df: df[columns]
         )
+
+
+class SummaryView(Step):
+    def run(self, input: pd.DataFrame):
+        # Columns order
+        columns = [
+            "Name",
+            "Ticker",
+            "Actual",
+            "TotalExpense",
+            "TotalValue",
+        ]
+        input_columns = set(input.columns)
+        columns = [column for column in columns if column in input_columns]
+        columns = ["Year"] + columns
+        return (
+            input.assign(Year=lambda df: df["Date"].apply(lambda dt: dt.year))
+            .groupby(["Year", "Ticker"], as_index=False)
+            .last()
+            .filter(items=columns)
+        )

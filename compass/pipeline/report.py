@@ -5,6 +5,7 @@ from compass.step import (
     ReadSource,
     ChangeHistoryReport,
     ChangeHistoryView,
+    SummaryView,
     WriteTarget,
 )
 
@@ -27,7 +28,15 @@ class Report(Pipeline):
                 tax_rate=self.config["tax_rate"],
             ),
             ChangeHistoryView(),
-            WriteTarget(target=target.create_output(config=self.config)),
+            WriteTarget(
+                target=target.create_output(config=self.config, sheet_name="Change")
+            ),
+            SummaryView(),
+            WriteTarget(
+                target=target.create_output(
+                    config=self.config, sheet_name="Summary", append=True
+                )
+            ),
         ]
         data = None
         for step in steps:
