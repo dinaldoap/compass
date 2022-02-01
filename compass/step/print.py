@@ -5,6 +5,10 @@ import pandas as pd
 
 
 class ChangePrint(Step):
+    def __init__(self, target: Target):
+        super().__init__()
+        self.target = target
+
     def run(self, input: pd.DataFrame):
         formatted = input.copy()
         # Columns order
@@ -34,6 +38,7 @@ class ChangePrint(Step):
                 lambda x: "{}%".format(x)
             )
         print(formatted[columns])
+        self.target.write(formatted[columns])
         return input
 
 

@@ -32,8 +32,7 @@ class Transaction(Pipeline):
                 rebalance=self.config["rebalance"],
                 calculator=model.create_calculator(config=self.config),
             ),
-            ChangePrint(),
-            WriteTarget(target=target.create_output(config=self.config)),
+            ChangePrint(target=target.create_output(config=self.config)),
         ]
         data = None
         for step in steps:
