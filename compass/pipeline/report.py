@@ -20,7 +20,7 @@ class Report(Pipeline):
             Join(
                 source=source.create_target(config=self.config),
                 on="Ticker",
-                add=[],
+                add=["Name"],
                 how="inner",
             ),
             ChangeHistoryReport(
