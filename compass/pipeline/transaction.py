@@ -6,7 +6,7 @@ from compass.step import (
     Price,
     Target,
     Balance,
-    Print,
+    ChangePrint,
     Report,
     WriteTarget,
 )
@@ -32,7 +32,7 @@ class Transaction(Pipeline):
                 rebalance=self.config["rebalance"],
                 calculator=model.create_calculator(config=self.config),
             ),
-            Print(),
+            ChangePrint(),
             WriteTarget(target=target.create_output(config=self.config)),
         ]
         data = None
