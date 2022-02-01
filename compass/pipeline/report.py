@@ -4,9 +4,8 @@ from compass.step import (
     Join,
     ReadSource,
     ChangeHistoryReport,
-    ChangeHistoryView,
-    SummaryView,
-    WriteTarget,
+    HistoricPrint,
+    SummaryPrint,
 )
 
 
@@ -27,10 +26,10 @@ class Report(Pipeline):
                 expense_ratio=self.config["expense_ratio"],
                 tax_rate=self.config["tax_rate"],
             ),
-            ChangeHistoryView(
+            HistoricPrint(
                 target=target.create_output(config=self.config, sheet_name="Change")
             ),
-            SummaryView(
+            SummaryPrint(
                 target=target.create_output(
                     config=self.config, sheet_name="Summary", append=True
                 )

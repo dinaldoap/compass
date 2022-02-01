@@ -4,7 +4,7 @@ from compass.target import Target
 import pandas as pd
 
 
-class Print(Step):
+class ChangePrint(Step):
     def run(self, input: pd.DataFrame):
         formatted = input.copy()
         # Columns order
@@ -37,7 +37,7 @@ class Print(Step):
         return input
 
 
-class ChangeHistoryView(Step):
+class HistoricPrint(Step):
     def __init__(self, target: Target):
         super().__init__()
         self.target = target
@@ -70,7 +70,7 @@ class ChangeHistoryView(Step):
         return input
 
 
-class SummaryView(Step):
+class SummaryPrint(Step):
     def __init__(self, target: Target):
         super().__init__()
         self.target = target
