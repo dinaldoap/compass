@@ -1,4 +1,5 @@
 from .base import Step
+from compass.target import Target
 
 import pandas as pd
 
@@ -37,6 +38,10 @@ class Print(Step):
 
 
 class ChangeHistoryView(Step):
+    def __init__(self, target: Target):
+        super().__init__()
+        self.target = target
+
     def run(self, input: pd.DataFrame):
         # Columns order
         columns = [
@@ -61,10 +66,15 @@ class ChangeHistoryView(Step):
         columns = [column for column in columns if column in input_columns]
         data = input.assign(Date=lambda df: df["Date"].dt.date).filter(items=columns)
         _print_last("Historic", data)
+        self.target.write(data)
         return input
 
 
 class SummaryView(Step):
+    def __init__(self, target: Target):
+        super().__init__()
+        self.target = target
+
     def run(self, input: pd.DataFrame):
         # Columns order
         columns = [
@@ -85,6 +95,7 @@ class SummaryView(Step):
             .filter(items=columns)
         )
         _print_last("Summary", data)
+        self.target.write(data)
         return input
 
 
