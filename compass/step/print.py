@@ -59,9 +59,9 @@ class ChangeHistoryView(Step):
         ]
         input_columns = set(input.columns)
         columns = [column for column in columns if column in input_columns]
-        return input.assign(Date=lambda df: df["Date"].dt.date).pipe(
-            lambda df: df[columns]
-        )
+        data = input.assign(Date=lambda df: df["Date"].dt.date).filter(items=columns)
+        _print_last("Historic", data)
+        return input
 
 
 class SummaryView(Step):
@@ -78,9 +78,17 @@ class SummaryView(Step):
         input_columns = set(input.columns)
         columns = [column for column in columns if column in input_columns]
         columns = ["Year"] + columns
-        return (
-            input.assign(Year=lambda df: df["Date"].apply(lambda dt: dt.year))
+        data = (
+            input.assign(Year=lambda df: df["Date"].dt.year)
             .groupby(["Year", "Ticker"], as_index=False)
             .last()
             .filter(items=columns)
         )
+        _print_last("Summary", data)
+        return input
+
+
+def _print_last(title: str, data: pd.DataFrame):
+    print(f"================= {title} =================")
+    last = data.groupby("Ticker").last()
+    print(last)
