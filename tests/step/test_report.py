@@ -1,4 +1,4 @@
-from compass.step import ChangeHistoryReport
+from compass.step import HistoricReport
 
 from datetime import datetime
 import pandas as pd
@@ -35,5 +35,5 @@ def test_change_history():
         .assign(CapitalGain=[0.0, 0.0, 97.0, 0.0, 0.0, 0.0])
         .assign(Tax=[0.0, 0.0, 14.55, 0.0, 0.0, 0.0])
     )
-    output = ChangeHistoryReport(expense_ratio=0.01, tax_rate=0.15).run(input)
+    output = HistoricReport(expense_ratio=0.01, tax_rate=0.15).run(input)
     assert_frame_equal(expected, output)

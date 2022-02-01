@@ -3,7 +3,7 @@ from compass import source, target
 from compass.step import (
     Join,
     ReadSource,
-    ChangeHistoryReport,
+    HistoricReport,
     HistoricPrint,
     SummaryPrint,
 )
@@ -22,7 +22,7 @@ class Report(Pipeline):
                 add=["Name"],
                 how="inner",
             ),
-            ChangeHistoryReport(
+            HistoricReport(
                 expense_ratio=self.config["expense_ratio"],
                 tax_rate=self.config["tax_rate"],
             ),

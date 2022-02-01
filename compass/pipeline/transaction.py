@@ -7,8 +7,7 @@ from compass.step import (
     Target,
     Balance,
     ChangePrint,
-    Report,
-    WriteTarget,
+    ChangeReport,
 )
 
 
@@ -28,7 +27,7 @@ class Transaction(Pipeline):
                 relative_distance=self.config["relative_distance"],
             ),
             Balance(),
-            Report(
+            ChangeReport(
                 rebalance=self.config["rebalance"],
                 calculator=model.create_calculator(config=self.config),
             ),

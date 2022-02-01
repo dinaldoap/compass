@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 
-class Report(Step):
+class ChangeReport(Step):
     def __init__(self, rebalance: bool, calculator: Calculator):
         self.rebalance = rebalance
         self.calculator = calculator
@@ -24,7 +24,7 @@ class Report(Step):
         return input
 
 
-class ChangeHistoryReport(Step):
+class HistoricReport(Step):
     def __init__(self, expense_ratio: float, tax_rate: float):
         self.expense_ratio = expense_ratio
         self.tax_rate = tax_rate
