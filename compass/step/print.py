@@ -48,8 +48,10 @@ class ChangeHistoryView(Step):
             "Price",
             "Expense",
             "Value",
+            "AvgPrice",
             "AvgExpense",
             "AvgValue",
+            "TotalPrice",
             "TotalExpense",
             "TotalValue",
             "CapitalGain",
@@ -69,6 +71,7 @@ class SummaryView(Step):
             "Name",
             "Ticker",
             "Actual",
+            "TotalPrice",
             "TotalExpense",
             "TotalValue",
         ]
