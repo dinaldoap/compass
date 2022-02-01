@@ -42,6 +42,8 @@ class ChangeHistoryReport(Step):
                 lambda df_group: df_group.assign(
                     Actual=lambda df: df["Change"].cumsum()
                 )
+                .assign(AvgPrice=lambda df: _cum_avg(df, "Price"))
+                .assign(TotalPrice=lambda df: df["Actual"] * df["AvgPrice"])
                 .assign(AvgExpense=lambda df: _cum_avg(df, "Expense"))
                 .assign(TotalExpense=lambda df: df["Actual"] * df["AvgExpense"])
                 .assign(AvgValue=lambda df: _cum_avg(df, "Value"))

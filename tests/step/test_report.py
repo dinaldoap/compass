@@ -26,6 +26,8 @@ def test_change_history():
         input.assign(Expense=[0.5, 1.5, 2.0, 2.0, 0.9, 0.9])
         .assign(Value=[50.5, 151.5, 198.0, 202.0, 90.9, 89.1])
         .assign(Actual=[1, 2, 1, 2, 9, 0])
+        .assign(AvgPrice=[50.0, 100.0, 100.0, 150.0, 90.0, 90.0])
+        .assign(TotalPrice=[50.0, 200.0, 100.0, 300.0, 810.0, 0.0])
         .assign(AvgExpense=[0.5, 1.0, 1.0, 1.5, 0.9, 0.9])
         .assign(TotalExpense=[0.5, 2.0, 1.0, 3.0, 8.1, 0.0])
         .assign(AvgValue=[50.5, 101.0, 101.0, 151.5, 90.9, 90.9])
