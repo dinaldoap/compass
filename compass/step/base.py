@@ -30,7 +30,8 @@ class WriteTarget(Step):
         self.target = target
 
     def run(self, input: pd.DataFrame):
-        return self.target.write(input)
+        self.target.write(input)
+        return input
 
 
 class Join(Step):
