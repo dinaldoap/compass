@@ -27,12 +27,10 @@ class Report(Pipeline):
                 expense_ratio=self.config["expense_ratio"],
                 tax_rate=self.config["tax_rate"],
             ),
-            ChangeHistoryView(),
-            WriteTarget(
+            ChangeHistoryView(
                 target=target.create_output(config=self.config, sheet_name="Change")
             ),
-            SummaryView(),
-            WriteTarget(
+            SummaryView(
                 target=target.create_output(
                     config=self.config, sheet_name="Summary", append=True
                 )
