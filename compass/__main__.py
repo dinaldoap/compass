@@ -1,4 +1,4 @@
-from compass.pipeline import Transaction, Report
+from compass.pipeline import ChangePosition, Report
 from compass.number import parse_bool, parse_decimal
 
 import argparse
@@ -57,7 +57,7 @@ def main(argv=sys.argv[1:]):
 
 
 def _run_change(config):
-    Transaction(config=config).run()
+    ChangePosition(config=config).run()
 
 
 def _run_report(config):

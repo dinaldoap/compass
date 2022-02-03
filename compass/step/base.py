@@ -6,14 +6,14 @@ import pandas as pd
 
 class Step(metaclass=ABCMeta):
     """
-    One step of a transaction.
+    One step of a pipeline.
 
     ...
     """
 
     @abstractmethod
     def run(self, input: pd.DataFrame):
-        """Run one step of a transaction."""
+        """Run one step of a pipeline."""
         pass
 
 
