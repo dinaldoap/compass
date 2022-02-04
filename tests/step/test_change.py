@@ -11,6 +11,7 @@ import pytest
         ([None, None], 7.0, [1, 3]),  # exact change
         (["A", None], 8.0, [1, 3]),  # round below x.5
         (["A/a", "B"], 6.0, [0, 2]),  # round above x.5
+        (["A/B/C", None], 7.0, [1, 3]),  # level with no group parent
     ],
 )
 def test_deposit(group, value, change):
