@@ -52,11 +52,10 @@ class HistoricReport(Step):
                 + ((df["Change"] >= 0).astype(int) - (df["Change"] < 0).astype(int))
                 * df["Expense"]
             )
-            .groupby("Ticker")
+            .groupby("Ticker", as_index=False)
             .apply(
-                lambda df_group: df_group.assign(
-                    Actual=lambda df: df["Change"].cumsum()
-                )
+                lambda df_group: df_group.sort_values("Date")
+                .assign(Actual=lambda df: df["Change"].cumsum())
                 .assign(AvgPrice=lambda df: _cum_avg(df, "Price"))
                 .assign(TotalPrice=lambda df: df["Actual"] * df["AvgPrice"])
                 .assign(AvgExpense=lambda df: _cum_avg(df, "Expense"))
@@ -64,11 +63,11 @@ class HistoricReport(Step):
                 .assign(AvgValue=lambda df: _cum_avg(df, "Value"))
                 .assign(TotalValue=lambda df: df["Actual"] * df["AvgValue"])
             )
-            .sort_values("Date")
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
                 * (df["Value"] - df["AvgValue"])
             )
+            .sort_values(["Date", "Ticker"], ignore_index=True)
             .assign(TotalCapitalGain=lambda df: _cum_sum_negative(df, "CapitalGain"))
             .assign(
                 Tax=lambda df: (
@@ -77,7 +76,6 @@ class HistoricReport(Step):
                     * self.tax_rate
                 ).round(2)
             )
-            .reset_index(drop=True)
         )
         return output
 
@@ -101,9 +99,18 @@ def _cum_sum_negative(input: pd.DataFrame, column):
     """
     total = 0
     totals = []
-    for _, value in input[column].items():
+    last = (
+        input.assign(Month=lambda df: df["Date"].dt.month)
+        .assign(Id=range(len(input)))
+        .groupby("Month", as_index=False)
+        .last()
+    )
+    last = set(last["Id"])
+    for i, row in input.iterrows():
+        value = row[column]
         total += value
         totals.append(total)
-        # do not accumulate positive total
-        total = np.minimum(total, 0)
+        # accumulate only negative total over month
+        if i in last:
+            total = np.minimum(total, 0)
     return totals
