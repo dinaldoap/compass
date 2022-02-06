@@ -64,12 +64,19 @@ class HistoricReport(Step):
                 .assign(AvgValue=lambda df: _cum_avg(df, "Value"))
                 .assign(TotalValue=lambda df: df["Actual"] * df["AvgValue"])
             )
+            .sort_values("Date")
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
-                * np.maximum(df["Value"] - df["AvgValue"], 0.0)
+                * (df["Value"] - df["AvgValue"])
             )
-            .assign(Tax=lambda df: (df["CapitalGain"] * self.tax_rate).round(2))
-            .sort_values("Date")
+            .assign(TotalCapitalGain=lambda df: _cum_sum_negative(df, "CapitalGain"))
+            .assign(
+                Tax=lambda df: (
+                    (df["TotalCapitalGain"] > 0)
+                    * df["TotalCapitalGain"]
+                    * self.tax_rate
+                ).round(2)
+            )
             .reset_index(drop=True)
         )
         return output
@@ -86,3 +93,17 @@ def _cum_avg(input: pd.DataFrame, column):
         avg = round(value / count, 2) if change >= 0 else avg
         avgs.append(avg)
     return avgs
+
+
+def _cum_sum_negative(input: pd.DataFrame, column):
+    """
+    This method is useful for accumulating losses over time and reseting total after paying tax over capital gains.
+    """
+    total = 0
+    totals = []
+    for _, value in input[column].items():
+        total += value
+        totals.append(total)
+        # do not accumulate positive total
+        total = np.minimum(total, 0)
+    return totals

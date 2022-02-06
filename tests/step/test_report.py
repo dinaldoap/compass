@@ -5,7 +5,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 
 
-def test_change_history():
+def test_change_history_avg_total():
     input = pd.DataFrame(
         {
             "Date": [datetime(2022, 1, i) for i in range(1, 5)]
@@ -32,8 +32,35 @@ def test_change_history():
         .assign(TotalExpense=[0.5, 2.0, 1.0, 3.0, 8.1, 0.0])
         .assign(AvgValue=[50.5, 101.0, 101.0, 151.5, 90.9, 90.9])
         .assign(TotalValue=[50.5, 202.0, 101.0, 303.0, 818.1, 0.0])
-        .assign(CapitalGain=[0.0, 0.0, 97.0, 0.0, 0.0, 0.0])
-        .assign(Tax=[0.0, 0.0, 14.55, 0.0, 0.0, 0.0])
     )
     output = HistoricReport(expense_ratio=0.01, tax_rate=0.15).run(input)
-    assert_frame_equal(expected, output)
+    assert_frame_equal(expected, output[expected.columns])
+
+
+def test_change_history_capital_gain():
+    input = pd.DataFrame(
+        {
+            "Date": [datetime(2022, 1, i) for i in range(1, 5)]
+            + [datetime(2022, 2, i) for i in range(1, 4)],
+            "Ticker": [
+                "BITO39",
+                "BITO39",
+                "BITO39",
+                "BIEF39",
+                "BIEF39",
+                "BIEF39",
+                "BIEF39",
+            ],
+            "Change": [2, -1, -1, 3, -1, -1, -1],
+            "Price": [100.0, 50.0, 50.0, 100.0, 150.0, 200.0, 200],
+        }
+    )
+    expected = (
+        input.assign(Value=[100.0, 50.0, 50.0, 100.0, 150.0, 200.0, 200.0])
+        .assign(AvgValue=[100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0])
+        .assign(CapitalGain=[0.0, -50.0, -50.0, 0.0, 50.0, 100.0, 100.0])
+        .assign(TotalCapitalGain=[0.0, -50.0, -100.0, -100.0, -50.0, 50.0, 100.0])
+        .assign(Tax=[0.0, 0.0, 0.0, 0.0, 0.0, 7.5, 15.0])
+    )
+    output = HistoricReport(expense_ratio=0.0, tax_rate=0.15).run(input)
+    assert_frame_equal(expected, output[expected.columns])
