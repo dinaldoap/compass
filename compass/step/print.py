@@ -65,6 +65,7 @@ class HistoricPrint(Step):
             "TotalExpense",
             "TotalValue",
             "CapitalGain",
+            "TotalCapitalGain",
             "Tax",
         ]
         input_columns = set(input.columns)
