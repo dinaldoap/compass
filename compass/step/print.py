@@ -76,6 +76,31 @@ class HistoricPrint(Step):
         return input
 
 
+class MonthPrint(Step):
+    def __init__(self, target: Target):
+        super().__init__()
+        self.target = target
+
+    def run(self, input: pd.DataFrame):
+        # Columns order
+        columns = [
+            "Year",
+            "Month",
+            "TotalCapitalGain",
+            "Tax",
+        ]
+        input_columns = set(input.columns)
+        columns = [column for column in columns if column in input_columns]
+        data = (
+            input.groupby(["Year", "Month"], as_index=False)
+            .last()
+            .filter(items=columns)
+        )
+        _print_last("Month", data, by=["Year", "Month"])
+        self.target.write(data)
+        return input
+
+
 class SummaryPrint(Step):
     def __init__(self, target: Target):
         super().__init__()
@@ -104,7 +129,7 @@ class SummaryPrint(Step):
         return input
 
 
-def _print_last(title: str, data: pd.DataFrame):
+def _print_last(title: str, data: pd.DataFrame, by="Ticker"):
     print(f"================= {title} =================")
-    last = data.groupby("Ticker").last()
+    last = data.groupby(by=by).last()
     print(last)
