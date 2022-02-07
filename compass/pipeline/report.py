@@ -31,7 +31,7 @@ class Report(Pipeline):
             ),
             SummaryPrint(
                 target=target.create_output(
-                    config=self.config, sheet_name="Summary", append=True
+                    config=self.config, sheet_name="Year", append=True
                 )
             ),
         ]

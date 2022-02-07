@@ -84,6 +84,7 @@ class SummaryPrint(Step):
     def run(self, input: pd.DataFrame):
         # Columns order
         columns = [
+            "Year",
             "Name",
             "Ticker",
             "Actual",
@@ -93,14 +94,12 @@ class SummaryPrint(Step):
         ]
         input_columns = set(input.columns)
         columns = [column for column in columns if column in input_columns]
-        columns = ["Year"] + columns
         data = (
-            input.assign(Year=lambda df: df["Date"].dt.year)
-            .groupby(["Year", "Ticker"], as_index=False)
+            input.groupby(["Year", "Ticker"], as_index=False)
             .last()
             .filter(items=columns)
         )
-        _print_last("Summary", data)
+        _print_last("Year", data)
         self.target.write(data)
         return input
 
