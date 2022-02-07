@@ -101,7 +101,7 @@ class MonthPrint(Step):
         return input
 
 
-class SummaryPrint(Step):
+class YearPrint(Step):
     def __init__(self, target: Target):
         super().__init__()
         self.target = target
