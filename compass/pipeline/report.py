@@ -5,6 +5,7 @@ from compass.step import (
     ReadSource,
     HistoricReport,
     HistoricPrint,
+    MonthPrint,
     SummaryPrint,
 )
 
@@ -28,6 +29,11 @@ class Report(Pipeline):
             ),
             HistoricPrint(
                 target=target.create_output(config=self.config, sheet_name="Change")
+            ),
+            MonthPrint(
+                target=target.create_output(
+                    config=self.config, sheet_name="Month", append=True
+                )
             ),
             SummaryPrint(
                 target=target.create_output(
