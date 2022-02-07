@@ -46,7 +46,9 @@ class HistoricReport(Step):
 
     def run(self, input: pd.DataFrame):
         output = (
-            input.assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
+            input.assign(Year=lambda df: df["Date"].dt.year)
+            .assign(Month=lambda df: df["Date"].dt.month)
+            .assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
             .assign(
                 Value=lambda df: df["Price"]
                 + ((df["Change"] >= 0).astype(int) - (df["Change"] < 0).astype(int))
@@ -100,9 +102,8 @@ def _cum_sum_negative(input: pd.DataFrame, column):
     total = 0
     totals = []
     last = (
-        input.assign(Month=lambda df: df["Date"].dt.month)
-        .assign(Id=range(len(input)))
-        .groupby("Month", as_index=False)
+        input.assign(Id=range(len(input)))
+        .groupby(["Year", "Month"], as_index=False)
         .last()
     )
     last = set(last["Id"])
