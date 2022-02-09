@@ -23,12 +23,11 @@ _ALI_RENAME = {
 }
 _ALI_COLUMNS = _ALI_RENAME.keys()
 _CHANGE_RENAME = {
-    "Entrada/Saída": "Transaction",  # Credito == Deposit and Debito == Withdraw
-    "Data": "Date",
-    "Movimentação": "Type",
-    "Produto": "Ticker",
+    "Data do Negócio": "Date",
+    "Tipo de Movimentação": "Transaction",  # Compra == Deposit and Venda == Withdraw
+    "Código de Negociação": "Ticker",
     "Quantidade": "Change",
-    "Preço unitário": "Price",
+    "Preço": "Price",
 }
 _CHANGE_COLUMNS = _CHANGE_RENAME.keys()
 _CHANGE_TYPES = {
@@ -226,8 +225,8 @@ class StandardOutput(Source):
 
 class Change(Source):
     """
-    Excel sheet with data downloaded from Área Logada do Investidor (https://https://www.investidor.b3.com.br/).
-    The columns Data, Produto, Quantidade and Preço unitário are, respectivelly, renamed to Date, Ticker, Change and Price.
+    Excel sheet with data downloaded from Área Logada do Investidor (https://www.investidor.b3.com.br/).
+    The columns Data do Negociação, Código de Negociação, Quantidade and Preço are, respectivelly, renamed to Date, Ticker, Change and Price.
 
     ...
     """
@@ -241,30 +240,22 @@ class Change(Source):
         data = (
             pd.read_excel(
                 self.path,
-                parse_dates=["Data"],
+                parse_dates=["Data do Negócio"],
                 date_parser=lambda txt: datetime.strptime(txt, "%d/%m/%Y"),
             )
             .pipe(lambda df: df[_CHANGE_COLUMNS])
             .rename(_CHANGE_RENAME, axis="columns")
-            .pipe(lambda df: df[df["Change"].str.fullmatch(r"\d+")])
-            .pipe(lambda df: df[df["Price"] != "-"])
-            .query("Type == 'Transferência - Liquidação'")
             .astype(_CHANGE_TYPES)
             .assign(
                 Change=lambda df: (
-                    (df["Transaction"] == "Credito")
-                    + (df["Transaction"] == "Debito") * -1
+                    (df["Transaction"] == "Compra")
+                    + (df["Transaction"] == "Venda") * -1
                 )
                 * df["Change"]
             )
-            .assign(Ticker=lambda df: df["Ticker"].apply(split_first_trim))
             .pipe(lambda df: df[["Date", "Ticker", "Change", "Price"]])
         )
         return data
-
-
-def split_first_trim(text):
-    return text.split("-")[0].strip()
 
 
 class LayoutError(Exception):
