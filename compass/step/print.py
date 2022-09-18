@@ -68,9 +68,7 @@ class HistoricPrint(Step):
             "TotalCapitalGain",
             "Tax",
         ]
-        input_columns = set(input.columns)
-        columns = [column for column in columns if column in input_columns]
-        data = input.assign(Date=lambda df: df["Date"].dt.date).filter(items=columns)
+        data = _reset_safe_filter(input, columns)
         _print_last("Historic", data)
         self.target.write(data)
         return input
@@ -84,19 +82,14 @@ class MonthPrint(Step):
     def run(self, input: pd.DataFrame):
         # Columns order
         columns = [
-            "Year",
-            "Month",
+            "Date",
             "TotalCapitalGain",
             "Tax",
         ]
-        input_columns = set(input.columns)
-        columns = [column for column in columns if column in input_columns]
-        data = (
-            input.groupby(["Year", "Month"], as_index=False)
-            .last()
-            .filter(items=columns)
-        )
-        _print_last("Month", data, by=["Year", "Month"])
+
+        data = _resample_last(input, "M")
+        data = _reset_safe_filter(data, columns)
+        _print_last("Month", data, by=["Date"])
         self.target.write(data)
         return input
 
@@ -109,7 +102,7 @@ class YearPrint(Step):
     def run(self, input: pd.DataFrame):
         # Columns order
         columns = [
-            "Year",
+            "Date",
             "Name",
             "Ticker",
             "Actual",
@@ -117,16 +110,21 @@ class YearPrint(Step):
             "TotalExpense",
             "TotalValue",
         ]
-        input_columns = set(input.columns)
-        columns = [column for column in columns if column in input_columns]
-        data = (
-            input.groupby(["Year", "Ticker"], as_index=False)
-            .last()
-            .filter(items=columns)
-        )
+        data = _resample_last(input, "Y")
+        data = _reset_safe_filter(data, columns)
         _print_last("Year", data)
         self.target.write(data)
         return input
+
+
+def _reset_safe_filter(input: pd.DataFrame, columns: list):
+    output = input.reset_index()
+    common_columns = [column for column in columns if column in set(output.columns)]
+    return output.filter(items=common_columns)
+
+
+def _resample_last(input: pd.DataFrame, period: str):
+    return input.resample(period).last()
 
 
 def _print_last(title: str, data: pd.DataFrame, by="Ticker"):
