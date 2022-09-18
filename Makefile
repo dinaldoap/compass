@@ -10,7 +10,7 @@ install:
 	pip install --quiet -r requirements.txt
 
 test: 
-	pytest tests
+	pytest --cov=compass --cov-report=term-missing tests
 
 package:
 	bash package.sh
