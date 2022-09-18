@@ -21,7 +21,7 @@ def test_change_history_avg_total():
             "Change": [1, 1, -1, 1, 9, -9],
             "Price": [50.0, 150.0, 200.0, 200.0, 90.0, 90.0],
         }
-    )
+    ).set_index("Date")
     expected = (
         input.assign(Expense=[0.5, 1.5, 2.0, 2.0, 0.9, 0.9])
         .assign(Value=[50.5, 151.5, 198.0, 202.0, 90.9, 89.1])
@@ -55,7 +55,7 @@ def test_change_history_capital_gain():
             "Change": [2, -1, -1, 3, -1, -1, -1],
             "Price": [100.0, 50.0, 50.0, 100.0, 250.0, 200.0, 200],
         }
-    )
+    ).set_index("Date")
     expected = (
         input.assign(Value=[100.0, 50.0, 50.0, 100.0, 250.0, 200.0, 200.0])
         .assign(AvgValue=[100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0])

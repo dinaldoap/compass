@@ -46,18 +46,17 @@ class HistoricReport(Step):
 
     def run(self, input: pd.DataFrame):
         output = (
-            input.assign(Year=lambda df: df["Date"].dt.year)
-            .assign(Month=lambda df: df["Date"].dt.month)
-            .assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
+            input.assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
             .assign(
                 Value=lambda df: df["Price"]
                 + ((df["Change"] >= 0).astype(int) - (df["Change"] < 0).astype(int))
                 * df["Expense"]
             )
-            .groupby("Ticker", as_index=False)
+            .groupby("Ticker")
             .apply(
-                lambda df_group: df_group.sort_values("Date")
-                .assign(Actual=lambda df: df["Change"].cumsum())
+                lambda df_group: df_group.assign(
+                    Actual=lambda df: df["Change"].cumsum()
+                )
                 .assign(AvgPrice=lambda df: _cum_avg(df, "Price"))
                 .assign(TotalPrice=lambda df: df["Actual"] * df["AvgPrice"])
                 .assign(AvgExpense=lambda df: _cum_avg(df, "Expense"))
@@ -65,11 +64,12 @@ class HistoricReport(Step):
                 .assign(AvgValue=lambda df: _cum_avg(df, "Value"))
                 .assign(TotalValue=lambda df: df["Actual"] * df["AvgValue"])
             )
+            .reset_index(level="Ticker", drop=True)
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
                 * (df["Value"] - df["AvgValue"])
             )
-            .sort_values(["Date", "Ticker"], ignore_index=True)
+            .sort_index()
             .assign(TotalCapitalGain=lambda df: _cum_sum_negative(df, "CapitalGain"))
             .assign(
                 Tax=lambda df: (
@@ -101,17 +101,14 @@ def _cum_sum_negative(input: pd.DataFrame, column):
     """
     total = 0
     totals = []
-    last = (
-        input.assign(Id=range(len(input)))
-        .groupby(["Year", "Month"], as_index=False)
-        .last()
-    )
+    input_id = input.assign(Id=range(len(input)))
+    last = input_id.groupby([input.index.year, input.index.month]).last()
     last = set(last["Id"])
-    for i, row in input.iterrows():
+    for _, row in input_id.iterrows():
         value = row[column]
         total += value
         totals.append(total)
         # accumulate only negative total over month
-        if i in last:
+        if row["Id"] in last:
             total = np.minimum(total, 0)
     return totals

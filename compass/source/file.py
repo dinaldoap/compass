@@ -254,6 +254,7 @@ class Change(Source):
                 * df["Change"]
             )
             .pipe(lambda df: df[["Date", "Ticker", "Change", "Price"]])
+            .set_index("Date")
         )
         return data
 

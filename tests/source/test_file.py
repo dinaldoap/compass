@@ -87,5 +87,5 @@ def test_Change():
             "Change": [2, -2, 1, -1],
             "Price": [2.22, 2.22, 1.11, 1.11],
         }
-    )
-    assert_frame_equal(expected, output.reset_index(drop=True))
+    ).set_index("Date")
+    assert_frame_equal(expected, output)
