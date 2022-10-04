@@ -20,7 +20,7 @@ setup(
         ]
     },
     install_requires=[
-        "numpy==1.20.2",
+        "numpy==1.23.0",
         "pandas==1.2.3",
         "openpyxl==3.0.7",
         "requests==2.25.1",
