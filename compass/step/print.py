@@ -110,9 +110,9 @@ class YearPrint(Step):
             "TotalExpense",
             "TotalValue",
         ]
-        data = _resample_last(input, "Y")
+        data = input.groupby([input.index.year, "Ticker"]).last()
         data = _reset_safe_filter(data, columns)
-        _print_last("Year", data)
+        _print_last("Year", data, by=["Date", "Ticker"])
         self.target.write(data)
         return input
 

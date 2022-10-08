@@ -1,3 +1,4 @@
+from datetime import datetime
 from .base import Step
 from compass.model import Calculator
 from compass.number import format_currency
@@ -40,13 +41,29 @@ class TransactionPrint(Step):
 
 
 class HistoricReport(Step):
-    def __init__(self, expense_ratio: float, tax_rate: float):
+    def __init__(
+        self, expense_ratio: float, tax_rate: float, current_date: datetime.date = None
+    ):
         self.expense_ratio = expense_ratio
         self.tax_rate = tax_rate
+        self.current_date = datetime.now() if current_date is None else current_date
 
     def run(self, input: pd.DataFrame):
+        last_day_months = pd.DataFrame(
+            {
+                "Date": pd.date_range(
+                    start=input.index.min(), end=self.current_date, freq="M"
+                )
+            }
+        )
+        tickers = input.filter(["Ticker"]).drop_duplicates()
+        date_ticker = last_day_months.merge(tickers, how="cross")
         output = (
-            input.assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
+            input.set_index("Ticker", append=True)
+            .join(date_ticker.set_index(["Date", "Ticker"]), how="outer")
+            .fillna(value={"Change": 0}, downcast="infer")
+            .fillna(value={"Price": 0.0})
+            .assign(Expense=lambda df: (df["Price"] * self.expense_ratio).round(2))
             .assign(
                 Value=lambda df: df["Price"]
                 + ((df["Change"] >= 0).astype(int) - (df["Change"] < 0).astype(int))
@@ -64,7 +81,7 @@ class HistoricReport(Step):
                 .assign(AvgValue=lambda df: _cum_avg(df, "Value"))
                 .assign(TotalValue=lambda df: df["Actual"] * df["AvgValue"])
             )
-            .reset_index(level="Ticker", drop=True)
+            .reset_index(level="Ticker")
             .assign(
                 CapitalGain=lambda df: np.abs(np.minimum(df["Change"], 0))
                 * (df["Value"] - df["AvgValue"])
@@ -84,13 +101,18 @@ class HistoricReport(Step):
 
 def _cum_avg(input: pd.DataFrame, column):
     count = 0
-    value = 0
+    value = 0.0
+    avg = 0.0
     avgs = []
     for _, row in input.iterrows():
         change = row["Change"]
         count += change
         value += change * (row[column] if change >= 0 else avg)
-        avg = round(value / count, 2) if change >= 0 else avg
+        avg = (
+            (round(value / count, 2) if value > 0.0 and count > 0 else 0.0)
+            if change >= 0
+            else avg
+        )
         avgs.append(avg)
     return avgs
 
