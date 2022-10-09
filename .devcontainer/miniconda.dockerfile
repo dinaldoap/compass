@@ -59,4 +59,7 @@ RUN mkdir /workspace && \
 # Set the default user
 USER $USERNAME
 
+# Initialize conda for shell interaction
+RUN conda init
+
 CMD ["/bin/bash"]
