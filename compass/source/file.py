@@ -259,6 +259,26 @@ class Change(Source):
         return data
 
 
+class DirectoryChange(Source):
+    """
+    Directory with multiples change files.
+    See @Change class.
+
+    ...
+    """
+
+    def __init__(self, path: Path, date=date.today()):
+        self.path = Path(path)
+        self.date = date
+        _check_directory(self.path)
+
+    def read(self) -> pd.DataFrame:
+        data = [Change(file, self.date) for file in self.path.iterdir()]
+        data = [change.read() for change in data]
+        data = pd.concat(data)
+        return data
+
+
 class LayoutError(Exception):
     pass
 
@@ -307,6 +327,15 @@ def _check_extension(path, extension: str):
         raise LayoutError(
             "Extension {} is expected in file {}.".format(extension, path)
         )
+
+
+def _check_directory(path: Path):
+    if not path.exists():
+        raise LayoutError("{} does not exists.".format(path))
+    if not path.is_dir():
+        raise LayoutError("{} is expected to be a directory.".format(path))
+    if not list(path.iterdir()):
+        raise LayoutError("{} is expected to have xlsx files.".format(path))
 
 
 def _check_layout(path: Path, columns: list) -> None:

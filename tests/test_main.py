@@ -43,7 +43,7 @@ def test_parse_args_report():
         [
             "report",
             "--change",
-            "tests/data/change.xlsx",
+            "tests/data/change",
             "--target",
             "tests/data/target.xlsx",
             "--output",
@@ -86,7 +86,7 @@ def _create_config_change(output: Path):
 def _create_config_report(output: Path):
     return {
         "subcommand": "report",
-        "change": "tests/data/change.xlsx",
+        "change": "tests/data/change",
         "target": "tests/data/target.xlsx",
         "output": str(output),
         # configuration (compass.ini)
