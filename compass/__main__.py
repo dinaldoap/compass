@@ -139,8 +139,8 @@ def _add_subcommand_report(subparsers):
         "-c",
         "--change",
         type=str,
-        help="Change history (default: change.xlsx).",
-        default="change.xlsx",
+        help="Directory with change history files (default: change).",
+        default="change",
     )
     parser.add_argument(
         "-t",

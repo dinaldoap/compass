@@ -74,7 +74,16 @@ def test_WarrenHtmlPrice():
 
 
 def test_Change():
-    output = Change("tests/data/change.xlsx", date=None).read()
+    output = Change("tests/data/change/change.xlsx", date=None).read()
+    _assert_change(output)
+
+
+def test_DirectoryChange():
+    output = DirectoryChange("tests/data/change", date=None).read()
+    _assert_change(output)
+
+
+def _assert_change(output):
     expected = pd.DataFrame(
         {
             "Date": [

@@ -41,4 +41,4 @@ def _create_source(path, classes: list):
 
 
 def create_change(config: dict):
-    return Change(config["change"])
+    return DirectoryChange(config["change"])
