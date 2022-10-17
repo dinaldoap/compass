@@ -1,6 +1,13 @@
 # coding=utf-8
 from setuptools import setup, find_packages
 
+
+def get_install_requires():
+    with open("requirements-prod.lock", encoding="utf-8") as file:
+        content = file.read()
+    return content.split()
+
+
 setup(
     name="compass",
     version="0.1.0",
@@ -19,14 +26,7 @@ setup(
             "compass = compass.__main__:main",
         ]
     },
-    install_requires=[
-        "numpy==1.23.0",
-        "pandas==1.2.3",
-        "openpyxl==3.0.7",
-        "requests==2.25.1",
-        "lxml==4.6.3",
-        "babel==2.9.1",
-    ],
+    install_requires=get_install_requires(),
     python_requires=">=3.8",
     zip_safe=True,
 )
