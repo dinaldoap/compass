@@ -25,4 +25,5 @@ init:
 	conda env update --file conda.yml --prune
 
 lock:
-	pip-compile --quiet --strip-extras --output-file=requirements.lock requirements.txt setup.py
+	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate requirements-prod.txt
+	pip-compile --quiet --strip-extras --output-file=requirements.lock --no-header requirements.txt
