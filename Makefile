@@ -1,4 +1,4 @@
-build: clean format install test package run
+build: clean install format test package run
 
 clean:
 	rm -rf compass.egg-info build dist
