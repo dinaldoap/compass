@@ -7,7 +7,7 @@ format:
 	black compass setup.py tests
 
 install:
-	pip install --quiet -r requirements.txt
+	pip-sync --quiet requirements.lock
 
 test: 
 	pytest --cov=compass --cov-report=term-missing tests
@@ -23,3 +23,6 @@ run:
 
 init:
 	conda env update --file conda.yml --prune
+
+lock:
+	pip-compile --quiet --strip-extras --output-file=requirements.lock requirements.txt setup.py
