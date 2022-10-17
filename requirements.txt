@@ -1,5 +1,6 @@
 # Dependencies for development
--e .
+--constraint constraints.txt
+--editable .
 pylint==2.7.4
 black==22.10.0
 pytest==7.1.3
