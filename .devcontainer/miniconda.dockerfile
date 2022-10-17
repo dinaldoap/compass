@@ -50,7 +50,10 @@ ENV CONDA_ENVS_PATH /workspace/.conda/envs
 
 # Config pip cache for rootless user mount
 RUN mkdir --parents "${HOME}/.cache/pip" && \
-    chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache/pip"
+    chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache/pip" && \
+    # Config pip-tools cache for rootless user mount
+    mkdir --parents "${HOME}/.cache/pip-tools" && \
+    chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache/pip-tools"
 
 # Config workspace
 RUN mkdir /workspace && \
