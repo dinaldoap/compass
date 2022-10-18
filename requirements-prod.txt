@@ -1,7 +1,7 @@
 --constraint constraints.txt
-numpy==1.23.0
-pandas==1.2.3
-openpyxl==3.0.7
-requests==2.25.1
-lxml==4.6.3
-babel==2.9.1
+numpy
+pandas
+openpyxl
+requests
+lxml
+babel
