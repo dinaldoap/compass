@@ -2,5 +2,3 @@ name: compass
 dependencies:
   - python=3.9
   - pip=21.0.1
-  - pip:
-    - -r requirements.txt
