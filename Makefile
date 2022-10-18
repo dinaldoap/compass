@@ -30,3 +30,6 @@ run:
 
 conda:
 	conda env update --file conda.yml --prune
+
+unlock:
+	rm requirements-*.lock
