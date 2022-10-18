@@ -1,4 +1,4 @@
-main: clean install format test package run
+main: clean install lock sync format test package run
 
 clean:
 	rm -rf compass.egg-info build dist
