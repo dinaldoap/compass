@@ -28,5 +28,5 @@ run:
 	compass --help
 	pip install --quiet --requirement=requirements-dev.txt
 
-init:
+conda:
 	conda env update --file conda.yml --prune
