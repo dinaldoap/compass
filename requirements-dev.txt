@@ -1,10 +1,7 @@
 # Dependencies for development
 --constraint constraints.txt
 --editable .
-pylint==2.7.4
-black==22.10.0
-pytest==7.1.3
-pytest-cov==3.0.0
-jupyter==1.0.0
-PyInstaller==4.2
+black
+pytest
+pytest-cov
 pip-tools
