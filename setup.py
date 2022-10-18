@@ -1,11 +1,14 @@
 # coding=utf-8
 from setuptools import setup, find_packages
+import re
 
 
 def get_install_requires():
-    with open("requirements-prod.lock", encoding="utf-8") as file:
+    with open("requirements-prod.txt", encoding="utf-8") as file:
         content = file.read()
-    return content.split()
+    deps = content.split("\n")
+    deps = [dep for dep in deps if re.match(r"^\w", dep)]
+    return deps
 
 
 setup(
