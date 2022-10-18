@@ -7,7 +7,14 @@ format:
 	black compass setup.py tests
 
 install:
-	pip-sync --quiet requirements.lock
+	pip install --quiet --requirement=requirements-dev.txt
+
+lock:
+	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate requirements-prod.txt
+	pip-compile --quiet --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt
+
+sync:
+	pip-sync --quiet requirements-dev.lock
 
 test: 
 	pytest --cov=compass --cov-report=term-missing tests
@@ -19,11 +26,7 @@ run:
 #	./dist/compass --help
 	pip install --quiet dist/compass*.whl
 	compass --help
-	pip install --quiet -r requirements.txt
+	pip install --quiet --requirement=requirements-dev.txt
 
 init:
 	conda env update --file conda.yml --prune
-
-lock:
-	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate requirements-prod.txt
-	pip-compile --quiet --strip-extras --output-file=requirements.lock --no-header requirements.txt
