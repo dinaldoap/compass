@@ -11,6 +11,7 @@
     "type=volume,source=compass_vscode-server,target=/home/miniconda/.vscode-server",
     "type=volume,source=conda-cache,target=/opt/conda/pkgs",
     "type=volume,source=pip-cache,target=/home/miniconda/.cache/pip",
+    "type=volume,source=pip-cache,target=/home/miniconda/.cache/pip-tools",
   ],
   "extensions": [
     "ms-python.python",
