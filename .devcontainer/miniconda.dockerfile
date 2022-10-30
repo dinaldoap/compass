@@ -43,26 +43,24 @@ ENV HOME /home/$USERNAME
 RUN mkdir "${HOME}/.vscode-server" && \
   chown -R ${USERNAME}:${USERNAME} "${HOME}/.vscode-server"
 
-# Config conda for rootless user mount
+# Config conda cache for rootless user mount
 RUN mkdir --parents /opt/conda/pkgs && \
     chown -R ${USERNAME}:${USERNAME} /opt/conda/pkgs
 ENV CONDA_ENVS_PATH /workspace/.conda/envs
 
-# Config pip cache for rootless user mount
-RUN mkdir --parents "${HOME}/.cache/pip" && \
-    chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache/pip" && \
-    # Config pip-tools cache for rootless user mount
-    mkdir --parents "${HOME}/.cache/pip-tools" && \
-    chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache/pip-tools"
+# Config cache directory for rootless user
+RUN mkdir --parents "${HOME}/.cache" && \
+    chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache"
 
 # Config workspace
 RUN mkdir /workspace && \
     chown -R ${USERNAME}:${USERNAME} /workspace
-    
+
+# Config conda initialization for rootless user
+RUN sudo --user=${USERNAME} $(which conda) init xonsh && \
+    sudo --user=${USERNAME} $(which conda) init bash
+
 # Set the default user
 USER $USERNAME
-
-# Initialize conda for shell interaction
-RUN conda init
 
 CMD ["/bin/bash"]
