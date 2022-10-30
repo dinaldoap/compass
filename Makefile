@@ -33,3 +33,6 @@ conda:
 
 unlock:
 	rm requirements-*.lock
+
+docker:
+	bash .devcontainer/devcontainer.sh
