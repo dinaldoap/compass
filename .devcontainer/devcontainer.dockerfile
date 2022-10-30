@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.10.3
+FROM continuumio/miniconda3:4.12.0
 
 # Set the default shell to bash instead of sh
 ENV SHELL /bin/bash
