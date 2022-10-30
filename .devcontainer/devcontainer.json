@@ -39,7 +39,7 @@
       "**/compass.egg-info/**": true,
     },
     // Python
-    "python.pythonPath": "/workspace/.conda/envs/miniconda/bin/python",
+    "python.pythonPath": "/workspace/.conda/envs/compass/bin/python",
     "python.terminal.activateEnvInCurrentTerminal": true,
     // pytest
     "python.testing.pytestArgs": [
