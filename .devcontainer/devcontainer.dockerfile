@@ -9,6 +9,7 @@ RUN apt-get update -q && \
       openssh-client \
       git \
       build-essential \
+      bash-completion \
       locales && \
     rm -rf /var/lib/apt/lists/*
 
