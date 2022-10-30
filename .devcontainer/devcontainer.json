@@ -1,7 +1,7 @@
 {
   "name": "compass",  
   // Use docker while docker-compose doesn't support --gpus
-  "dockerFile": "miniconda.dockerfile",
+  "dockerFile": "devcontainer.dockerfile",
   "context": "..",  
   "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace",
   "workspaceFolder": "/workspace",
