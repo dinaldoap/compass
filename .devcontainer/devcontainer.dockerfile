@@ -58,8 +58,9 @@ RUN mkdir /workspace && \
     chown -R ${USERNAME}:${USERNAME} /workspace
 
 # Config conda initialization for rootless user
-RUN sudo --user=${USERNAME} /opt/conda/bin/conda init xonsh && \
-    sudo --user=${USERNAME} /opt/conda/bin/conda init bash
+RUN su - ${USERNAME} && \
+    conda init xonsh && \
+    conda init bash
 
 # Set the default user
 USER $USERNAME
