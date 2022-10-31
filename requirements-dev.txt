@@ -2,9 +2,11 @@
 --constraint constraints.txt
 --editable .
 black
+bandit
+pip-audit
 pytest
 pytest-cov
 pip-tools
 xonsh[full]
 python-lsp-server
-autopep8 
+autopep8
