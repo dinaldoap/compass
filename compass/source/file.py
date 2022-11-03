@@ -344,7 +344,7 @@ def _check_layout(path: Path, columns: list) -> None:
     elif path.suffix.endswith("html"):
         data = _read_html(path, columns)
     else:
-        assert "File extension not supported: {}.".format(path)
+        raise RuntimeError("File extension not supported: {}.".format(path))
     if not set(columns).issubset(set(data.columns)):
         raise LayoutError("Columns {} are expected in file {}.".format(columns, path))
 
@@ -364,11 +364,12 @@ def _check_last_update(path: Path, expected_date: date) -> None:
 def _parse_html(path: Path, table_pattern, ticker_pattern, value_column):
     text = _clean_html(_read_content(path))
     match = re.search(table_pattern, text)
-    assert (
-        match is not None
-    ), "It is expected one table with values embraced by the pattern {} in the cleaned html {}.".format(
-        table_pattern, text
-    )
+    if match is None:
+        raise RuntimeError(
+            "It is expected one table with values embraced by the pattern {} in the cleaned html {}.".format(
+                table_pattern, text
+            )
+        )
     table = match.group(0)
     data = []
     for row in re.findall(ticker_pattern, table):
