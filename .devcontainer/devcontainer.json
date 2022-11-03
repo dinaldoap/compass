@@ -20,6 +20,7 @@
     "mhutchie.git-graph",
     "jnoortheen.xonsh"
   ],
+  "postCreateCommand": "bash -c '(conda env list | grep ^compass) || (make conda && source activate compass && make install)'",
   "settings": {
     // Save
     "files.autoSave": "afterDelay",
