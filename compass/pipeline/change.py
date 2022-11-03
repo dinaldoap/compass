@@ -1,14 +1,15 @@
-from .base import Pipeline
-from compass import source, target, model
+from compass import model, source, target
 from compass.step import (
     Actual,
+    AllocationReport,
     Change,
+    ChangePrint,
     Price,
     Target,
-    AllocationReport,
-    ChangePrint,
     TransactionPrint,
 )
+
+from .base import Pipeline
 
 
 class ChangePosition(Pipeline):

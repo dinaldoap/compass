@@ -1,9 +1,9 @@
-from compass.pipeline import ChangePosition, Report
-from compass.number import parse_bool, parse_decimal
-
 import argparse
-import sys
 import configparser
+import sys
+
+from compass.number import parse_bool, parse_decimal
+from compass.pipeline import ChangePosition, Report
 
 
 def parse_args(argv, file="compass.ini"):

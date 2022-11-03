@@ -1,8 +1,8 @@
-from compass.step import Actual
-from compass.source.file import StandardActual, StandardOutput
-
 import pandas as pd
 from pandas.testing import assert_frame_equal
+
+from compass.source.file import StandardActual, StandardOutput
+from compass.step import Actual
 
 
 def test_actual():

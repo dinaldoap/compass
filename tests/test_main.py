@@ -1,7 +1,8 @@
-from compass.__main__ import main, parse_args, _run_report, _run_change
-
 from pathlib import Path
+
 import pytest
+
+from compass.__main__ import _run_change, _run_report, main, parse_args
 
 
 def test_main():

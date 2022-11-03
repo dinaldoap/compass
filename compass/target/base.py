@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+
 import pandas as pd
 
 
@@ -20,6 +21,5 @@ class Target(metaclass=ABCMeta):
 
         Returns
         -------
-
         """
         pass

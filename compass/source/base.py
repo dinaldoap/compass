@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+
 import pandas as pd
 
 
@@ -20,6 +21,5 @@ class Source(metaclass=ABCMeta):
         -------
         pandas.DataFrame
             DataFrame with the columns specified by each implementation.
-
         """
         pass
