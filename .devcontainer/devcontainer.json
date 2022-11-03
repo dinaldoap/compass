@@ -51,6 +51,8 @@
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
+    // Bandit
+    "python.linting.banditEnabled": true,
     // Xonsh
     "terminal.integrated.profiles.linux": {
         "xonsh": {
