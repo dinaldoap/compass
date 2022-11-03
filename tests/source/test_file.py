@@ -1,9 +1,10 @@
-from compass.source.file import *
-
 from datetime import date, datetime
+
 import pandas as pd
-from pandas.testing import assert_frame_equal
 import pytest
+from pandas.testing import assert_frame_equal
+
+from compass.source.file import *
 
 
 def test_StandardTarget():

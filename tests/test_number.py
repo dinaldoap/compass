@@ -1,6 +1,7 @@
-from compass.number import parse_decimal
 import pytest
 from babel.numbers import NumberFormatError
+
+from compass.number import parse_decimal
 
 
 @pytest.mark.parametrize(

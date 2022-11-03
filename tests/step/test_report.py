@@ -1,10 +1,11 @@
 from cmath import exp
-from compass.step import HistoricReport
-
 from datetime import datetime
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 from pandas.testing import assert_frame_equal
+
+from compass.step import HistoricReport
 
 
 def test_change_history_avg_total():

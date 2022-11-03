@@ -1,9 +1,8 @@
-from compass.source.file import StandardPrice
-from compass.step import Price
-from compass.source.file import StandardPrice
-
 import pandas as pd
 from pandas.testing import assert_frame_equal
+
+from compass.source.file import StandardPrice
+from compass.step import Price
 
 
 def test_price():

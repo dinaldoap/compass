@@ -1,7 +1,7 @@
-from .base import Step
-
-import pandas as pd
 import numpy as np
+import pandas as pd
+
+from .base import Step
 
 
 class Change(Step):
@@ -37,7 +37,6 @@ class Change(Step):
             DataFrame with the same columns of ``input`` and the following columns:
                 Change : int
                     Number of asset's units to buy or sell represented, repectivelly, by a positive or negative value.
-
         """
         percentage = input.copy()
         percentage["Actual"] = percentage["Actual"] * percentage["Price"]

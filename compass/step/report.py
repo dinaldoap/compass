@@ -1,9 +1,12 @@
 from datetime import datetime
-from .base import Step
+
+import numpy as np
+import pandas as pd
+
 from compass.model import Calculator
 from compass.number import format_currency
-import pandas as pd
-import numpy as np
+
+from .base import Step
 
 
 class AllocationReport(Step):
@@ -118,9 +121,8 @@ def _cum_avg(input: pd.DataFrame, column):
 
 
 def _cum_sum_negative(input: pd.DataFrame, column):
-    """
-    This method is useful for accumulating losses over time and reseting total after paying tax over capital gains.
-    """
+    """This method is useful for accumulating losses over time and reseting
+    total after paying tax over capital gains."""
     total = 0
     totals = []
     input_id = input.assign(Id=range(len(input)))
