@@ -13,6 +13,7 @@ commonmark==0.9.1
 coverage==6.5.0
 cyclonedx-python-lib==3.1.0
 distro==1.8.0
+docformatter==1.5.0
 et-xmlfile==1.1.0
 exceptiongroup==1.0.0
 gitdb==4.0.9
@@ -20,6 +21,7 @@ gitpython==3.1.29
 html5lib==1.1
 idna==3.4
 iniconfig==1.1.1
+isort==5.10.1
 jedi==0.18.1
 lockfile==0.12.2
 lxml==4.9.1
@@ -61,6 +63,7 @@ toml==0.10.2
 tomli==2.0.1
 typing-extensions==4.4.0
 ujson==5.5.0
+untokenize==0.1.1
 urllib3==1.26.12
 webencodings==0.5.1
 wheel==0.37.1
