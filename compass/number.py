@@ -1,6 +1,7 @@
-from babel import numbers
 import re
 from distutils.util import strtobool
+
+from babel import numbers
 
 
 def parse_bool(text: str):

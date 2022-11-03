@@ -1,9 +1,9 @@
+import pandas as pd
+import pytest
+from pandas.testing import assert_frame_equal
+
 from compass.source import Source
 from compass.step import Join, LengthChangedError
-
-import pandas as pd
-from pandas.testing import assert_frame_equal
-import pytest
 
 
 class SourceMock(Source):

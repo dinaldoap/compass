@@ -1,13 +1,14 @@
-from .base import Pipeline
 from compass import source, target
 from compass.step import (
-    Join,
-    ReadSource,
-    HistoricReport,
     HistoricPrint,
+    HistoricReport,
+    Join,
     MonthPrint,
+    ReadSource,
     YearPrint,
 )
+
+from .base import Pipeline
 
 
 class Report(Pipeline):

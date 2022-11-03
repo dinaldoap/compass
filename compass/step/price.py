@@ -1,7 +1,8 @@
-from .base import Step
+import pandas as pd
+
 from compass.source import Source
 
-import pandas as pd
+from .base import Step
 
 
 class Price(Step):

@@ -1,9 +1,10 @@
-from compass.source.http import *
-from compass.source import Source
+from pathlib import Path
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
-from pathlib import Path
+
+from compass.source import Source
+from compass.source.http import *
 
 
 class MockTargetSource(Source):

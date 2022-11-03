@@ -1,8 +1,8 @@
+from pathlib import Path
+
 from .base import Source
 from .file import *
 from .http import YahooPrice
-
-from pathlib import Path
 
 
 def create_target(config: dict) -> Source:
