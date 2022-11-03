@@ -42,9 +42,10 @@ def _read_http(ticker: str) -> str:
         ticker
     )
     response = requests.get(url=url, headers=headers)
-    assert (
-        200 == response.status_code
-    ), "Status code 200 expected from Yahoo Finance, but received: {}".format(
-        response.status_code
-    )
+    if 200 != response.status_code:
+        raise RuntimeError(
+            "Status code 200 expected from Yahoo Finance, but received: {}".format(
+                response.status_code
+            )
+        )
     return response.json()

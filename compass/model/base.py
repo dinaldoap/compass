@@ -14,9 +14,10 @@ class Calculator:
 
     @property
     def transaction(self) -> float:
-        assert (
-            self.deposit is not None and self.withdraw is not None
-        ), "Buy and sell are expected to calculate actual transaction."
+        if self.deposit is None or self.withdraw is None:
+            raise RuntimeError(
+                "Buy and sell are expected to calculate actual transaction."
+            )
         return self.deposit + abs(self.withdraw)
 
     @property

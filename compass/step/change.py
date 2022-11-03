@@ -42,7 +42,8 @@ class Change(Step):
         percentage = input.copy()
         percentage["Actual"] = percentage["Actual"] * percentage["Price"]
         total = percentage["Actual"].sum() + self.value
-        assert total > 0, "Full withdraw not supported."
+        if total <= 0:
+            raise RuntimeError("Full withdraw not supported.")
         percentage["Actual"] = percentage["Actual"] / total
         percentage = _add_group(percentage)
         percentage, levels = _add_hierarchy(percentage)

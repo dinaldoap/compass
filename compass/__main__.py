@@ -52,7 +52,8 @@ def main(argv=sys.argv[1:]):
         "change": _run_change,
         "report": _run_report,
     }
-    assert subcommand in routes, f"Subcommad {subcommand} not expected."
+    if subcommand not in routes:
+        raise RuntimeError(f"Subcommad {subcommand} not expected.")
     routes[subcommand](config)
 
 
