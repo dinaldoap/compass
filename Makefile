@@ -17,7 +17,9 @@ sync:
 	pip-sync --quiet requirements-dev.lock
 
 format:
+	isort --profile black compass tests setup.py
 	black compass setup.py tests
+	docformatter --in-place --recursive compass tests setup.py
 
 secure:
 	pip-audit

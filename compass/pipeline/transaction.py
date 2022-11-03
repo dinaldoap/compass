@@ -1,14 +1,15 @@
-from .base import Pipeline
-from compass import source, target, model
+from compass import model, source, target
 from compass.step import (
     Actual,
-    Change,
-    Price,
-    Target,
     Balance,
+    Change,
     ChangePrint,
     ChangeReport,
+    Price,
+    Target,
 )
+
+from .base import Pipeline
 
 
 class Transaction(Pipeline):

@@ -1,7 +1,8 @@
-from compass.source import Source
-
 from abc import ABCMeta, abstractmethod
+
 import pandas as pd
+
+from compass.source import Source
 
 
 class Step(metaclass=ABCMeta):

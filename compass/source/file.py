@@ -1,10 +1,12 @@
-from .base import Source
+import re
+from datetime import date, datetime
+from pathlib import Path
+
+import pandas as pd
+
 from compass.number import parse_decimal
 
-from datetime import date, datetime
-import pandas as pd
-from pathlib import Path
-import re
+from .base import Source
 
 _CEI_COLUMNS = ["Cód. de Negociação", "Qtde."]
 _RICO_RENAME = {
