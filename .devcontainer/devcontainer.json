@@ -19,7 +19,6 @@
     "mhutchie.git-graph",
     "jnoortheen.xonsh"
   ],
-  "postCreateCommand": "bash -c '(conda env list | grep ^compass) || (make conda && source activate compass && make install)'",
   "settings": {
     // Save
     "files.autoSave": "afterDelay",
@@ -40,8 +39,7 @@
       "**/compass.egg-info/**": true
     },
     // Python
-    "python.defaultInterpreterPath": "/workspace/.conda/envs/compass/bin/python",
-    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
     "python.formatting.provider": "black",
     // pytest
     "python.testing.pytestArgs": [
@@ -55,10 +53,9 @@
     // Xonsh
     "terminal.integrated.profiles.linux": {
         "xonsh": {
-            "path": "/workspace/.conda/envs/compass/bin/xonsh"
+            "path": "/workspace/.venv/bin/xonsh"
         }
     },
-    "terminal.integrated.defaultProfile.linux": "xonsh",
-    "pylsp.executable": "/workspace/.conda/envs/compass/bin/pylsp"
+    "pylsp.executable": "/workspace/.venv/bin/pylsp"
   }
 }

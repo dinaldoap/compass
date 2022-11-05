@@ -35,8 +35,9 @@ run:
 	compass --help
 	pip install --quiet --requirement=requirements-dev.txt
 
-conda:
-	conda env update --file conda.yml --prune
+venv:
+	rm -rf .venv
+	python -m venv .venv
 
 docker:
 	bash .devcontainer/devcontainer.sh
