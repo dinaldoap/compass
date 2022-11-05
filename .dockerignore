@@ -1,4 +1,3 @@
 *
-!conda.yml
-!requirements.txt
-!setup.py
+!.devcontainer/.bashrc.append
+!.devcontainer/.xonshrc
