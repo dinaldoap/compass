@@ -31,13 +31,13 @@
     // Ignore files
     "files.exclude": {
       "**/.git": true,
-      "**/.ipynb_checkpoints": true,
+      "**/.ipynb_checkpoints": true
     },
     // Ignore for watching
     "files.watcherExclude": {
       "**/.git/**": true,
       "**/data/**": true,
-      "**/compass.egg-info/**": true,
+      "**/compass.egg-info/**": true
     },
     // Python
     "python.defaultInterpreterPath": "/workspace/.conda/envs/compass/bin/python",
