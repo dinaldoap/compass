@@ -1,0 +1,10 @@
+# create and activate virtual enviroment
+if [ -d .venv ]; then
+    source activate
+else
+    make venv && \
+    source activate && \
+    make install
+fi
+# open xonsh shell
+xonsh
