@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.12.0
+FROM python:3.11.0-bullseye
 
 # Set the default shell to bash instead of sh
 ENV SHELL /bin/bash
@@ -47,22 +47,21 @@ ENV HOME /home/$USERNAME
 RUN mkdir "${HOME}/.vscode-server" && \
   chown -R ${USERNAME}:${USERNAME} "${HOME}/.vscode-server"
 
-# Config conda cache for rootless user mount
-RUN mkdir --parents /opt/conda/pkgs && \
-    chown -R ${USERNAME}:${USERNAME} /opt/conda/pkgs
-ENV CONDA_ENVS_PATH /workspace/.conda/envs
-
 # Config cache directory for rootless user
 RUN mkdir --parents "${HOME}/.cache" && \
     chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache"
 
+# Config .xonshrc for rootless user
+COPY --chown=${USERNAME}:${USERNAME} .devcontainer/.xonshrc "${HOME}/.xonshrc"
+
+# Config .bashrc for rootless user
+COPY .devcontainer/.bashrc.append "${HOME}/.bashrc.append"
+RUN cat "${HOME}/.bashrc.append" >> "${HOME}/.bashrc" && \
+    rm "${HOME}/.bashrc.append"
+
 # Config workspace
 RUN mkdir /workspace && \
     chown -R ${USERNAME}:${USERNAME} /workspace
-
-# Config conda initialization for rootless user
-RUN su - ${USERNAME} --command 'conda init xonsh' && \
-    su - ${USERNAME} --command 'conda init bash'
 
 # Set the default user
 USER $USERNAME
