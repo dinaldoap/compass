@@ -21,7 +21,7 @@ format:
 
 secure:
 	pip-audit
-	bandit --recursive compass
+	bandit --recursive compass setup.py
 
 test: 
 	pytest --cov=compass --cov-report=term-missing tests
