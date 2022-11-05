@@ -20,7 +20,7 @@ RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && \
 ENV LC_ALL en_US.UTF-8
 
 # Config standard user
-ARG USERNAME=miniconda
+ARG USERNAME=user
 
 # Or your actual UID, GID on Linux if not the default 1000
 ARG USER_UID=1000
