@@ -19,6 +19,9 @@ RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && \
 # Config locale
 ENV LC_ALL en_US.UTF-8
 
+# Config time zone
+RUN ln --symbolic --force /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+
 # Config standard user
 ARG USERNAME=user
 
