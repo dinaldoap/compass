@@ -1,5 +1,5 @@
 # create and activate virtual enviroment
-if [ -d .venv ]; then
+if [ -d .venv ] && [ -f activate ]; then
     source activate
 else
     make venv && \
