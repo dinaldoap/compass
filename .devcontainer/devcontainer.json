@@ -17,7 +17,8 @@
     "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "mhutchie.git-graph",
-    "jnoortheen.xonsh"
+    "jnoortheen.xonsh",
+    "njpwerner.autodocstring"
   ],
   "settings": {
     // Save
@@ -30,13 +31,22 @@
     // Ignore files
     "files.exclude": {
       "**/.git": true,
-      "**/.ipynb_checkpoints": true
+      "**/.venv": true,
+      "**/compass.egg-info": true,
+      "**/__pycache__": true,
+      "**/.ipynb_checkpoints": true,
+      "**/activate": true,
+      "**/.coverage": true,
+      "**/compass.spec": true
     },
     // Ignore for watching
     "files.watcherExclude": {
       "**/.git/**": true,
-      "**/data/**": true,
-      "**/compass.egg-info/**": true
+      "**/.venv/**": true,
+      "**/compass.egg-info/**": true,
+      "**/__pycache__/**": true,
+      "**/.ipynb_checkpoints/**": true,
+      "**/data/**": true
     },
     // Python
     "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
