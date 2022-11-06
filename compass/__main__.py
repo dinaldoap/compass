@@ -79,6 +79,7 @@ def _add_subcommand_change(subparsers):
         type=parse_bool,
         help="""Allow rebalancing. A rebalancing is done when one distance is exceeded (see --absolute-distance and --relative-distance).
                                                      A rebalancing moves the portfolio up to the point where the exceeded distance goes back to the allowed range  (default: true).""",
+        choices=["true", "false"],
         default="true",
     )
     parser.add_argument(
