@@ -40,6 +40,7 @@
     },
     // Python
     "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+    "python.terminal.activateEnvironment": false,
     "python.formatting.provider": "black",
     // pytest
     "python.testing.pytestArgs": [
