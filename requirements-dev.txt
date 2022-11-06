@@ -6,6 +6,7 @@ black
 docformatter
 bandit
 pip-audit
+pylint
 pytest
 pytest-cov
 pip-tools

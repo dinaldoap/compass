@@ -1,4 +1,4 @@
-main: clean install lock sync format secure test package run
+main: clean install lock sync format secure lint test package run
 
 clean:
 	rm -rf compass.egg-info build dist
@@ -24,6 +24,9 @@ format:
 secure:
 	pip-audit
 	bandit --recursive compass setup.py
+
+lint:
+	pylint --disable=line-too-long compass setup.py
 
 test: 
 	pytest --cov=compass --cov-report=term-missing tests
