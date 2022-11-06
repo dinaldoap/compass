@@ -66,6 +66,12 @@
     "python.linting.pylintArgs": [
         "--disable=line-too-long"
     ],
+    "python.linting.ignorePatterns": [
+        "**/site-packages/**/*.py",
+        ".vscode/*.py",
+        "**/tests/**/*.py",
+        "**/lib/python*/**/*.py"
+    ],
     // Xonsh
     "pylsp.executable": "/workspace/.venv/bin/pylsp"
   }
