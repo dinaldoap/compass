@@ -50,6 +50,11 @@
     "python.testing.pytestEnabled": true,
     // Bandit
     "python.linting.banditEnabled": true,
+    // Pylint    
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--disable=line-too-long"
+    ],
     // Xonsh
     "terminal.integrated.profiles.linux": {
         "xonsh": {
