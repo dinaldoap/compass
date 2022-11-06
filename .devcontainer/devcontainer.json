@@ -56,11 +56,6 @@
         "--disable=line-too-long"
     ],
     // Xonsh
-    "terminal.integrated.profiles.linux": {
-        "xonsh": {
-            "path": "/workspace/.venv/bin/xonsh"
-        }
-    },
     "pylsp.executable": "/workspace/.venv/bin/pylsp"
   }
 }
