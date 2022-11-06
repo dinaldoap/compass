@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from compass.__main__ import _run_change, _run_report, main, parse_args
+from compass.__main__ import _parse_args, _run_change, _run_report, main
 
 
 def test_main():
@@ -13,7 +13,7 @@ def test_main():
 def test_parse_args_change():
     output = _create_output(".")
     expected_args = _create_config_change(output)
-    args = parse_args(
+    args = _parse_args(
         [
             "change",
             "1,000.00",
@@ -40,7 +40,7 @@ def test_change(temp_dir):
 def test_parse_args_report():
     output = _create_output(".")
     expected_config = _create_config_report(output)
-    args = parse_args(
+    args = _parse_args(
         [
             "report",
             "--change",

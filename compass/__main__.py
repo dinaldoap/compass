@@ -1,3 +1,4 @@
+"""Main module."""
 import argparse
 import configparser
 import sys
@@ -6,7 +7,16 @@ from compass.number import parse_bool, parse_decimal
 from compass.pipeline import ChangePosition, Report
 
 
-def parse_args(argv, file="compass.ini"):
+def _parse_args(argv: list, file="compass.ini") -> dict:
+    """Parse arguments of the command-line interface.
+
+    Args:
+        argv (list): Argument values.
+        file (str, optional): Configuration file. Defaults to "compass.ini".
+
+    Returns:
+        dict: Configuration.
+    """
     parser = argparse.ArgumentParser(
         description="Compass: Helping investors to stick with theirs plans.",
         epilog="""
@@ -45,8 +55,18 @@ def _add_config(argv: list, file: str, subcommands: list):
     return argv[:1] + configv + argv[1:]
 
 
-def main(argv=sys.argv[1:]):
-    config = parse_args(argv)
+def main(argv: list = None):
+    """Command-line interface's entrypoint.
+
+    Args:
+        argv (list, optional): Argument values. Defaults to None.
+
+    Raises:
+        RuntimeError: When subcommand value is not expected.
+    """
+    if argv is None:
+        argv = sys.argv[1:]
+    config = _parse_args(argv)
     subcommand = config["subcommand"]
     routes = {
         "change": _run_change,
