@@ -1,44 +1,69 @@
-from pathlib import Path
-
+"""Factory for source step."""
 from .base import Source
-from .file import *
-from .http import YahooPrice
+from .file import (
+    DirectoryChange,
+    StandardActual,
+    StandardOutput,
+    StandardPrice,
+    StandardTarget,
+)
 
 
 def create_target(config: dict) -> Source:
+    """Create source step for target data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: source step.
+    """
     return StandardTarget(path=config["target"])
 
 
 def create_actual(config: dict) -> Source:
-    classes = [
-        StandardActual,
-        AliActual,
-        RicoHtmlActualPrice,
-        CeiHtmlActual,
-        WarrenHtmlActual,
-    ]
-    return _create_source(config["actual"], classes)
+    """Create source step for actual data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: source step.
+    """
+    return StandardActual(config["actual"])
 
 
 def create_price(config: dict) -> Source:
-    # TODO: add YahooPrice
-    return _create_source(
-        config["price"], [StandardPrice, RicoHtmlActualPrice, WarrenHtmlPrice]
-    )
+    """Create source step for price data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: source step.
+    """
+    return StandardPrice(config["price"])
 
 
 def create_output(config: dict) -> Source:
+    """Create source step for output data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: source step.
+    """
     return StandardOutput(config["output"])
 
 
-def _create_source(path, classes: list):
-    for class_ in classes:
-        try:
-            return class_(path=path)
-        except LayoutError:
-            continue
-    raise LayoutError("Layout not supported: {}.".format(path))
-
-
 def create_change(config: dict):
+    """Create source step for change data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: source step.
+    """
     return DirectoryChange(config["change"])
