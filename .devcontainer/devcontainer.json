@@ -63,9 +63,6 @@
     "python.linting.banditEnabled": true,
     // Pylint    
     "python.linting.pylintEnabled": true,
-    "python.linting.pylintArgs": [
-        "--disable=line-too-long"
-    ],
     "python.linting.ignorePatterns": [
         "**/site-packages/**/*.py",
         ".vscode/*.py",

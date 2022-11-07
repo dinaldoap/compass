@@ -26,7 +26,7 @@ secure:
 	bandit --recursive compass setup.py
 
 lint:
-	pylint --disable=line-too-long compass setup.py
+	pylint compass setup.py
 
 test: 
 	pytest --cov=compass --cov-report=term-missing tests
