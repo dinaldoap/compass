@@ -41,8 +41,10 @@ run:
 	pip install --quiet --requirement=requirements-dev.txt
 
 venv:
-	python -m venv --clear --prompt=compass .venv
-	ln --symbolic --force .venv/bin/activate
+	bash make/venv.sh
+
+venv-init:
+	bash make/venv-init.sh
 
 docker:
 	bash .devcontainer/devcontainer.sh

@@ -11,6 +11,7 @@
     "type=volume,source=compass_vscode-server,target=/home/user/.vscode-server",
     "type=volume,source=home-cache,target=/home/user/.cache"
   ],
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
   "extensions": [
     "ms-python.python",
     "VisualStudioExptTeam.vscodeintellicode",

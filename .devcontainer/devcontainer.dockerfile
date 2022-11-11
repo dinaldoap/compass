@@ -54,11 +54,6 @@ RUN mkdir --parents "${HOME}/.cache" && \
 # Config .xonshrc for rootless user
 COPY --chown=${USERNAME}:${USERNAME} .devcontainer/.xonshrc "${HOME}/.xonshrc"
 
-# Config .bashrc for rootless user
-COPY .devcontainer/.bashrc.append "${HOME}/.bashrc.append"
-RUN cat "${HOME}/.bashrc.append" >> "${HOME}/.bashrc" && \
-    rm "${HOME}/.bashrc.append"
-
 # Config workspace
 RUN mkdir /workspace && \
     chown -R ${USERNAME}:${USERNAME} /workspace
