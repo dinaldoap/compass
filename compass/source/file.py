@@ -125,36 +125,34 @@ class DirectoryChange(Source):
 
 
 class LayoutError(Exception):
-    pass
+    """Exception raised when the file does not have the expected columns."""
 
 
 class LastUpdateError(Exception):
-    pass
+    """Exception raised when the file is not up to date."""
 
 
 def _check_extension(path, extension: str):
     if not path.suffix.endswith(extension):
-        raise LayoutError(
-            "Extension {} is expected in file {}.".format(extension, path)
-        )
+        raise LayoutError(f"Extension {extension} is expected in file {path}.")
 
 
 def _check_directory(path: Path):
     if not path.exists():
-        raise LayoutError("{} does not exists.".format(path))
+        raise LayoutError(f"{path} does not exists.")
     if not path.is_dir():
-        raise LayoutError("{} is expected to be a directory.".format(path))
+        raise LayoutError(f"{path} is expected to be a directory.")
     if not list(path.iterdir()):
-        raise LayoutError("{} is expected to have xlsx files.".format(path))
+        raise LayoutError(f"{path} is expected to have xlsx files.")
 
 
 def _check_layout(path: Path, columns: list) -> None:
     if path.suffix.endswith("xlsx"):
         data = pd.read_excel(path)
     else:
-        raise RuntimeError("File extension not supported: {}.".format(path))
+        raise RuntimeError(f"File extension not supported: {path}.")
     if not set(columns).issubset(set(data.columns)):
-        raise LayoutError("Columns {} are expected in file {}.".format(columns, path))
+        raise LayoutError(f"Columns {columns} are expected in file {path}.")
 
 
 def _check_last_update(path: Path, expected_date: dt.date) -> None:
@@ -163,7 +161,5 @@ def _check_last_update(path: Path, expected_date: dt.date) -> None:
     last_update = dt.date.fromtimestamp(path.stat().st_mtime)
     if last_update < expected_date:
         raise LastUpdateError(
-            "{} is out of date. Last update is expected to be at {} or later.".format(
-                path, expected_date
-            )
+            f"{path} is out of date. Last update is expected to be at {expected_date} or later."
         )
