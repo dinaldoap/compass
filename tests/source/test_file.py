@@ -1,7 +1,6 @@
 from datetime import date, datetime
 
 import pandas as pd
-import pytest
 from pandas.testing import assert_frame_equal
 
 from compass.source.file import *
@@ -29,48 +28,11 @@ def test_StandardActual():
     assert_frame_equal(expected, output[["Ticker", "Actual"]])
 
 
-def test_ALIActual():
-    output = AliActual("tests/data/actual_ali.xlsx").read()
-    expected = pd.DataFrame({"Ticker": ["BITO39", "BIEF39"], "Actual": [1, 2]})
-    assert_frame_equal(expected, output[["Ticker", "Actual"]])
-
-
-def test_CEIHtmlActual():
-    output = CeiHtmlActual("tests/data/actual.html", date=None).read()
-    expected = pd.DataFrame({"Ticker": ["BITO39", "BIEF39"], "Actual": [1, 2]})
-    assert_frame_equal(expected, output[["Ticker", "Actual"]])
-
-
-def test_RicoHtmlActualPrice():
-    output = RicoHtmlActualPrice("tests/data/actual_price_rico.html", date=None).read()
-    expected = pd.DataFrame(
-        {"Ticker": ["BITO39", "BIEF39"], "Actual": [1, 2], "Price": [1.11, 2.22]}
-    )
-    assert_frame_equal(expected, output[["Ticker", "Actual", "Price"]])
-
-
-def test_WarrenHtmlActual():
-    output = WarrenHtmlActual("tests/data/actual_warren.html", date=None).read()
-    expected = pd.DataFrame({"Ticker": ["BITO39", "BIEF39"], "Actual": [1, 2]})
-    assert_frame_equal(expected, output[["Ticker", "Actual"]])
-
-
-def test_CEIHtmlActual_LastUpdateError():
-    with pytest.raises(LastUpdateError):
-        CeiHtmlActual("tests/data/actual.html", date=date(9999, 1, 1))
-
-
 def test_StandardPrice():
     output = StandardPrice("tests/data/price.xlsx").read()
     expected = pd.DataFrame(
         {"Ticker": ["BITO39", "BIEF39", "BIEM39"], "Price": [1, 2, 3]}
     )
-    assert_frame_equal(expected, output[["Ticker", "Price"]])
-
-
-def test_WarrenHtmlPrice():
-    output = WarrenHtmlPrice("tests/data/price_warren.html", date=None).read()
-    expected = pd.DataFrame({"Ticker": ["BITO39", "BIEF39"], "Price": [1.11, 2.22]})
     assert_frame_equal(expected, output[["Ticker", "Price"]])
 
 
