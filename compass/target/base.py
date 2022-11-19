@@ -1,3 +1,4 @@
+"""Base classes for targets."""
 from abc import ABCMeta, abstractmethod
 
 import pandas as pd

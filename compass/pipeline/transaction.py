@@ -1,3 +1,4 @@
+"""Transaction pipeline."""
 from compass import model, source, target
 from compass.step import (
     Actual,

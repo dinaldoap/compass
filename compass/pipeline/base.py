@@ -1,3 +1,4 @@
+"""Base classes for pipelines."""
 from abc import ABCMeta, abstractmethod
 
 

@@ -1,4 +1,4 @@
-"""Factory for source step."""
+"""Factory for sources."""
 from .base import Source
 from .file import DirectoryChange, StandardActual, StandardPrice, StandardTarget
 

@@ -1,4 +1,4 @@
-"""File source step."""
+"""File sources."""
 import datetime as dt
 from pathlib import Path
 
