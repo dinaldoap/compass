@@ -1,3 +1,4 @@
+"""Factory for models."""
 from .base import Calculator
 
 

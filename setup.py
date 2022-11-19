@@ -1,4 +1,4 @@
-# coding=utf-8
+"""Setup.py."""
 import re
 
 from setuptools import find_packages, setup

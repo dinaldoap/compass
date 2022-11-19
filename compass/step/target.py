@@ -1,3 +1,4 @@
+"""Target step."""
 import pandas as pd
 
 from compass.source import Source

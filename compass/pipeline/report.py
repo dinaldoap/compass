@@ -1,3 +1,4 @@
+"""Report pipeline."""
 from compass import source, target
 from compass.step import (
     HistoricPrint,
