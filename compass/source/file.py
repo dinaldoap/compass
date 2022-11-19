@@ -68,22 +68,6 @@ class StandardPrice(Source):
         return pd.read_excel(self.path)
 
 
-class StandardOutput(Source):
-    """
-    Excel sheet outputted by Transaction pipeline, which includes Ticker, Actual and Change columns.
-
-    ...
-    """
-
-    def __init__(self, path: Path):
-        self.path = Path(path)
-        _check_extension(self.path, "xlsx")
-        _check_layout(self.path, ["Ticker", "Actual", "Change"])
-
-    def read(self):
-        return pd.read_excel(self.path)
-
-
 class Change(Source):
     """
     Excel sheet with data downloaded from Área Logada do Investidor (https://www.investidor.b3.com.br/).
