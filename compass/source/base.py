@@ -1,4 +1,4 @@
-"""Base classes for data sources."""
+"""Base classes for source step."""
 from abc import ABCMeta, abstractmethod
 
 import pandas as pd
