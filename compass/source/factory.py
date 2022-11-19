@@ -1,12 +1,6 @@
 """Factory for source step."""
 from .base import Source
-from .file import (
-    DirectoryChange,
-    StandardActual,
-    StandardOutput,
-    StandardPrice,
-    StandardTarget,
-)
+from .file import DirectoryChange, StandardActual, StandardPrice, StandardTarget
 
 
 def create_target(config: dict) -> Source:
@@ -43,18 +37,6 @@ def create_price(config: dict) -> Source:
         Source: source step.
     """
     return StandardPrice(config["price"])
-
-
-def create_output(config: dict) -> Source:
-    """Create source step for output data.
-
-    Args:
-        config (dict): Configuration.
-
-    Returns:
-        Source: source step.
-    """
-    return StandardOutput(config["output"])
 
 
 def create_change(config: dict):
