@@ -11,15 +11,15 @@ def parse_bool(text: str):
         text (str): Textual value.
 
     Raises:
-        ValueError: when 'text' is neither 'true' or 'false'.
+        ValueError: when 'text' is neither 'True' or 'False'.
 
     Returns:
-        _type_: True, when 'text' is 'true';
-                False, when 'text' is 'false'.
+        _type_: True, when 'text' is 'True';
+                False, when 'text' is 'False'.
     """
-    if text == "true":
+    if text == "True":
         return True
-    if text == "false":
+    if text == "False":
         return False
     raise ValueError(f"Value not expected to conver to bool: {text}.")
 
