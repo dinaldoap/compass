@@ -7,17 +7,17 @@ from .base import Step
 
 
 class Price(Step):
+    """Step which reads price data."""
+
     def __init__(self, source: Source):
         self.source = source
 
-    def run(self, input: pd.DataFrame):
+    def run(self, input_: pd.DataFrame):
         output = self.source.read()
         output = output[["Ticker", "Price"]]
-        output = input.join(output.set_index("Ticker"), on="Ticker", how="inner")
-        if len(input) != len(output):
+        output = input_.join(output.set_index("Ticker"), on="Ticker", how="inner")
+        if len(input_) != len(output):
             raise RuntimeError(
-                "output's length ({}) is expected to be the same as input's ({}).".format(
-                    len(output), len(input)
-                )
+                f"output's length ({len(output)}) is expected to be the same as input's ({len(input_)})."
             )
         return output

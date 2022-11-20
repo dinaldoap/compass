@@ -7,18 +7,18 @@ from .base import Step
 
 
 class Actual(Step):
+    """Step which reads actual data."""
+
     def __init__(self, source: Source):
         self.source = source
 
-    def run(self, input: pd.DataFrame) -> pd.DataFrame:
+    def run(self, input_: pd.DataFrame) -> pd.DataFrame:
         output = self.source.read()
         output = output[["Ticker", "Actual"]]
-        output = input.join(output.set_index("Ticker"), on="Ticker", how="left")
+        output = input_.join(output.set_index("Ticker"), on="Ticker", how="left")
         output["Actual"] = output["Actual"].fillna(0).astype(int)
-        if len(input) != len(output):
+        if len(input_) != len(output):
             raise RuntimeError(
-                "output's length ({}) is expected to be the same as input's ({}).".format(
-                    len(output), len(input)
-                )
+                f"output's length ({len(output)}) is expected to be the same as input's ({len(input_)})."
             )
         return output

@@ -76,7 +76,9 @@ class Change(Source):
     ...
     """
 
-    def __init__(self, path: Path, date=dt.date.today()):
+    def __init__(
+        self, path: Path, date=dt.date.today()
+    ):  # pylint: disable=unused-argument
         self.path = Path(path)
         _check_extension(self.path, "xlsx")
         _check_layout(self.path, _CHANGE_COLUMNS)

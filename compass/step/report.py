@@ -11,8 +11,10 @@ from .base import Step
 
 
 class AllocationReport(Step):
-    def run(self, input: pd.DataFrame):
-        output = input.copy()
+    """Step which calculates actual values before and after the changes."""
+
+    def run(self, input_: pd.DataFrame):
+        output = input_.copy()
         output["Before"] = output["Actual"] * output["Price"]
         output["Before"] = _to_percentage(output["Before"])
         output["After"] = (output["Actual"] + output["Change"]) * output["Price"]
@@ -26,25 +28,30 @@ def _to_percentage(series: pd.Series):
 
 
 class TransactionPrint(Step):
+    """Step which prints transaction values: total value of the change,
+    expenses, deposit and withdraw values."""
+
     def __init__(self, rebalance: bool, calculator: Calculator):
         self.rebalance = rebalance
         self.calculator = calculator
 
-    def run(self, input: pd.DataFrame):
-        self.calculator.calculate(input)
+    def run(self, input_: pd.DataFrame):
+        self.calculator.calculate(input_)
         print("=========== Input ===============")
         print("        Value:", format_currency(self.calculator.value))
-        print("    Rebalance: {}".format(self.rebalance))
-        print("Expense Ratio: {}%".format(self.calculator.expense_ratio * 100))
+        print(f"    Rebalance: {self.rebalance}")
+        print(f"Expense Ratio: {self.calculator.expense_ratio * 100}%")
         print("======== Transaction ============")
         print("      Deposit:", format_currency(self.calculator.deposit))
         print("     Withdraw:", format_currency(self.calculator.withdraw))
         print("      Expense:", format_currency(self.calculator.expense))
         print("=================================")
-        return input
+        return input_
 
 
 class HistoricReport(Step):
+    """Step which calculates historic changes to the report."""
+
     def __init__(
         self, expense_ratio: float, tax_rate: float, current_date: datetime.date = None
     ):
@@ -52,18 +59,18 @@ class HistoricReport(Step):
         self.tax_rate = tax_rate
         self.current_date = datetime.now() if current_date is None else current_date
 
-    def run(self, input: pd.DataFrame):
+    def run(self, input_: pd.DataFrame):
         last_day_months = pd.DataFrame(
             {
                 "Date": pd.date_range(
-                    start=input.index.min(), end=self.current_date, freq="M"
+                    start=input_.index.min(), end=self.current_date, freq="M"
                 )
             }
         )
-        tickers = input.filter(["Ticker"]).drop_duplicates()
+        tickers = input_.filter(["Ticker"]).drop_duplicates()
         date_ticker = last_day_months.merge(tickers, how="cross")
         output = (
-            input.set_index("Ticker", append=True)
+            input_.set_index("Ticker", append=True)
             .join(date_ticker.set_index(["Date", "Ticker"]), how="outer")
             .fillna(value={"Change": 0}, downcast="infer")
             .fillna(value={"Price": 0.0})
@@ -103,12 +110,12 @@ class HistoricReport(Step):
         return output
 
 
-def _cum_avg(input: pd.DataFrame, column):
+def _cum_avg(input_: pd.DataFrame, column):
     count = 0
     value = 0.0
     avg = 0.0
     avgs = []
-    for _, row in input.iterrows():
+    for _, row in input_.iterrows():
         change = row["Change"]
         count += change
         value += change * (row[column] if change >= 0 else avg)
@@ -121,13 +128,13 @@ def _cum_avg(input: pd.DataFrame, column):
     return avgs
 
 
-def _cum_sum_negative(input: pd.DataFrame, column):
+def _cum_sum_negative(input_: pd.DataFrame, column):
     """This method is useful for accumulating losses over time and reseting
     total after paying tax over capital gains."""
     total = 0
     totals = []
-    input_id = input.assign(Id=range(len(input)))
-    last = input_id.groupby([input.index.year, input.index.month]).last()
+    input_id = input_.assign(Id=range(len(input_)))
+    last = input_id.groupby([input_.index.year, input_.index.month]).last()
     last = set(last["Id"])
     for _, row in input_id.iterrows():
         value = row[column]

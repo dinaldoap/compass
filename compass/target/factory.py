@@ -9,7 +9,7 @@ def create_output(
     """Create output target.
 
     Args:
-        config (dict): Run configuration.
+        config (dict): Configuration.
         sheet_name (str, optional): Sheet name. Defaults to "sheet".
         append (bool, optional): Whether must append to existing output target. Defaults to False.
 
