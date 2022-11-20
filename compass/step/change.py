@@ -1,4 +1,6 @@
 """Change step."""
+import functools as ft
+
 import numpy as np
 import pandas as pd
 
@@ -106,16 +108,17 @@ def _hierarchy_change(
         else:
             parent_group_column = f"Group_{level - 1}"
             group_percentage = percentage.groupby(parent_group_column, dropna=False)
-            percentage = group_percentage.apply(
-                lambda parent_percentage,: _parent_group_change(
-                    level,
-                    total,
-                    rebalance,
-                    absolute_distance,
-                    relative_distance,
-                    parent_percentage,
-                )
+            # freeze some arguments of _parent_group_change
+            _parent_group_change_partial = ft.partial(
+                _parent_group_change,
+                level,
+                total,
+                rebalance,
+                absolute_distance,
+                relative_distance,
             )
+            # apply _parent_group_change_partial, with freezed arguments, to each DataFrameGroup
+            percentage = group_percentage.apply(_parent_group_change_partial)
         leaf = percentage["Group"] == percentage[f"Group_{level}"]
         change.loc[leaf] = percentage.loc[leaf, f"Change_{level}"]
     return change
