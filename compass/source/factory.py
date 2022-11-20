@@ -4,48 +4,48 @@ from .file import DirectoryChange, StandardActual, StandardPrice, StandardTarget
 
 
 def create_target(config: dict) -> Source:
-    """Create source step for target data.
+    """Create source for target data.
 
     Args:
         config (dict): Configuration.
 
     Returns:
-        Source: source step.
+        Source: Source.
     """
     return StandardTarget(path=config["target"])
 
 
 def create_actual(config: dict) -> Source:
-    """Create source step for actual data.
+    """Create source for actual data.
 
     Args:
         config (dict): Configuration.
 
     Returns:
-        Source: source step.
+        Source: Source.
     """
     return StandardActual(config["actual"])
 
 
 def create_price(config: dict) -> Source:
-    """Create source step for price data.
+    """Create source for price data.
 
     Args:
         config (dict): Configuration.
 
     Returns:
-        Source: source step.
+        Source: Source.
     """
     return StandardPrice(config["price"])
 
 
 def create_change(config: dict):
-    """Create source step for change data.
+    """Create source for change data.
 
     Args:
         config (dict): Configuration.
 
     Returns:
-        Source: source step.
+        Source: Source.
     """
     return DirectoryChange(config["change"])

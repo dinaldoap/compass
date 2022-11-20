@@ -7,12 +7,17 @@ from .base import Step
 
 
 class ChangePrint(Step):
+    """Print changes calculated in the change step.
+
+    See @Change class.
+    """
+
     def __init__(self, target: Target):
         super().__init__()
         self.target = target
 
-    def run(self, input: pd.DataFrame):
-        formatted = input.copy()
+    def run(self, input_: pd.DataFrame):
+        formatted = input_.copy()
         # Columns order
         columns = [
             "Name",
@@ -25,7 +30,7 @@ class ChangePrint(Step):
             "Target",
             "Group",
         ]
-        input_columns = set(input.columns)
+        input_columns = set(input_.columns)
         columns = [column for column in columns if column in input_columns]
         # Replace NaN with empty string
         if "Group" in input_columns:
@@ -37,19 +42,21 @@ class ChangePrint(Step):
             formatted[percentage_columns] = formatted[percentage_columns].round()
             formatted[percentage_columns] = formatted[percentage_columns].astype(int)
             formatted[percentage_columns] = formatted[percentage_columns].applymap(
-                lambda x: "{}%".format(x)
+                lambda x: f"{x}%"
             )
         print(formatted[columns])
         self.target.write(formatted[columns])
-        return input
+        return input_
 
 
 class HistoricPrint(Step):
+    """Print historic changes to the report."""
+
     def __init__(self, target: Target):
         super().__init__()
         self.target = target
 
-    def run(self, input: pd.DataFrame):
+    def run(self, input_: pd.DataFrame):
         # Columns order
         columns = [
             "Date",
@@ -70,18 +77,20 @@ class HistoricPrint(Step):
             "TotalCapitalGain",
             "Tax",
         ]
-        data = _reset_safe_filter(input, columns)
+        data = _reset_safe_filter(input_, columns)
         _print_last("Historic", data)
         self.target.write(data)
-        return input
+        return input_
 
 
 class MonthPrint(Step):
+    """Print month gain or loss to the report."""
+
     def __init__(self, target: Target):
         super().__init__()
         self.target = target
 
-    def run(self, input: pd.DataFrame):
+    def run(self, input_: pd.DataFrame):
         # Columns order
         columns = [
             "Date",
@@ -89,19 +98,21 @@ class MonthPrint(Step):
             "Tax",
         ]
 
-        data = _resample_last(input, "M")
+        data = _resample_last(input_, "M")
         data = _reset_safe_filter(data, columns)
         _print_last("Month", data, by=["Date"])
         self.target.write(data)
-        return input
+        return input_
 
 
 class YearPrint(Step):
+    """Print accumulated actual by Year."""
+
     def __init__(self, target: Target):
         super().__init__()
         self.target = target
 
-    def run(self, input: pd.DataFrame):
+    def run(self, input_: pd.DataFrame):
         # Columns order
         columns = [
             "Date",
@@ -112,21 +123,21 @@ class YearPrint(Step):
             "TotalExpense",
             "TotalValue",
         ]
-        data = input.groupby([input.index.year, "Ticker"]).last()
+        data = input_.groupby([input_.index.year, "Ticker"]).last()
         data = _reset_safe_filter(data, columns)
         _print_last("Year", data, by=["Date", "Ticker"])
         self.target.write(data)
-        return input
+        return input_
 
 
-def _reset_safe_filter(input: pd.DataFrame, columns: list):
-    output = input.reset_index()
+def _reset_safe_filter(input_: pd.DataFrame, columns: list):
+    output = input_.reset_index()
     common_columns = [column for column in columns if column in set(output.columns)]
     return output.filter(items=common_columns)
 
 
-def _resample_last(input: pd.DataFrame, period: str):
-    return input.resample(period).last()
+def _resample_last(input_: pd.DataFrame, period: str):
+    return input_.resample(period).last()
 
 
 def _print_last(title: str, data: pd.DataFrame, by="Ticker"):

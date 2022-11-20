@@ -4,7 +4,7 @@ import re
 from setuptools import find_packages, setup
 
 
-def get_install_requires():
+def _get_install_requires():
     with open("requirements-prod.txt", encoding="utf-8") as file:
         content = file.read()
     deps = content.split("\n")
@@ -30,7 +30,7 @@ setup(
             "compass = compass.__main__:main",
         ]
     },
-    install_requires=get_install_requires(),
+    install_requires=_get_install_requires(),
     python_requires=">=3.8",
     zip_safe=True,
 )

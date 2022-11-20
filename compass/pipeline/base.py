@@ -12,4 +12,3 @@ class Pipeline(metaclass=ABCMeta):
     @abstractmethod
     def run(self):
         """Run the pipeline."""
-        pass

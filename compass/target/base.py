@@ -23,4 +23,3 @@ class Target(metaclass=ABCMeta):
         Returns
         -------
         """
-        pass
