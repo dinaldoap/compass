@@ -107,7 +107,7 @@ def _hierarchy_change(
             )
         else:
             parent_group_column = f"Group_{level - 1}"
-            group_percentage = percentage.groupby(parent_group_column, dropna=False)
+            group_percentage = percentage.groupby(parent_group_column, dropna=False, group_keys=False)
             # freeze some arguments of _parent_group_change
             _parent_group_change_partial = ft.partial(
                 _parent_group_change,
