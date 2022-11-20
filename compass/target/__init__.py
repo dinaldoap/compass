@@ -1,2 +1,3 @@
+"""Init for target package."""
 from .base import Target
-from .factory import create_actual, create_output
+from .factory import create_output

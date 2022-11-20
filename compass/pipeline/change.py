@@ -1,3 +1,4 @@
+"""Change pipeline."""
 from compass import model, source, target
 from compass.step import (
     Actual,
@@ -13,6 +14,9 @@ from .base import Pipeline
 
 
 class ChangePosition(Pipeline):
+    """Pipeline wich reads portfolio data and calculates the change necessary
+    to move the actual allocation towards the target one."""
+
     def __init__(self, config):
         self.config = config
 
@@ -36,4 +40,4 @@ class ChangePosition(Pipeline):
         ]
         data = None
         for step in steps:
-            data = step.run(input=data)
+            data = step.run(input_=data)

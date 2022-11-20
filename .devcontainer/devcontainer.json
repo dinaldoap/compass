@@ -11,13 +11,15 @@
     "type=volume,source=compass_vscode-server,target=/home/user/.vscode-server",
     "type=volume,source=home-cache,target=/home/user/.cache"
   ],
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
   "extensions": [
     "ms-python.python",
     "VisualStudioExptTeam.vscodeintellicode",
     "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "mhutchie.git-graph",
-    "jnoortheen.xonsh"
+    "jnoortheen.xonsh",
+    "njpwerner.autodocstring"
   ],
   "settings": {
     // Save
@@ -30,16 +32,26 @@
     // Ignore files
     "files.exclude": {
       "**/.git": true,
-      "**/.ipynb_checkpoints": true
+      "**/.venv": true,
+      "**/compass.egg-info": true,
+      "**/__pycache__": true,
+      "**/.ipynb_checkpoints": true,
+      "**/activate": true,
+      "**/.coverage": true,
+      "**/compass.spec": true
     },
     // Ignore for watching
     "files.watcherExclude": {
       "**/.git/**": true,
-      "**/data/**": true,
-      "**/compass.egg-info/**": true
+      "**/.venv/**": true,
+      "**/compass.egg-info/**": true,
+      "**/__pycache__/**": true,
+      "**/.ipynb_checkpoints/**": true,
+      "**/data/**": true
     },
     // Python
     "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+    "python.terminal.activateEnvironment": false,
     "python.formatting.provider": "black",
     // pytest
     "python.testing.pytestArgs": [
@@ -50,12 +62,15 @@
     "python.testing.pytestEnabled": true,
     // Bandit
     "python.linting.banditEnabled": true,
+    // Pylint    
+    "python.linting.pylintEnabled": true,
+    "python.linting.ignorePatterns": [
+        "**/site-packages/**/*.py",
+        ".vscode/*.py",
+        "**/tests/**/*.py",
+        "**/lib/python*/**/*.py"
+    ],
     // Xonsh
-    "terminal.integrated.profiles.linux": {
-        "xonsh": {
-            "path": "/workspace/.venv/bin/xonsh"
-        }
-    },
     "pylsp.executable": "/workspace/.venv/bin/pylsp"
   }
 }

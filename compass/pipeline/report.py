@@ -1,3 +1,4 @@
+"""Report pipeline."""
 from compass import source, target
 from compass.step import (
     HistoricPrint,
@@ -12,6 +13,9 @@ from .base import Pipeline
 
 
 class Report(Pipeline):
+    """Pipeline wich reads historical change data and calculates taxes and
+    accumulated totals."""
+
     def __init__(self, config):
         self.config = config
 
@@ -44,4 +48,4 @@ class Report(Pipeline):
         ]
         data = None
         for step in steps:
-            data = step.run(input=data)
+            data = step.run(input_=data)

@@ -1,4 +1,4 @@
-main: clean install lock sync format secure test package run
+main: clean install lock sync format secure lint test package run
 
 clean:
 	rm -rf compass.egg-info build dist
@@ -25,6 +25,9 @@ secure:
 	pip-audit
 	bandit --recursive compass setup.py
 
+lint:
+	pylint compass setup.py
+
 test: 
 	pytest --cov=compass --cov-report=term-missing tests
 
@@ -38,8 +41,10 @@ run:
 	pip install --quiet --requirement=requirements-dev.txt
 
 venv:
-	rm -rf .venv
-	python -m venv .venv
+	bash make/venv.sh
+
+venv-init:
+	bash make/venv-init.sh
 
 docker:
 	bash .devcontainer/devcontainer.sh

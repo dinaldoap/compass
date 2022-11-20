@@ -1,3 +1,6 @@
+"""Change step."""
+import functools as ft
+
 import numpy as np
 import pandas as pd
 
@@ -5,11 +8,8 @@ from .base import Step
 
 
 class Change(Step):
-    """
-    Change in the actual allocation required to approximate the target allocation.
-
-    ...
-    """
+    """Step which calculates the change required in the actual allocation to
+    move it towards the target allocation."""
 
     def __init__(self, value, rebalance, absolute_distance=0.0, relative_distance=0.0):
         self.value = value
@@ -17,7 +17,7 @@ class Change(Step):
         self.absolute_distance = absolute_distance
         self.relative_distance = relative_distance
 
-    def run(self, input: pd.DataFrame):
+    def run(self, input_: pd.DataFrame):
         """Calculate the change.
 
         Parameters
@@ -38,7 +38,7 @@ class Change(Step):
                 Change : int
                     Number of asset's units to buy or sell represented, repectivelly, by a positive or negative value.
         """
-        percentage = input.copy()
+        percentage = input_.copy()
         percentage["Actual"] = percentage["Actual"] * percentage["Price"]
         total = percentage["Actual"].sum() + self.value
         if total <= 0:
@@ -55,7 +55,7 @@ class Change(Step):
             self.relative_distance,
             percentage,
         )
-        output = input.copy()
+        output = input_.copy()
         output["Change"] = change.round(2)
         output = _discretize(output)
         return output
@@ -63,7 +63,7 @@ class Change(Step):
 
 def _add_group(percentage: pd.DataFrame):
     group = percentage.copy()
-    has_group = ~pd.isna(group["Group"])
+    has_group = ~group["Group"].isna()
     group.loc[has_group, "Group"] = (
         group.loc[has_group, "Group"] + "/" + group.loc[has_group, "Ticker"]
     )
@@ -75,11 +75,11 @@ def _add_hierarchy(percentage: pd.DataFrame):
     hierarchy = percentage["Group"].str.split("/", expand=True)
     levels = hierarchy.columns
     for level in levels[1:]:
-        has_level = ~pd.isna(hierarchy[level])
+        has_level = ~hierarchy[level].isna()
         hierarchy.loc[has_level, level] = (
             hierarchy.loc[has_level, level - 1] + "/" + hierarchy.loc[has_level, level]
         )
-    hierarchy.columns = map(lambda column: "Group_{}".format(column), hierarchy.columns)
+    hierarchy.columns = map(lambda column: f"Group_{column}", hierarchy.columns)
     hierarchy = pd.concat([percentage, hierarchy], axis="columns")
     return hierarchy, levels
 
@@ -92,7 +92,7 @@ def _hierarchy_change(
     absolute_distance: float,
     relative_distance: float,
     percentage: pd.DataFrame,
-):
+):  # pylint: disable=too-many-arguments
     change = pd.Series(index=percentage.index, dtype=np.float64)
     for level in levels:
         if level == 0:
@@ -106,20 +106,21 @@ def _hierarchy_change(
                 percentage,
             )
         else:
-            parent_group_column = "Group_{}".format(level - 1)
-            group_percentage = percentage.groupby(parent_group_column, dropna=False)
-            percentage = group_percentage.apply(
-                lambda parent_percentage,: _parent_group_change(
-                    level,
-                    total,
-                    rebalance,
-                    absolute_distance,
-                    relative_distance,
-                    parent_percentage,
-                )
+            parent_group_column = f"Group_{level - 1}"
+            group_percentage = percentage.groupby(parent_group_column, dropna=False, group_keys=False)
+            # freeze some arguments of _parent_group_change
+            _parent_group_change_partial = ft.partial(
+                _parent_group_change,
+                level,
+                total,
+                rebalance,
+                absolute_distance,
+                relative_distance,
             )
-        leaf = percentage["Group"] == percentage["Group_{}".format(level)]
-        change.loc[leaf] = percentage.loc[leaf, "Change_{}".format(level)]
+            # apply _parent_group_change_partial, with freezed arguments, to each DataFrameGroup
+            percentage = group_percentage.apply(_parent_group_change_partial)
+        leaf = percentage["Group"] == percentage[f"Group_{level}"]
+        change.loc[leaf] = percentage.loc[leaf, f"Change_{level}"]
     return change
 
 
@@ -130,8 +131,8 @@ def _parent_group_change(
     absolute_distance: float,
     relative_distance: float,
     parent_percentage: pd.DataFrame,
-):
-    parent_value = parent_percentage["Change_{}".format(level - 1)].iat[0]
+):  # pylint: disable=too-many-arguments
+    parent_value = parent_percentage[f"Change_{level - 1}"].iat[0]
     multiple_targets = (parent_percentage["Target"] > 0).sum() > 1
     parent_rebalance = rebalance and multiple_targets
     return _group_change(
@@ -153,16 +154,16 @@ def _group_change(
     absolute_distance: float,
     relative_distance: float,
     parent_percentage: pd.DataFrame,
-):
-    group_column = "Group_{}".format(level)
+):  # pylint: disable=too-many-arguments
+    group_column = f"Group_{level}"
     group_percentage = parent_percentage.groupby(group_column).agg(
         {"Target": "sum", "Actual": "sum"}
     )
-    group_percentage["Change_{}".format(level)] = _change(
+    group_percentage[f"Change_{level}"] = _change(
         value, total, rebalance, absolute_distance, relative_distance, group_percentage
     )
     group_percentage = group_percentage.rename(
-        {"Target": "Target_{}".format(level), "Actual": "Actual_{}".format(level)},
+        {"Target": f"Target_{level}", "Actual": f"Actual_{level}"},
         axis="columns",
     )
     group_percentage = parent_percentage.join(group_percentage, on=group_column)
@@ -176,7 +177,7 @@ def _change(
     absolute_distance: float,
     relative_distance: float,
     percentage: pd.DataFrame,
-):
+):  # pylint: disable=too-many-arguments,too-many-locals
     # percentage per ticker
     target = percentage["Target"].copy()
     actual = percentage["Actual"].copy()
@@ -232,12 +233,12 @@ def _change(
     return accum_change
 
 
-def _normalize(input: np.array):
-    return input / input.sum()
+def _normalize(input_: np.array):
+    return input_ / input_.sum()
 
 
-def _discretize(input: pd.DataFrame):
-    output = input.copy()
+def _discretize(input_: pd.DataFrame):
+    output = input_.copy()
     price = output["Price"].values
     change = output["Change"].values
     # units per ticker without overflow

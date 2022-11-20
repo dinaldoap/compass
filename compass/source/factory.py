@@ -1,44 +1,51 @@
-from pathlib import Path
-
+"""Factory for sources."""
 from .base import Source
-from .file import *
-from .http import YahooPrice
+from .file import DirectoryChange, StandardActual, StandardPrice, StandardTarget
 
 
 def create_target(config: dict) -> Source:
+    """Create source for target data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: Source.
+    """
     return StandardTarget(path=config["target"])
 
 
 def create_actual(config: dict) -> Source:
-    classes = [
-        StandardActual,
-        AliActual,
-        RicoHtmlActualPrice,
-        CeiHtmlActual,
-        WarrenHtmlActual,
-    ]
-    return _create_source(config["actual"], classes)
+    """Create source for actual data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: Source.
+    """
+    return StandardActual(config["actual"])
 
 
 def create_price(config: dict) -> Source:
-    # TODO: add YahooPrice
-    return _create_source(
-        config["price"], [StandardPrice, RicoHtmlActualPrice, WarrenHtmlPrice]
-    )
+    """Create source for price data.
 
+    Args:
+        config (dict): Configuration.
 
-def create_output(config: dict) -> Source:
-    return StandardOutput(config["output"])
-
-
-def _create_source(path, classes: list):
-    for class_ in classes:
-        try:
-            return class_(path=path)
-        except LayoutError:
-            continue
-    raise LayoutError("Layout not supported: {}.".format(path))
+    Returns:
+        Source: Source.
+    """
+    return StandardPrice(config["price"])
 
 
 def create_change(config: dict):
+    """Create source for change data.
+
+    Args:
+        config (dict): Configuration.
+
+    Returns:
+        Source: Source.
+    """
     return DirectoryChange(config["change"])
