@@ -1,4 +1,4 @@
---constraint constraints.txt
+--constraint requirements-dev.lock
 numpy
 pandas
 openpyxl
