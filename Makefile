@@ -7,8 +7,8 @@ install:
 	pip install --quiet --requirement=requirements-dev.txt
 
 lock:
-	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate requirements-prod.txt
 	pip-compile --quiet --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt
+	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate requirements-prod.txt
 
 unlock:
 	rm requirements-*.lock
@@ -22,7 +22,7 @@ format:
 	docformatter --in-place --recursive compass tests setup.py
 
 secure:
-	pip-audit
+	pip-audit --ignore-vuln GHSA-hcpj-qp55-gfph
 	bandit --recursive compass setup.py
 
 lint:
