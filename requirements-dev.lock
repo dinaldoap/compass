@@ -51,6 +51,7 @@ pylint==2.15.9
 pyparsing==3.0.9
 pytest==7.2.0
 pytest-cov==4.0.0
+pytest-env==0.8.1
 python-dateutil==2.8.2
 python-lsp-jsonrpc==1.0.0
 python-lsp-server==1.6.0
