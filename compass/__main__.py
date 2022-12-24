@@ -18,7 +18,7 @@ def _parse_args(argv: list, file="compass.ini") -> dict:
         dict: Configuration.
     """
     parser = argparse.ArgumentParser(
-        description="Compass: Helping investors to stick with theirs plans.",
+        description="Compass: Leading investors to theirs targets.",
         epilog="""
                     A single spreadsheet (portolio.xlsx) must be maintained to the basic usage. The expected column layout is as follows:
                     (1) Name: str, description of the ticker, e.g., iShares Core S&P 500 ETF.

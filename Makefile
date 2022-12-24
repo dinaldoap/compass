@@ -7,8 +7,8 @@ install:
 	pip install --quiet --requirement=requirements-editable.txt --requirement=requirements-dev.txt
 
 lock:
-	pip-compile --quiet --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt setup.py
-	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate setup.py requirements-bridge.txt
+	pip-compile --quiet --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml
+	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml requirements-bridge.txt
 
 unlock:
 	rm requirements-*.lock
@@ -17,16 +17,16 @@ sync:
 	pip-sync --quiet requirements-editable.txt requirements-dev.lock
 
 format:
-	isort --profile black compass tests setup.py
-	black compass setup.py tests
-	docformatter --in-place --recursive compass tests setup.py
+	isort --profile black compass tests
+	black compass tests
+	docformatter --in-place --recursive compass tests
 
 secure:
 	pip-audit --ignore-vuln GHSA-hcpj-qp55-gfph
-	bandit --recursive compass setup.py
+	bandit --recursive compass
 
 lint:
-	pylint compass setup.py
+	pylint compass
 
 test: 
 	pytest --cov=compass --cov-report=term-missing tests
@@ -38,7 +38,7 @@ run:
 #	./dist/compass --help
 	pip install --quiet dist/compass*.whl
 	compass --help
-	pip install --quiet --requirement=requirements-dev.txt
+	pip install --quiet --requirement=requirements-editable.txt
 
 venv:
 	bash make/venv.sh
