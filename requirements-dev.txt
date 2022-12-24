@@ -1,6 +1,5 @@
 # Dependencies for development
 --constraint constraints.txt
---editable .
 isort
 black
 docformatter

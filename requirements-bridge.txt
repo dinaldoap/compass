@@ -1,0 +1,2 @@
+# Bridge versions from requirements-dev.lock to requirements-prod.lock
+--constraint requirements-dev.lock
