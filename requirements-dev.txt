@@ -8,6 +8,7 @@ pip-audit
 pylint
 pytest
 pytest-cov
+pytest-env
 pip-tools
 xonsh[full]
 python-lsp-server
