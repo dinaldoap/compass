@@ -4,17 +4,17 @@ clean:
 	rm -rf compass.egg-info build dist
 
 install:
-	pip install --quiet --requirement=requirements-dev.txt
+	pip install --quiet --requirement=requirements-editable.txt --requirement=requirements-dev.txt
 
 lock:
-	pip-compile --quiet --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt
-	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate requirements-prod.txt
+	pip-compile --quiet --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt setup.py
+	pip-compile --quiet --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate setup.py requirements-bridge.txt
 
 unlock:
 	rm requirements-*.lock
 
 sync:
-	pip-sync --quiet requirements-dev.lock
+	pip-sync --quiet requirements-editable.txt requirements-dev.lock
 
 format:
 	isort --profile black compass tests setup.py
@@ -32,7 +32,7 @@ test:
 	pytest --cov=compass --cov-report=term-missing tests
 
 package:
-	bash package.sh
+	python -m build
 
 run:
 #	./dist/compass --help

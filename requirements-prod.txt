@@ -1,7 +1,0 @@
---constraint requirements-dev.lock
-numpy
-pandas
-openpyxl
-requests
-lxml
-babel
