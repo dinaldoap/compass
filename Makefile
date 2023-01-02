@@ -1,13 +1,16 @@
-main: clean install lock sync format secure lint test package smoke
+main: clean smoke
 .PHONY: main
 
 .PHONY: clean
 clean:
 	rm -rf compass.egg-info build dist
 
-build/install: requirements-editable.txt pyproject.toml requirements-dev.txt constraints.txt
-	pip install --quiet --requirement=requirements-editable.txt --requirement=requirements-dev.txt
+build/setup:
 	mkdir --parents build
+	@date > $@
+
+build/install: requirements-editable.txt pyproject.toml requirements-dev.txt constraints.txt build/setup
+	pip install --quiet --requirement=requirements-editable.txt --requirement=requirements-dev.txt
 	@date > $@
 .PHONY: install
 install: build/install
@@ -29,37 +32,52 @@ build/sync: requirements-editable.txt pyproject.toml requirements-dev.lock build
 .PHONY: sync
 sync: build/sync
 
-.PHONY: format
-format: build/sync
+PACKAGE_SRC=$(shell find compass -type f -name '*.py')
+TESTS_SRC=$(shell find tests -type f -name '*.py')
+TESTS_DATA=$(shell find tests -type f -name '*.xlsx' -name '*.ini')
+build/format: $(PACKAGE_SRC) $(TESTS_SRC) build/sync
 	isort --profile black compass tests
 	black compass tests
 	docformatter --in-place --recursive compass tests
+	@date > $@
+.PHONY: format
+format: build/format
 
 build/pip-audit: build/sync
 	pip-audit --ignore-vuln GHSA-hcpj-qp55-gfph
 	@date > $@
-.PHONY: secure
-secure: build/pip-audit format
+build/bandit: $(PACKAGE_SRC) build/sync
 	bandit --recursive compass
+	@date > $@
+.PHONY: secure
+secure: build/bandit
 
-.PHONY: lint
-lint: format
+build/lint: $(PACKAGE_SRC) build/sync
 	pylint compass
-	
-.PHONY: test
-test: secure lint
-	pytest --cov=compass --cov-report=term-missing tests
-	
-.PHONY: package
-package: test
-	python -m build
+	@date > $@
+.PHONY: lint
+lint: build/lint
 
-.PHONY: smoke
-smoke: package
+build/test: $(PACKAGE_SRC) $(TESTS_SRC) $(TESTS_DATA) build/format build/pip-audit build/bandit build/lint
+	pytest --cov=compass --cov-report=term-missing tests
+	@date > $@
+.PHONY: test
+test: build/test
+	
+build/package: $(PACKAGE_SRC) pyproject.toml build/sync
+	python -m build
+	@date > $@
+.PHONY: package
+package: build/package
+
+build/smoke: build/test build/package
 #	./dist/compass --help
 	pip install --quiet dist/compass*.whl
 	compass --help
 	pip install --quiet --requirement=requirements-editable.txt
+	@date > $@
+.PHONY: smoke
+smoke: build/smoke
 
 .PHONY: venv
 venv:
