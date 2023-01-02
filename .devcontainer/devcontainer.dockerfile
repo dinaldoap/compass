@@ -1,4 +1,4 @@
-FROM python:3.11.0-bullseye
+FROM python:3.11.1-bullseye
 
 # Set the default shell to bash instead of sh
 ENV SHELL /bin/bash
