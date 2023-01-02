@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from compass.__main__ import _parse_args, _run_change, _run_report, main
+from compass.__main__ import _parse_args, _run_change, main
 
 
 def test_main():
@@ -37,30 +37,6 @@ def test_change(temp_dir):
     assert output.exists()
 
 
-def test_parse_args_report():
-    output = _create_output(".")
-    expected_config = _create_config_report(output)
-    args = _parse_args(
-        [
-            "report",
-            "--change",
-            "tests/data/change",
-            "--target",
-            "tests/data/target.xlsx",
-            "--output",
-            str(output),
-        ],
-        "tests/data/compass.ini",
-    )
-    assert expected_config == args
-
-
-def test_report(temp_dir):
-    output = Path(temp_dir).joinpath("report.xlsx")
-    _run_report(_create_config_report(output))
-    assert output.exists()
-
-
 def _create_output(temp_dir: str):
     output = Path(temp_dir).joinpath("output.xlsx")
     return output
@@ -81,17 +57,4 @@ def _create_config_change(output: Path):
         # default
         "absolute_distance": 0.05,
         "relative_distance": 0.25,
-    }
-
-
-def _create_config_report(output: Path):
-    return {
-        "subcommand": "report",
-        "change": "tests/data/change",
-        "target": "tests/data/target.xlsx",
-        "output": str(output),
-        # configuration (compass.ini)
-        "expense_ratio": 0.2,
-        # default
-        "tax_rate": 0.15,
     }

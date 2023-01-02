@@ -4,7 +4,7 @@ import configparser
 import sys
 
 from compass.number import parse_bool, parse_decimal
-from compass.pipeline import ChangePosition, Report
+from compass.pipeline import ChangePosition
 
 
 def _parse_args(argv: list, file="compass.ini") -> dict:
@@ -32,7 +32,6 @@ def _parse_args(argv: list, file="compass.ini") -> dict:
     subparsers = parser.add_subparsers(dest="subcommand")
     subcommands = []
     subcommands.append(_add_subcommand_change(subparsers))
-    subcommands.append(_add_subcommand_report(subparsers))
 
     configv_argv = _add_config(argv, file, subcommands)
     namespace = parser.parse_args(configv_argv)
@@ -70,7 +69,6 @@ def main(argv: list = None):
     subcommand = config["subcommand"]
     routes = {
         "change": _run_change,
-        "report": _run_report,
     }
     if subcommand not in routes:
         raise RuntimeError(f"Subcommad {subcommand} not expected.")
@@ -79,10 +77,6 @@ def main(argv: list = None):
 
 def _run_change(config):
     ChangePosition(config=config).run()
-
-
-def _run_report(config):
-    Report(config=config).run()
 
 
 def _add_subcommand_change(subparsers):
@@ -150,47 +144,6 @@ def _add_subcommand_change(subparsers):
         type=float,
         help="Expense ratio (default: 0.03%%).",
         default=0.0003,
-    )
-    return subcommand
-
-
-def _add_subcommand_report(subparsers):
-    subcommand = "report"
-    parser = subparsers.add_parser(subcommand)
-    parser.add_argument(
-        "-c",
-        "--change",
-        type=str,
-        help="Directory with change history files (default: change).",
-        default="change",
-    )
-    parser.add_argument(
-        "-t",
-        "--target",
-        type=str,
-        help="Target of the portfolio in terms of percentages per ticker (default: portfolio.xlsx).",
-        default="portfolio.xlsx",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        type=str,
-        help="Output with changes to be done per ticker (default: output.xlsx).",
-        default="output.xlsx",
-    )
-    parser.add_argument(
-        "-e",
-        "--expense-ratio",
-        type=float,
-        help="Expense ratio (default: 0.03%%).",
-        default=0.0003,
-    )
-    parser.add_argument(
-        "-x",
-        "--tax-rate",
-        type=float,
-        help="Tax rate (default: 15.0%%).",
-        default=0.15,
     )
     return subcommand
 
