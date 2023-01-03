@@ -1,5 +1,4 @@
 """File sources."""
-import datetime as dt
 from pathlib import Path
 
 import pandas as pd
@@ -68,64 +67,6 @@ class StandardPrice(Source):
         return pd.read_excel(self.path)
 
 
-class Change(Source):
-    """
-    Excel sheet with data downloaded from Área Logada do Investidor (https://www.investidor.b3.com.br/).
-    The columns Data do Negociação, Código de Negociação, Quantidade and Preço are, respectivelly, renamed to Date, Ticker, Change and Price.
-
-    ...
-    """
-
-    def __init__(
-        self, path: Path, date=dt.date.today()
-    ):  # pylint: disable=unused-argument
-        self.path = Path(path)
-        _check_extension(self.path, "xlsx")
-        _check_layout(self.path, _CHANGE_COLUMNS)
-
-    def read(self) -> pd.DataFrame:
-        data = (
-            pd.read_excel(
-                self.path,
-                parse_dates=["Data do Negócio"],
-                date_parser=lambda txt: dt.datetime.strptime(txt, "%d/%m/%Y"),
-            )
-            .pipe(lambda df: df[_CHANGE_COLUMNS])
-            .rename(_CHANGE_RENAME, axis="columns")
-            .astype(_CHANGE_TYPES)
-            .assign(
-                Change=lambda df: (
-                    (df["Transaction"] == "Compra")
-                    + (df["Transaction"] == "Venda") * -1
-                )
-                * df["Change"]
-            )
-            .pipe(lambda df: df[["Date", "Ticker", "Change", "Price"]])
-            .set_index("Date")
-        )
-        return data
-
-
-class DirectoryChange(Source):
-    """
-    Directory with multiples change files.
-    See @Change class.
-
-    ...
-    """
-
-    def __init__(self, path: Path, date=dt.date.today()):
-        self.path = Path(path)
-        self.date = date
-        _check_directory(self.path)
-
-    def read(self) -> pd.DataFrame:
-        data = [Change(file, self.date) for file in self.path.iterdir()]
-        data = [change.read() for change in data]
-        data = pd.concat(data)
-        return data
-
-
 class LayoutError(Exception):
     """Exception raised when the file does not have the expected columns."""
 
@@ -139,15 +80,6 @@ def _check_extension(path, extension: str):
         raise LayoutError(f"Extension {extension} is expected in file {path}.")
 
 
-def _check_directory(path: Path):
-    if not path.exists():
-        raise LayoutError(f"{path} does not exists.")
-    if not path.is_dir():
-        raise LayoutError(f"{path} is expected to be a directory.")
-    if not list(path.iterdir()):
-        raise LayoutError(f"{path} is expected to have xlsx files.")
-
-
 def _check_layout(path: Path, columns: list) -> None:
     if path.suffix.endswith("xlsx"):
         data = pd.read_excel(path)
@@ -155,13 +87,3 @@ def _check_layout(path: Path, columns: list) -> None:
         raise RuntimeError(f"File extension not supported: {path}.")
     if not set(columns).issubset(set(data.columns)):
         raise LayoutError(f"Columns {columns} are expected in file {path}.")
-
-
-def _check_last_update(path: Path, expected_date: dt.date) -> None:
-    if expected_date is None:
-        return
-    last_update = dt.date.fromtimestamp(path.stat().st_mtime)
-    if last_update < expected_date:
-        raise LastUpdateError(
-            f"{path} is out of date. Last update is expected to be at {expected_date} or later."
-        )

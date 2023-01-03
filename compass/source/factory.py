@@ -1,6 +1,6 @@
 """Factory for sources."""
 from .base import Source
-from .file import DirectoryChange, StandardActual, StandardPrice, StandardTarget
+from .file import StandardActual, StandardPrice, StandardTarget
 
 
 def create_target(config: dict) -> Source:
@@ -37,15 +37,3 @@ def create_price(config: dict) -> Source:
         Source: Source.
     """
     return StandardPrice(config["price"])
-
-
-def create_change(config: dict):
-    """Create source for change data.
-
-    Args:
-        config (dict): Configuration.
-
-    Returns:
-        Source: Source.
-    """
-    return DirectoryChange(config["change"])

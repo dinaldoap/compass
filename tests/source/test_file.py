@@ -34,30 +34,3 @@ def test_StandardPrice():
         {"Ticker": ["BITO39", "BIEF39", "BIEM39"], "Price": [1, 2, 3]}
     )
     assert_frame_equal(expected, output[["Ticker", "Price"]])
-
-
-def test_Change():
-    output = Change("tests/data/change/change.xlsx", date=None).read()
-    _assert_change(output)
-
-
-def test_DirectoryChange():
-    output = DirectoryChange("tests/data/change", date=None).read()
-    _assert_change(output)
-
-
-def _assert_change(output):
-    expected = pd.DataFrame(
-        {
-            "Date": [
-                datetime(2021, 2, 1),
-                datetime(2021, 2, 2),
-                datetime(2021, 1, 1),
-                datetime(2021, 1, 2),
-            ],
-            "Ticker": ["BIEF39", "BIEF39", "BITO39", "BITO39"],
-            "Change": [2, -2, 1, -1],
-            "Price": [2.22, 2.22, 1.11, 1.11],
-        }
-    ).set_index("Date")
-    assert_frame_equal(expected, output)
