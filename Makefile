@@ -44,7 +44,7 @@ build/format: $(PACKAGE_SRC) $(TESTS_SRC) build/sync
 format: build/format
 
 build/pip-audit: build/sync
-	pip-audit --ignore-vuln GHSA-hcpj-qp55-gfph
+	pip-audit
 	@date > $@
 build/bandit: $(PACKAGE_SRC) build/sync
 	bandit --recursive compass
