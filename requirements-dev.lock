@@ -45,10 +45,12 @@ pip-requirements-parser==32.0.1
 pip-tools==6.12.1
 platformdirs==2.6.2
 pluggy==1.0.0
+prompt-toolkit==3.0.36
 pycodestyle==2.10.0
 pygments==2.13.0
 pylint==2.15.9
 pyparsing==3.0.9
+pyperclip==1.8.2
 pytest==7.2.0
 pytest-cov==4.0.0
 pytest-env==0.8.1
@@ -70,6 +72,7 @@ tomlkit==0.11.6
 ujson==5.6.0
 untokenize==0.1.1
 urllib3==1.26.13
+wcwidth==0.2.5
 webencodings==0.5.1
 wheel==0.38.4
 wrapt==1.14.1
