@@ -24,18 +24,19 @@ build/install: requirements-editable.txt ${PACKAGE_CFG} requirements-dev.txt con
 install: build/install
 
 build/lock: requirements-dev.txt constraints.txt ${PACKAGE_CFG} requirements-bridge.txt build/install
-	pip-compile --quiet --resolver=backtracking --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml
-	pip-compile --quiet --resolver=backtracking --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml requirements-bridge.txt
+	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml
+	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml requirements-bridge.txt
 	@date > $@
 .PHONY: lock
 lock: build/lock
 
 .PHONY: unlock
 unlock:
-	rm requirements-*.lock
+	rm --force requirements-*.lock
 
 build/sync: requirements-editable.txt ${PACKAGE_CFG} requirements-dev.lock build/lock
-	pip-sync --quiet requirements-editable.txt requirements-dev.lock
+	pip-sync --quiet requirements-dev.lock
+	pip install --quiet --requirement=requirements-editable.txt
 	@date > $@
 .PHONY: sync
 sync: build/sync
@@ -49,7 +50,7 @@ build/format: ${PACKAGE_SRC} ${TESTS_SRC} build/sync
 format: build/format
 
 build/pip-audit: build/sync
-	pip-audit
+	pip-audit --cache-dir=${HOME}/.cache/pip-audit --requirement=requirements-prod.lock
 	@date > $@
 build/bandit: ${PACKAGE_SRC} build/sync
 	bandit --recursive compass
