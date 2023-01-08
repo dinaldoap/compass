@@ -1,12 +1,10 @@
 """Change pipeline."""
 from compass import model, source, target
 from compass.step import (
-    Actual,
     AllocationReport,
     Change,
     ChangePrint,
-    Price,
-    Target,
+    ReadSource,
     TransactionPrint,
 )
 
@@ -22,9 +20,7 @@ class ChangePosition(Pipeline):
 
     def run(self):
         steps = [
-            Target(source=source.create_target(config=self.config)),
-            Actual(source=source.create_actual(config=self.config)),
-            Price(source=source.create_price(config=self.config)),
+            ReadSource(source=source.create_portfolio(config=self.config)),
             Change(
                 value=self.config["value"],
                 rebalance=self.config["rebalance"],

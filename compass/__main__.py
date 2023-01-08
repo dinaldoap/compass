@@ -111,24 +111,10 @@ def _add_subcommand_change(subparsers):
         default=0.25,
     )
     parser.add_argument(
-        "-t",
-        "--target",
-        type=str,
-        help="Target of the portfolio in terms of percentages per ticker (default: portfolio.xlsx).",
-        default="portfolio.xlsx",
-    )
-    parser.add_argument(
-        "-a",
-        "--actual",
-        type=str,
-        help="Actual portfolio in terms of units per ticker (default: portfolio.xlsx).",
-        default="portfolio.xlsx",
-    )
-    parser.add_argument(
         "-p",
-        "--price",
+        "--portfolio",
         type=str,
-        help="Prices of the tickers (default: portfolio.xlsx).",
+        help="Portfolio with target percentage, actual units and price per ticker (default: portfolio.xlsx).",
         default="portfolio.xlsx",
     )
     parser.add_argument(

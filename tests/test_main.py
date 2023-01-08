@@ -17,11 +17,7 @@ def test_parse_args_change():
         [
             "change",
             "1,000.00",
-            "--target",
-            "tests/data/portfolio.xlsx",
-            "--actual",
-            "tests/data/portfolio.xlsx",
-            "--price",
+            "--portfolio",
             "tests/data/portfolio.xlsx",
             "--output",
             str(output),
@@ -48,9 +44,7 @@ def _create_config_change(output: Path):
         "subcommand": "change",
         "value": 1000.0,
         "rebalance": True,
-        "target": "tests/data/portfolio.xlsx",
-        "actual": "tests/data/portfolio.xlsx",
-        "price": "tests/data/portfolio.xlsx",
+        "portfolio": "tests/data/portfolio.xlsx",
         "output": str(output),
         # configuration (compass.ini)
         "expense_ratio": 0.1,
