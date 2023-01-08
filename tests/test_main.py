@@ -17,11 +17,7 @@ def test_parse_args_change():
         [
             "change",
             "1,000.00",
-            "--target",
-            "tests/data/portfolio.xlsx",
-            "--actual",
-            "tests/data/portfolio.xlsx",
-            "--price",
+            "--portfolio",
             "tests/data/portfolio.xlsx",
             "--output",
             str(output),
@@ -31,14 +27,14 @@ def test_parse_args_change():
     assert expected_args == args
 
 
-def test_change(temp_dir):
-    output = _create_output(temp_dir)
+def test_change(tmp_path):
+    output = _create_output(tmp_path)
     _run_change(_create_config_change(output))
     assert output.exists()
 
 
-def _create_output(temp_dir: str):
-    output = Path(temp_dir).joinpath("output.xlsx")
+def _create_output(tmp_path: str):
+    output = Path(tmp_path).joinpath("output.xlsx")
     return output
 
 
@@ -48,9 +44,7 @@ def _create_config_change(output: Path):
         "subcommand": "change",
         "value": 1000.0,
         "rebalance": True,
-        "target": "tests/data/portfolio.xlsx",
-        "actual": "tests/data/portfolio.xlsx",
-        "price": "tests/data/portfolio.xlsx",
+        "portfolio": "tests/data/portfolio.xlsx",
         "output": str(output),
         # configuration (compass.ini)
         "expense_ratio": 0.1,

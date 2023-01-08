@@ -5,23 +5,10 @@ import pandas as pd
 
 from .base import Source
 
-_CHANGE_RENAME = {
-    "Data do Negócio": "Date",
-    "Tipo de Movimentação": "Transaction",  # Compra == Deposit and Venda == Withdraw
-    "Código de Negociação": "Ticker",
-    "Quantidade": "Change",
-    "Preço": "Price",
-}
-_CHANGE_COLUMNS = _CHANGE_RENAME.keys()
-_CHANGE_TYPES = {
-    "Change": int,
-    "Price": float,
-}
 
-
-class StandardTarget(Source):
+class StandardPortfolio(Source):
     """
-    Excel sheet with Name, Ticker and Target columns.
+    Excel sheet with Name, Ticker, Target, Actual, Price and Group columns.
 
     ...
     """
@@ -29,39 +16,9 @@ class StandardTarget(Source):
     def __init__(self, path: Path):
         self.path = Path(path)
         _check_extension(self.path, "xlsx")
-        _check_layout(self.path, ["Name", "Ticker", "Target", "Group"])
-
-    def read(self):
-        return pd.read_excel(self.path)
-
-
-class StandardActual(Source):
-    """
-    Excel sheet with Ticker and Actual columns.
-
-    ...
-    """
-
-    def __init__(self, path: Path):
-        self.path = Path(path)
-        _check_extension(self.path, "xlsx")
-        _check_layout(self.path, ["Ticker", "Actual"])
-
-    def read(self):
-        return pd.read_excel(self.path)
-
-
-class StandardPrice(Source):
-    """
-    Excel sheet with Ticker and Price columns.
-
-    ...
-    """
-
-    def __init__(self, path: Path):
-        self.path = Path(path)
-        _check_extension(self.path, "xlsx")
-        _check_layout(self.path, ["Ticker", "Price"])
+        _check_layout(
+            self.path, ["Name", "Ticker", "Target", "Actual", "Price", "Group"]
+        )
 
     def read(self):
         return pd.read_excel(self.path)

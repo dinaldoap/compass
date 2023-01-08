@@ -1,22 +1,10 @@
 """Factory for sources."""
 from .base import Source
-from .file import StandardActual, StandardPrice, StandardTarget
+from .file import StandardPortfolio
 
 
-def create_target(config: dict) -> Source:
-    """Create source for target data.
-
-    Args:
-        config (dict): Configuration.
-
-    Returns:
-        Source: Source.
-    """
-    return StandardTarget(path=config["target"])
-
-
-def create_actual(config: dict) -> Source:
-    """Create source for actual data.
+def create_portfolio(config: dict) -> Source:
+    """Create source for portfolio data.
 
     Args:
         config (dict): Configuration.
@@ -24,16 +12,4 @@ def create_actual(config: dict) -> Source:
     Returns:
         Source: Source.
     """
-    return StandardActual(config["actual"])
-
-
-def create_price(config: dict) -> Source:
-    """Create source for price data.
-
-    Args:
-        config (dict): Configuration.
-
-    Returns:
-        Source: Source.
-    """
-    return StandardPrice(config["price"])
+    return StandardPortfolio(path=config["portfolio"])
