@@ -57,6 +57,10 @@ class InputSchema(pa.SchemaModel):
     def _sum_one(self, column: Series[float]) -> Series[float]:
         return column.sum() == 1
 
+    @pa.check("Actual", name="not_fractionable")
+    def _not_fractionable(self, column: Series[float]) -> Series[float]:
+        return column % 1 == 0
+
 
 @pa.check_types(lazy=True)
 def _transform(input_: DataFrame[InputSchema]) -> DataFrame[InputSchema]:
