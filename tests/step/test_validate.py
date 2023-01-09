@@ -46,7 +46,7 @@ def test_validate_error():
                 -0.2,
                 1.8,
             ],  # None is invalid, negative is invalid, greater than 1 is invalid
-            "Actual": [None, -1, 2],  # None is invalid, negative is invalid
+            "Actual": [None, -1, 2.5],  # None is invalid, negative is invalid
             "Price": [None, -1.0, 2.0],  # None is invalid, negative is invalid
             "Group": [None, "1.0", None],
         }
@@ -65,6 +65,7 @@ def test_validate_error():
                 "Actual",
                 "Actual",
                 "Actual",
+                "Actual",
                 "Price",
                 "Price",
             ],
@@ -75,10 +76,11 @@ def test_validate_error():
                 "not_nullable",  # Target
                 "greater_than_or_equal_to(0)",  # Target
                 "less_than_or_equal_to(1)",  # Target
-                "target_sum_one",  # Target
+                "sum_one",  # Target
                 "not_nullable",  # Actual
                 "dtype('int64')",  # Actual
                 "greater_than_or_equal_to(0)",  # Actual
+                "not_fractionable",  # Actual
                 "not_nullable",  # Price
                 "greater_than_or_equal_to(0)",  # Price
             ],
@@ -88,5 +90,5 @@ def test_validate_error():
         step.Validate().run(input_)
         assert False, "SchemaErros are expected."
     except pa.errors.SchemaErrors as ex:
-        assert 12 == len(ex.failure_cases)
+        assert 13 == len(ex.failure_cases)
         assert_frame_equal(expected, ex.failure_cases[["column", "check"]])

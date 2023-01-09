@@ -43,7 +43,7 @@ class Validate(Step):
         return _transform(input_)
 
 
-class InputSchema(pa.SchemaModel):
+class PortfolioSchema(pa.SchemaModel):
     """Portfolio's data schema."""
 
     Name: Series[str] = pa.Field(coerce=True)
@@ -53,11 +53,15 @@ class InputSchema(pa.SchemaModel):
     Price: Series[float] = pa.Field(ge=0, coerce=True)
     Group: Series[str] = pa.Field(coerce=True, nullable=True)
 
-    @pa.check("Target", name="target_sum_one")
-    def _target_sum_one(self, target: Series[float]) -> Series[float]:
-        return target.sum() == 1
+    @pa.check("Target", name="sum_one")
+    def _sum_one(self, column: Series[float]) -> Series[float]:
+        return column.sum() == 1
+
+    @pa.check("Actual", name="not_fractionable")
+    def _not_fractionable(self, column: Series[float]) -> Series[float]:
+        return column % 1 == 0
 
 
 @pa.check_types(lazy=True)
-def _transform(input_: DataFrame[InputSchema]) -> DataFrame[InputSchema]:
+def _transform(input_: DataFrame[PortfolioSchema]) -> DataFrame[PortfolioSchema]:
     return input_
