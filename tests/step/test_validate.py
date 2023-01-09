@@ -61,6 +61,7 @@ def test_validate_error():
                 "Target",
                 "Target",
                 "Target",
+                "Target",
                 "Actual",
                 "Actual",
                 "Actual",
@@ -74,6 +75,7 @@ def test_validate_error():
                 "not_nullable",  # Target
                 "greater_than_or_equal_to(0)",  # Target
                 "less_than_or_equal_to(1)",  # Target
+                "target_sum_one",  # Target
                 "not_nullable",  # Actual
                 "dtype('int64')",  # Actual
                 "greater_than_or_equal_to(0)",  # Actual
@@ -86,4 +88,5 @@ def test_validate_error():
         step.Validate().run(input_)
         assert False, "SchemaErros are expected."
     except pa.errors.SchemaErrors as ex:
+        assert 12 == len(ex.failure_cases)
         assert_frame_equal(expected, ex.failure_cases[["column", "check"]])

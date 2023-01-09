@@ -53,6 +53,10 @@ class InputSchema(pa.SchemaModel):
     Price: Series[float] = pa.Field(ge=0, coerce=True)
     Group: Series[str] = pa.Field(coerce=True, nullable=True)
 
+    @pa.check("Target", name="target_sum_one")
+    def _target_sum_one(self, target: Series[float]) -> Series[float]:
+        return target.sum() == 1
+
 
 @pa.check_types(lazy=True)
 def _transform(input_: DataFrame[InputSchema]) -> DataFrame[InputSchema]:
