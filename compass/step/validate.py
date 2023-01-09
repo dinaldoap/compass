@@ -43,7 +43,7 @@ class Validate(Step):
         return _transform(input_)
 
 
-class InputSchema(pa.SchemaModel):
+class PortfolioSchema(pa.SchemaModel):
     """Portfolio's data schema."""
 
     Name: Series[str] = pa.Field(coerce=True)
@@ -63,5 +63,5 @@ class InputSchema(pa.SchemaModel):
 
 
 @pa.check_types(lazy=True)
-def _transform(input_: DataFrame[InputSchema]) -> DataFrame[InputSchema]:
+def _transform(input_: DataFrame[PortfolioSchema]) -> DataFrame[PortfolioSchema]:
     return input_
