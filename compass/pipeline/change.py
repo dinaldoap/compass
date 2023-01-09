@@ -6,6 +6,7 @@ from compass.step import (
     ChangePrint,
     ReadSource,
     TransactionPrint,
+    Validate,
 )
 
 from .base import Pipeline
@@ -21,6 +22,7 @@ class ChangePosition(Pipeline):
     def run(self):
         steps = [
             ReadSource(source=source.create_portfolio(config=self.config)),
+            Validate(),
             Change(
                 value=self.config["value"],
                 rebalance=self.config["rebalance"],
