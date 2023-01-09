@@ -75,7 +75,7 @@ def test_validate_error():
                 "not_nullable",  # Target
                 "greater_than_or_equal_to(0)",  # Target
                 "less_than_or_equal_to(1)",  # Target
-                "target_sum_one",  # Target
+                "sum_one",  # Target
                 "not_nullable",  # Actual
                 "dtype('int64')",  # Actual
                 "greater_than_or_equal_to(0)",  # Actual
