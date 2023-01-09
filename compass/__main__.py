@@ -26,6 +26,7 @@ def _parse_args(argv: list, file="compass.ini") -> dict:
                     (3) Target: float, target percentage for the ticker, e.g., 40%.
                     (4) Actual: int, number of owned units of the ticker, e.g., 500.
                     (5) Price: float, current price of the ticker, e.g., $100.
+                    (6) Group: str, optional, group of the ticker, e.g., Stocks.
                     Additional columns in the spreadsheet are ignored.
                 """,
     )
