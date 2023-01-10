@@ -1,8 +1,6 @@
 from pathlib import Path
 
-import pandas as pd
 import pytest
-from pandas.testing import assert_frame_equal
 from pytest import MonkeyPatch
 
 from compass.__main__ import _parse_args, _run_change, main
@@ -69,3 +67,26 @@ def test_init(tmp_path: Path, monkeypatch: MonkeyPatch):
     # Files are valid
     main(["change", "1000"])
     assert Path("output.xlsx").exists()
+
+
+@pytest.mark.parametrize(
+    "file",
+    [
+        ("portfolio.xlsx"),
+        ("compass.ini"),
+    ],
+)
+def test_init_not_overwrite(file, tmp_path: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(tmp_path)
+    # Dummy file is initialized
+    Path(file).touch()
+    dummy_stat = Path(file).stat()
+    # File is not overwritten
+    main(["init"])
+    not_overwritten_stat = Path(file).stat()
+    assert dummy_stat == not_overwritten_stat
+    # Remove and initialize file
+    Path(file).unlink()
+    main(["init"])
+    init_stat = Path(file).stat()
+    assert dummy_stat != init_stat
