@@ -21,7 +21,7 @@ class AllocationReport(Step):
 
 def _to_percentage(series: pd.Series):
     series = series / series.sum()
-    return series.round(2)
+    return series.fillna(0).round(2)
 
 
 class TransactionPrint(Step):
