@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "compass 1000",
+            "name": "compass change",
             "type": "python",
             "request": "launch",
             "module": "compass",
-            "args": ["1000"],
+            "args": ["change", "1000"],
             "cwd": "${workspaceFolder}/data"
         }
     ]

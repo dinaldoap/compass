@@ -2,9 +2,10 @@
 import argparse
 import configparser
 import sys
+from pathlib import Path
 
 from compass.number import parse_bool, parse_decimal
-from compass.pipeline import ChangePosition
+from compass.pipeline import ChangePosition, InitPipeline
 
 
 def _parse_args(argv: list, file="compass.ini") -> dict:
@@ -19,19 +20,10 @@ def _parse_args(argv: list, file="compass.ini") -> dict:
     """
     parser = argparse.ArgumentParser(
         description="Compass: Leading investors to theirs targets.",
-        epilog="""
-                    A single spreadsheet (--portfolio=portolio.xlsx) must be passed as input to the basic usage. The expected column layout is as follows:
-                    (1) Name: str, description of the ticker, e.g., iShares Core S&P 500 ETF.
-                    (2) Ticker: str, ticker name, e.g., IVV.
-                    (3) Target: float, target percentage for the ticker, e.g., 40%.
-                    (4) Actual: int, number of owned units of the ticker, e.g., 500.
-                    (5) Price: float, current price of the ticker, e.g., $100.
-                    (6) Group: str, optional, group of the ticker, e.g., Stocks.
-                    Additional columns in the spreadsheet are ignored.
-                """,
     )
     subparsers = parser.add_subparsers(dest="subcommand")
     subcommands = []
+    subcommands.append(_add_subcommand_init(subparsers))
     subcommands.append(_add_subcommand_change(subparsers))
 
     configv_argv = _add_config(argv, file, subcommands)
@@ -69,6 +61,7 @@ def main(argv: list = None):
     config = _parse_args(argv)
     subcommand = config["subcommand"]
     routes = {
+        "init": _run_init,
         "change": _run_change,
     }
     if subcommand not in routes:
@@ -76,13 +69,59 @@ def main(argv: list = None):
     routes[subcommand](config)
 
 
+def _run_init(config):
+    if not Path("compass.ini").exists():
+        _init_config()
+    if not Path(config["output"]).exists():
+        InitPipeline(config=config).run()
+
+
+def _init_config():
+    configuration = "[compass]\n#change_args=--expense-ratio=0.0 --rebalance=False\n"
+    with open("compass.ini", mode="w", encoding="utf-8") as fout:
+        fout.write(configuration)
+
+
 def _run_change(config):
     ChangePosition(config=config).run()
 
 
+def _add_subcommand_init(subparsers):
+    subcommand = "init"
+    parser = subparsers.add_parser(
+        subcommand,
+        help="Initialize portfolio spreadsheat (portfolio.xlsx) and configuration (compass.ini).",
+        epilog="""
+                    The porfolio spreadsheet is initialized with fictitious tickers. Please, replace them with you own portfolio.
+                    And, the configuration (compass.ini) is initialized with an disabled example. Please, replace it with your own configuration, and remove the character \'#\' to activate it.
+                """,
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        help="Output with the portfolio spreadsheet (default: portfolio.xlsx).",
+        default="portfolio.xlsx",
+    )
+    return subcommand
+
+
 def _add_subcommand_change(subparsers):
     subcommand = "change"
-    parser = subparsers.add_parser(subcommand)
+    parser = subparsers.add_parser(
+        subcommand,
+        help="Calculate how many units to buy/sell per ticker in order to move the portfolio towards the target. The basic inputs are the deposit/withdraw value and the portfolio spreadsheet.",
+        epilog="""
+                    The deposit/withdraw value (e.g., 1000) and the porfolio spreadsheet (e.g., --portfolio=portolio.xlsx) must be passed as inputs to the basic usage. The expected column layout is as follows:
+                    (1) Name: str, description of the ticker, e.g., iShares Core S&P 500 ETF.
+                    (2) Ticker: str, ticker name, e.g., IVV.
+                    (3) Target: float, target percentage for the ticker, e.g., 40%.
+                    (4) Actual: int, number of owned units of the ticker, e.g., 500.
+                    (5) Price: float, current price of the ticker, e.g., $100.
+                    (6) Group: str, optional, group of the ticker, e.g., Stocks.
+                    Additional columns in the spreadsheet are ignored.
+                """,
+    )
     parser.add_argument(
         "value",
         type=parse_decimal,
@@ -93,7 +132,7 @@ def _add_subcommand_change(subparsers):
         "--rebalance",
         type=parse_bool,
         help="""Allow rebalancing. A rebalancing is done when one distance is exceeded (see --absolute-distance and --relative-distance).
-                                                     A rebalancing moves the portfolio up to the point where the exceeded distance goes back to the allowed range  (default: True).""",
+                                                     A rebalancing buys and sells in order to move the portfolio up to the point where the exceeded distance goes back to the allowed range. Not allowing rebalacing means that only cash flows, deposits and withdraws, will be used to balance the portfolio (default: True).""",
         choices=[True, False],
         default=True,
     )
