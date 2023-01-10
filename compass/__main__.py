@@ -2,9 +2,10 @@
 import argparse
 import configparser
 import sys
+from pathlib import Path
 
 from compass.number import parse_bool, parse_decimal
-from compass.pipeline import ChangePosition
+from compass.pipeline import ChangePosition, InitPipeline
 
 
 def _parse_args(argv: list, file="compass.ini") -> dict:
@@ -22,6 +23,7 @@ def _parse_args(argv: list, file="compass.ini") -> dict:
     )
     subparsers = parser.add_subparsers(dest="subcommand")
     subcommands = []
+    subcommands.append(_add_subcommand_init(subparsers))
     subcommands.append(_add_subcommand_change(subparsers))
 
     configv_argv = _add_config(argv, file, subcommands)
@@ -59,6 +61,7 @@ def main(argv: list = None):
     config = _parse_args(argv)
     subcommand = config["subcommand"]
     routes = {
+        "init": _run_init,
         "change": _run_change,
     }
     if subcommand not in routes:
@@ -66,8 +69,41 @@ def main(argv: list = None):
     routes[subcommand](config)
 
 
+def _run_init(config):
+    if not Path("compass.ini").exists():
+        _init_config()
+    if not Path(config["output"]).exists():
+        InitPipeline(config=config).run()
+
+
+def _init_config():
+    configuration = "[compass]\n#change_args=--expense-ratio=0.0 --rebalance=False\n"
+    with open("compass.ini", mode="w", encoding="utf-8") as fout:
+        fout.write(configuration)
+
+
 def _run_change(config):
     ChangePosition(config=config).run()
+
+
+def _add_subcommand_init(subparsers):
+    subcommand = "init"
+    parser = subparsers.add_parser(
+        subcommand,
+        help="Initialize portfolio spreadsheat (portfolio.xlsx) and configuration (compass.ini).",
+        epilog="""
+                    The porfolio spreadsheet is initialized with fictitious tickers. Please, replace them with you own portfolio.
+                    And, the configuration (compass.ini) is initialized with an disabled example. Please, replace it with your own configuration, and remove the character \'#\' to activate it.
+                """,
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        help="Output with the portfolio spreadsheet (default: portfolio.xlsx).",
+        default="portfolio.xlsx",
+    )
+    return subcommand
 
 
 def _add_subcommand_change(subparsers):

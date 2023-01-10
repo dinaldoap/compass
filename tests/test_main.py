@@ -1,6 +1,9 @@
 from pathlib import Path
 
+import pandas as pd
 import pytest
+from pandas.testing import assert_frame_equal
+from pytest import MonkeyPatch
 
 from compass.__main__ import _parse_args, _run_change, main
 
@@ -52,3 +55,17 @@ def _create_config_change(output: Path):
         "absolute_distance": 0.05,
         "relative_distance": 0.25,
     }
+
+
+def test_init(tmp_path: Path, monkeypatch: MonkeyPatch):
+    monkeypatch.chdir(tmp_path)
+    # Files do not exist
+    assert not Path("portfolio.xlsx").exists()
+    assert not Path("compass.ini").exists()
+    main(["init"])
+    # Files are initialized
+    assert Path("portfolio.xlsx").exists()
+    assert Path("compass.ini").exists()
+    # Files are valid
+    main(["change", "1000"])
+    assert Path("output.xlsx").exists()
