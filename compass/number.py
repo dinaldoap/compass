@@ -11,7 +11,7 @@ def parse_bool(text: str):
         text (str): Textual value.
 
     Raises:
-        ValueError: when 'text' is neither 'True' or 'False'.
+        CompassException: when 'text' is neither 'True' or 'False'.
 
     Returns:
         _type_: True, when 'text' is 'True';
@@ -21,7 +21,7 @@ def parse_bool(text: str):
         return True
     if text == "False":
         return False
-    raise ValueError(f"Value not expected to conver to bool: {text}.")
+    raise ValueError(f"Value {text} not valid as boolean. Use True or False instead.")
 
 
 def parse_decimal(text: str, locale=numbers.LC_NUMERIC) -> float:

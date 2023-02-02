@@ -1,8 +1,9 @@
 import pandas as pd
-import pandera as pa
 from pandas.testing import assert_frame_equal
+from pandera.errors import SchemaErrors
 
 from compass import step
+from compass.exception import CompassException
 
 
 def test_validate_convert():
@@ -88,7 +89,8 @@ def test_validate_error():
     )
     try:
         step.Validate().run(input_)
-        assert False, "SchemaErros are expected."
-    except pa.errors.SchemaErrors as ex:
-        assert 13 == len(ex.failure_cases)
-        assert_frame_equal(expected, ex.failure_cases[["column", "check"]])
+        assert False, "SchemaErrors are expected."
+    except CompassException as ex:
+        assert SchemaErrors == type(ex.__cause__)
+        assert 13 == len(ex.__cause__.failure_cases)
+        assert_frame_equal(expected, ex.__cause__.failure_cases[["column", "check"]])
