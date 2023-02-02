@@ -48,7 +48,7 @@ class Validate(Step):
             return _transform(input_)
         except SchemaErrors as ex:
             raise CompassException(
-                f"Input data with invalid schema. Please review the columns and errors showed below. Fix only the first check/error for each column and try again.\n{ex.failure_cases}"
+                f"Input data with invalid schema. Please review the columns and errors showed below. Fix the first check/error of each column and try again.\n{ex.failure_cases}"
             ) from ex
 
 
