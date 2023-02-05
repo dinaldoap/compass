@@ -1,5 +1,7 @@
 """Validate step."""
 
+import math
+
 import pandas as pd
 import pandera as pa
 from pandera.errors import SchemaErrors
@@ -64,7 +66,7 @@ class PortfolioSchema(pa.SchemaModel):
 
     @pa.check("Target", name="sum_one")
     def _sum_one(self, column: Series[float]) -> Series[float]:
-        return column.sum() == 1
+        return math.isclose(column.sum(), 1)
 
     @pa.check("Actual", name="not_fractionable")
     def _not_fractionable(self, column: Series[float]) -> Series[float]:
