@@ -97,3 +97,7 @@ venv-init:
 .PHONY: docker
 docker:
 	bash .devcontainer/devcontainer.sh
+
+.PHONY: testpypi
+testpypi:
+	twine upload --repository testpypi dist/compass*.whl
