@@ -34,7 +34,7 @@ class Calculator:
         """
         if self.deposit is None or self.withdraw is None:
             raise RuntimeError(
-                "Buy and sell are expected to calculate actual transaction."
+                "Call Calculator.calculate() before calling Calculator.transaction()."
             )
         return self.deposit + abs(self.withdraw)
 

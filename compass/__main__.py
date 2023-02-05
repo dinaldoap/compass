@@ -1,9 +1,11 @@
 """Main module."""
 import argparse
 import configparser
+import logging
 import sys
 from pathlib import Path
 
+from compass.exception import CompassException
 from compass.number import parse_bool, parse_decimal
 from compass.pipeline import ChangePosition, InitPipeline
 
@@ -52,10 +54,19 @@ def main(argv: list = None):
 
     Args:
         argv (list, optional): Argument values. Defaults to None.
-
-    Raises:
-        RuntimeError: When subcommand value is not expected.
     """
+    try:
+        _run_main(argv)
+    except CompassException as ex:
+        print(ex)
+    except Exception as ex:
+        logging.exception(ex)
+        print(
+            "Please visit https://github.com/dinaldoap/compass/issues/new/choose to open an issue with the error log above."
+        )
+
+
+def _run_main(argv: list = None):
     if argv is None:
         argv = sys.argv[1:]
     config = _parse_args(argv)
@@ -65,14 +76,18 @@ def main(argv: list = None):
         "change": _run_change,
     }
     if subcommand not in routes:
-        raise RuntimeError(f"Subcommad {subcommand} not expected.")
+        raise NotImplementedError(f"Route not implemented for subcommand {subcommand}.")
     routes[subcommand](config)
 
 
 def _run_init(config):
-    if not Path("compass.ini").exists():
+    if Path("compass.ini").exists():
+        print("compass.ini already exists.")
+    else:
         _init_config()
-    if not Path(config["output"]).exists():
+    if Path(config["output"]).exists():
+        print(f'{config["output"]} already exists.')
+    else:
         InitPipeline(config=config).run()
 
 
@@ -92,7 +107,7 @@ def _add_subcommand_init(subparsers):
         subcommand,
         help="Initialize portfolio spreadsheat (portfolio.xlsx) and configuration (compass.ini).",
         epilog="""
-                    The porfolio spreadsheet is initialized with fictitious tickers. Please, replace them with you own portfolio.
+                    The porfolio spreadsheet (portfolio.xlsx) is initialized with fictitious tickers. Please, replace them with you own portfolio.
                     And, the configuration (compass.ini) is initialized with an disabled example. Please, replace it with your own configuration, and remove the character \'#\' to activate it.
                 """,
     )

@@ -1,6 +1,7 @@
 import pytest
 from babel.numbers import NumberFormatError
 
+from compass.exception import CompassException
 from compass.number import parse_bool, parse_decimal
 
 

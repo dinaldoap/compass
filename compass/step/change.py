@@ -4,6 +4,8 @@ import functools as ft
 import numpy as np
 import pandas as pd
 
+from compass.exception import CompassException
+
 from .base import Step
 
 
@@ -42,7 +44,9 @@ class Change(Step):
         percentage["Actual"] = percentage["Actual"] * percentage["Price"]
         total = percentage["Actual"].sum() + self.value
         if total <= 0:
-            raise RuntimeError("Full withdraw not supported.")
+            raise CompassException(
+                "Calculations aborted. They are not required since this change ends up with no wealth."
+            )
         percentage["Actual"] = percentage["Actual"] / total
         percentage = _add_group(percentage)
         percentage, levels = _add_hierarchy(percentage)

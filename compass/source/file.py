@@ -3,7 +3,11 @@ from pathlib import Path
 
 import pandas as pd
 
+from compass.exception import CompassException
+
 from .base import Source
+
+_EXTENSION = "xlsx"
 
 
 class StandardPortfolio(Source):
@@ -15,7 +19,7 @@ class StandardPortfolio(Source):
 
     def __init__(self, path: Path):
         self.path = Path(path)
-        _check_extension(self.path, "xlsx")
+        _check_extension(self.path)
         _check_layout(
             self.path, ["Name", "Ticker", "Target", "Actual", "Price", "Group"]
         )
@@ -24,23 +28,14 @@ class StandardPortfolio(Source):
         return pd.read_excel(self.path)
 
 
-class LayoutError(Exception):
-    """Exception raised when the file does not have the expected columns."""
+def _check_extension(path):
+    if not path.suffix.endswith(_EXTENSION):
+        raise CompassException(f"Extension {_EXTENSION} is expected in file {path}.")
 
 
-class LastUpdateError(Exception):
-    """Exception raised when the file is not up to date."""
-
-
-def _check_extension(path, extension: str):
-    if not path.suffix.endswith(extension):
-        raise LayoutError(f"Extension {extension} is expected in file {path}.")
-
-
-def _check_layout(path: Path, columns: list) -> None:
-    if path.suffix.endswith("xlsx"):
-        data = pd.read_excel(path)
-    else:
-        raise RuntimeError(f"File extension not supported: {path}.")
+def _check_layout(path: Path, columns: list):
+    if not path.suffix.endswith(_EXTENSION):
+        raise ValueError(f"File extension {path} not supported.")
+    data = pd.read_excel(path)
     if not set(columns).issubset(set(data.columns)):
-        raise LayoutError(f"Columns {columns} are expected in file {path}.")
+        raise CompassException(f"Columns {columns} are expected in file {path}.")

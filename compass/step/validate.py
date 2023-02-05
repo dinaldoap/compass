@@ -1,7 +1,11 @@
 """Validate step."""
+
 import pandas as pd
 import pandera as pa
+from pandera.errors import SchemaErrors
 from pandera.typing import DataFrame, Series
+
+from compass.exception import CompassException
 
 from .base import Step
 
@@ -40,7 +44,12 @@ class Validate(Step):
         Raises:
             RuntimeError: When the input schema is not as expected, and it is not possible to convert it to the expected one.
         """
-        return _transform(input_)
+        try:
+            return _transform(input_)
+        except SchemaErrors as ex:
+            raise CompassException(
+                f"Input data with invalid schema. Please review the columns and errors showed below. Fix the first check/error of each column and try again.\n{ex.failure_cases}"
+            ) from ex
 
 
 class PortfolioSchema(pa.SchemaModel):
