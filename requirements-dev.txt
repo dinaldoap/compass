@@ -10,7 +10,4 @@ pytest
 pytest-cov
 pytest-env
 pip-tools
-xonsh[full]
-python-lsp-server
-autopep8
 twine

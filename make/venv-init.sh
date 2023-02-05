@@ -17,7 +17,5 @@ cat << EOF >> ~/.bashrc
 cd $(pwd)
 # activate virtual environment
 activate
-# open xonsh shell
-xonsh
 # <<< venv-init <<<
 EOF
