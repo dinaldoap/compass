@@ -51,9 +51,6 @@ RUN mkdir "${HOME}/.vscode-server" && \
 RUN mkdir --parents "${HOME}/.cache" && \
     chown -R ${USERNAME}:${USERNAME} "${HOME}/.cache"
 
-# Config .xonshrc for rootless user
-COPY --chown=${USERNAME}:${USERNAME} .devcontainer/.xonshrc "${HOME}/.xonshrc"
-
 # Config workspace
 RUN mkdir /workspace && \
     chown -R ${USERNAME}:${USERNAME} /workspace

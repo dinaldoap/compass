@@ -8,6 +8,7 @@ from pathlib import Path
 from compass.exception import CompassException
 from compass.number import parse_bool, parse_decimal
 from compass.pipeline import ChangePosition, InitPipeline
+from compass.version import __version__
 
 
 def _parse_args(argv: list, file="compass.ini") -> dict:
@@ -23,6 +24,7 @@ def _parse_args(argv: list, file="compass.ini") -> dict:
     parser = argparse.ArgumentParser(
         description="Compass: Leading investors to theirs targets.",
     )
+    parser.add_argument("--version", action="version", version=__version__)
     subparsers = parser.add_subparsers(dest="subcommand")
     subcommands = []
     subcommands.append(_add_subcommand_init(subparsers))

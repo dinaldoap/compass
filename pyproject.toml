@@ -1,3 +1,39 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "setuptools_scm[toml]"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "compass"
+authors = [
+    {name = "Dinaldo Pessoa", email = "dinaldoap@gmail.com"},
+]
+description = "Leading investors to theirs targets."
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["investment", "portfolio", "management"]
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "pandas",
+    "openpyxl",
+    "babel",
+    "pandera",
+]
+dynamic = ["version"]
+
+[project.urls]
+repository = "https://github.com/dinaldoap/compass"
+
+[project.scripts]
+compass = "compass.__main__:main"
+
+[tool.setuptools.packages]
+find = {}
+#find = {namespaces = false}
+
+[tool.setuptools_scm]
+write_to = "compass/version.py"
+version_scheme = "post-release"
