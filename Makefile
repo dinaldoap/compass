@@ -1,5 +1,5 @@
 PACKAGE_SRC=$(shell find compass -type f -name '*.py')
-PACKAGE_CFG=pyproject.toml setup.cfg
+PACKAGE_CFG=pyproject.toml
 TESTS_SRC=$(shell find tests -type f -name '*.py')
 TESTS_DATA=$(shell find tests -type f -name '*.xlsx' -name '*.ini')
 
@@ -71,15 +71,16 @@ build/test: ${PACKAGE_SRC} ${TESTS_SRC} ${TESTS_DATA} build/sync
 test: build/test
 	
 build/package: ${PACKAGE_SRC} ${PACKAGE_CFG} build/sync
+	rm -rf dist/
 	python -m build
 	@date > $@
 .PHONY: package
 package: build/package
 
 build/smoke: build/package
-#	./dist/compass --help
 	pip install --quiet dist/compass*.whl
 	compass --help
+	compass --version
 	pip install --quiet --requirement=requirements-editable.txt
 	@date > $@
 .PHONY: smoke
