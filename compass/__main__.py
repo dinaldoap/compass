@@ -157,14 +157,14 @@ def _add_subcommand_change(subparsers):
         "-b",
         "--absolute-distance",
         type=float,
-        help="Absolute distance allowed between the actual and the target allocation of each ticker and group (default: 5%%).",
+        help="Absolute distance allowed between the actual and the target allocation of each ticker and group (default: 0.05).",
         default=0.05,
     )
     parser.add_argument(
         "-l",
         "--relative-distance",
         type=float,
-        help="Relative distance allowed between the actual and the target allocation of each ticker and group (default: 25%%).",
+        help="Relative distance allowed between the actual and the target allocation of each ticker and group (default: 0.25).",
         default=0.25,
     )
     parser.add_argument(
@@ -185,8 +185,8 @@ def _add_subcommand_change(subparsers):
         "-e",
         "--expense-ratio",
         type=float,
-        help="Expense ratio (default: 0.03%%).",
-        default=0.0003,
+        help="Expense ratio (default: 0.0).",
+        default=0.0,
     )
     return subcommand
 
