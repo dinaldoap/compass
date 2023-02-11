@@ -12,62 +12,66 @@
     "type=volume,source=home-cache,target=/home/user/.cache"
   ],
   "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
-  "extensions": [
-    "ms-python.python",
-    "VisualStudioExptTeam.vscodeintellicode",
-    "GitHub.vscode-pull-request-github",
-    "eamodio.gitlens",
-    "mhutchie.git-graph",
-    "njpwerner.autodocstring"
-  ],
-  "settings": {
-    // Save
-    "files.autoSave": "afterDelay",
-    // Format
-    // "editor.formatOnSave": true,
-    "editor.detectIndentation": false,
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true,
-    // Ignore files
-    "files.exclude": {
-      "**/.git": true,
-      "**/.venv": true,
-      "**/compass.egg-info": true,
-      "**/__pycache__": true,
-      "**/.ipynb_checkpoints": true,
-      "**/activate": true,
-      "**/.coverage": true,
-      "**/compass.spec": true
-    },
-    // Ignore for watching
-    "files.watcherExclude": {
-      "**/.git/**": true,
-      "**/.venv/**": true,
-      "**/compass.egg-info/**": true,
-      "**/__pycache__/**": true,
-      "**/.ipynb_checkpoints/**": true,
-      "**/data/**": true
-    },
-    // Python
-    "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
-    "python.terminal.activateEnvironment": false,
-    "python.formatting.provider": "black",
-    // pytest
-    "python.testing.pytestArgs": [
-        "tests"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.nosetestsEnabled": false,
-    "python.testing.pytestEnabled": true,
-    // Bandit
-    "python.linting.banditEnabled": true,
-    // Pylint    
-    "python.linting.pylintEnabled": true,
-    "python.linting.ignorePatterns": [
-        "**/site-packages/**/*.py",
-        ".vscode/*.py",
-        "**/tests/**/*.py",
-        "**/lib/python*/**/*.py"
-    ],
+  "customizations": {
+    "vscode": {
+        "extensions": [
+            "ms-python.python",
+            "VisualStudioExptTeam.vscodeintellicode",
+            "GitHub.vscode-pull-request-github",
+            "eamodio.gitlens",
+            "mhutchie.git-graph",
+            "njpwerner.autodocstring"        
+        ],
+        "settings": {
+          // Save
+          "files.autoSave": "afterDelay",
+          // Format
+          // "editor.formatOnSave": true,
+          "editor.detectIndentation": false,
+          "editor.tabSize": 4,
+          "editor.insertSpaces": true,
+          // Ignore files
+          "files.exclude": {
+            "**/.git": true,
+            "**/.venv": true,
+            "**/compass.egg-info": true,
+            "**/__pycache__": true,
+            "**/.ipynb_checkpoints": true,
+            "**/activate": true,
+            "**/.coverage": true,
+            "**/compass.spec": true
+          },
+          // Ignore for watching
+          "files.watcherExclude": {
+            "**/.git/**": true,
+            "**/.venv/**": true,
+            "**/compass.egg-info/**": true,
+            "**/__pycache__/**": true,
+            "**/.ipynb_checkpoints/**": true,
+            "**/data/**": true
+          },
+          // Python
+          "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+          "python.terminal.activateEnvironment": false,
+          "python.formatting.provider": "black",
+          // pytest
+          "python.testing.pytestArgs": [
+              "tests"
+          ],
+          "python.testing.unittestEnabled": false,
+          "python.testing.nosetestsEnabled": false,
+          "python.testing.pytestEnabled": true,
+          // Bandit
+          "python.linting.banditEnabled": true,
+          // Pylint    
+          "python.linting.pylintEnabled": true,
+          "python.linting.ignorePatterns": [
+              "**/site-packages/**/*.py",
+              ".vscode/*.py",
+              "**/tests/**/*.py",
+              "**/lib/python*/**/*.py"
+          ]
+        }
+    }
   }
 }
