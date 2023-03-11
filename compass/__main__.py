@@ -109,8 +109,8 @@ def _add_subcommand_init(subparsers):
         subcommand,
         help="Initialize portfolio spreadsheat (portfolio.xlsx) and configuration (compass.ini).",
         epilog="""
-                    The porfolio spreadsheet (portfolio.xlsx) is initialized with fictitious tickers. Please, replace them with you own portfolio.
-                    And, the configuration (compass.ini) is initialized with an disabled example. Please, replace it with your own configuration, and remove the character \'#\' to activate it.
+                    The porfolio spreadsheet (portfolio.xlsx) is initialized with fictitious tickers. Please, replace its content with your own portfolio.
+                    And, the configuration (compass.ini) is initialized with an disabled example. Please, replace its content with your own configuration, and remove the character \'#\' to activate it.
                 """,
     )
     parser.add_argument(
