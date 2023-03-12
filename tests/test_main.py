@@ -44,7 +44,7 @@ def _create_config_change(output: Path):
         # command line
         "subcommand": "change",
         "value": 1000.0,
-        "rebalance": True,
+        "rebalance": False,
         "portfolio": "tests/data/portfolio.xlsx",
         "output": str(output),
         # configuration (compass.ini)
