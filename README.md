@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/dinaldoap/compass"><img src="docs/img/logo.png" alt="Compass"></a>
+  <a href="https://github.com/dinaldoap/compass"><img src="https://raw.githubusercontent.com/dinaldoap/compass/main/docs/img/logo.png" alt="Compass"></a>
 </p>
 <p align="center">
     <em>Leading investors to theirs targets.</em>
