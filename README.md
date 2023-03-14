@@ -5,6 +5,16 @@
     <em>Leading investors to theirs targets.</em>
 </p>
 
+# Compass
+
+Compass is a command-line interface that is designed for managing investiment portfolios. More specifically, Compass helps investors doing the following tasks:
+
+* [Portfolio spreadsheet setup](#portfolio-spreadsheet-setup)
+* [Deposit](#deposit)
+* [Withdraw](#withdraw)
+* [Rebalancing](#rebalancing) (with cash flows, sells/buys and tracking error)
+* [Grouping assets](#grouping-assets)
+
 # Installation
 
 Requirements:
@@ -17,7 +27,7 @@ pip install --upgrade compass
 
 # Basic usage
 
-### Portfolio setup
+### Portfolio spreadsheet setup
 
 Suppose you want to start a 60/40 portfolio, you would type the command as follows:
 ```bash
