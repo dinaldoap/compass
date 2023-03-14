@@ -149,7 +149,7 @@ def _add_subcommand_change(subparsers):
         "--rebalance",
         type=parse_bool,
         help="""Allow rebalancing. A rebalancing is done when one distance is exceeded (see --absolute-distance and --relative-distance).
-                                                     A rebalancing buys and sells in order to move the portfolio up to the point where the exceeded distance goes back to the allowed range. Not allowing rebalacing means that only cash flows, deposits and withdraws, will be used to balance the portfolio (default: True).""",
+                                                     A rebalancing buys and sells in order to move the portfolio up to the point where the exceeded distance goes back to the allowed range. Not allowing rebalacing means that only cash flows, deposits and withdraws, will be used to rebalance the portfolio (default: True).""",
         choices=[True, False],
         default=False,
     )
