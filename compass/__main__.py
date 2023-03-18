@@ -64,7 +64,7 @@ def main(argv: list = None):
     except Exception as ex:
         logging.exception(ex)
         print(
-            "Please visit https://github.com/dinaldoap/compass/issues/new/choose to open an issue with the error log above."
+            "Please visit https://github.com/dinaldoap/compass/issues/new to open an issue with the error log above."
         )
 
 
