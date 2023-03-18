@@ -117,7 +117,7 @@ def _add_subcommand_init(subparsers):
         "-o",
         "--output",
         type=str,
-        help="Output with the portfolio spreadsheet (default: portfolio.xlsx).",
+        help="The portfolio spreadsheet (default: portfolio.xlsx).",
         default="portfolio.xlsx",
     )
     return subcommand
@@ -148,8 +148,7 @@ def _add_subcommand_change(subparsers):
         "-r",
         "--rebalance",
         type=parse_bool,
-        help="""Allow rebalancing. A rebalancing is done when one distance is exceeded (see --absolute-distance and --relative-distance).
-                                                     A rebalancing buys and sells in order to move the portfolio up to the point where the exceeded distance goes back to the allowed range. Not allowing rebalacing means that only cash flows, deposits and withdraws, will be used to rebalance the portfolio (default: True).""",
+        help="""Activate/deactivate rebalancing. When True and the tracking error exceeds the allowed range (see --absolute-distance and --relative-distance), a rebalancing is done in order to move the portfolio back to the allowed range of tracking error. When False, only cash flows (deposits and withdraws) are used to balance the portfolio (default: False).""",
         choices=[True, False],
         default=False,
     )
@@ -178,7 +177,7 @@ def _add_subcommand_change(subparsers):
         "-o",
         "--output",
         type=str,
-        help="Output with changes to be done per ticker (default: output.xlsx).",
+        help="Spreadsheet with changes to be done per ticker (default: output.xlsx).",
         default="output.xlsx",
     )
     parser.add_argument(
