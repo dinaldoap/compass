@@ -164,3 +164,16 @@ At some point in time, the competitor B launches the ETF BUS, with the same char
 | A Internacional | AIN    | 100.00 |     90 |    90% |       |
 
 With that setting, Compass will handle AUS as a deprecated asset. That means that its actual allocation is considered as part of the group allocation when depositing or withdrawing from the portfolio. However, its target allocation is not considered when rebalancing inside the group, since all units would be selled to match the target allocation of 0%. It is up to the investor to decide whether and when to replace the deprecated asset based on changes in the expense ratios of the alternatives.
+
+# Contributing
+
+Compass is free to use, and maintained by volunteers. If you wish to contribute, these are the main options:
+
+* :star: [Star](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars#starring-a-repository) the [project repository](https://github.com/dinaldoap/compass) to show people that it is useful;
+* :eyes: [Watch](https://docs.github.com/en/get-started/quickstart/be-social#watching-a-repository) the [project repository](https://github.com/dinaldoap/compass) to be informed about new releases;
+* :monocle_face: Share the [project home page](https://github.com/dinaldoap/compass#readme) with someone that could benefit from it;
+* :handshake: Help and get help on [Q&A discussions](https://github.com/dinaldoap/compass/discussions/categories/q-a);
+* :bulb: Share ideas and give feedback on [Ideas discussions](https://github.com/dinaldoap/compass/discussions/categories/ideas);
+* :lady_beetle: Report bugs on [Issues](https://github.com/dinaldoap/compass/issues);
+* :technologist: Fix issues following the [Developer Guide](https://raw.githubusercontent.com/dinaldoap/compass/main/CONTRIBUTING.md).
+* :purple_heart: [Sponsor](https://github.com/sponsors) the project (coming soon).
