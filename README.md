@@ -22,7 +22,7 @@ Requirements:
 
 With Python installed, run the command as follows:
 ```bash
-pip install --upgrade compass
+pip install --upgrade compass-investor
 ```
 
 # Basic usage

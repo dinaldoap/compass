@@ -78,7 +78,7 @@ build/package: build/sync ${PACKAGE_SRC} ${PACKAGE_CFG}
 package: build/package
 
 build/smoke: build/package
-	pip install --quiet dist/compass*.whl
+	pip install --quiet dist/compass_investor*.whl
 	compass --help
 	compass --version
 	pip install --quiet --requirement=requirements-editable.txt
