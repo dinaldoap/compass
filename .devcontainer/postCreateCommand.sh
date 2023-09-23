@@ -3,4 +3,4 @@
 if [ ! -d .venv ]; then
     make venv
 fi
-make venv-init
+make bash

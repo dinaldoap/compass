@@ -1,103 +1,106 @@
-PACKAGE_SRC=$(shell find compass -type f -name '*.py')
-PACKAGE_CFG=pyproject.toml
+PACKAGE_SRC=$(shell find compass -type f -name '*.py' ! -name 'version.py')
 TESTS_SRC=$(shell find tests -type f -name '*.py')
 TESTS_DATA=$(shell find tests -type f -name '*.xlsx' -name '*.ini')
 
-main: clean build
+main: clean install lock sync format secure lint test package smoke
 .PHONY: main
 
-.PHONY: clean
-clean:
-	rm -rf compass.egg-info build dist
-
-.PHONY: build
-build: install lock sync format secure lint test package smoke
-
-build/setup:
-	mkdir --parents build
+.cache/make/clean:
+	rm -rf .cache/make compass.egg-info .pytest_cache tests/.pytest_cache dist
+	mkdir --parents .cache/make
 	@date > $@
+.PHONY: clean
+clean: .cache/make/clean
 
-build/install: build/setup requirements-editable.txt ${PACKAGE_CFG} requirements-dev.txt constraints.txt
-	pip install --quiet --requirement=requirements-editable.txt --requirement=requirements-dev.txt
+.cache/make/install: .cache/make/clean requirements-dev-editable.txt pyproject.toml requirements-dev.txt constraints.txt
+	pip install --quiet --requirement=requirements-dev-editable.txt --requirement=requirements-dev.txt
 	@date > $@
 .PHONY: install
-install: build/install
+install: .cache/make/install
 
-build/lock: build/install requirements-dev.txt constraints.txt ${PACKAGE_CFG} requirements-bridge.txt
-	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml
-	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml requirements-bridge.txt
-	@date > $@
+requirements-dev.lock: .cache/make/install requirements-dev.txt constraints.txt pyproject.toml requirements-dev-constraints.txt
+	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml
+requirements-prod.lock: requirements-dev.lock pyproject.toml requirements-dev-constraints.txt
+	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml requirements-dev-constraints.txt
 .PHONY: lock
-lock: build/lock
+lock: requirements-dev.lock requirements-prod.lock
 
 .PHONY: unlock
 unlock:
-	rm --force requirements-*.lock
+	rm -rf requirements-*.lock
 
-build/sync: build/lock requirements-editable.txt ${PACKAGE_CFG} requirements-dev.lock
+.cache/make/sync: requirements-dev-editable.txt pyproject.toml requirements-dev.lock
 	pip-sync --quiet requirements-dev.lock
-	pip install --quiet --requirement=requirements-editable.txt
+	pip install --quiet --requirement=requirements-dev-editable.txt
 	@date > $@
 .PHONY: sync
-sync: build/sync
+sync: .cache/make/sync
 
-build/format: build/sync ${PACKAGE_SRC} ${TESTS_SRC}
+.cache/make/format: .cache/make/sync ${PACKAGE_SRC} ${TESTS_SRC}
 	isort --profile black compass tests
 	black compass tests
 	docformatter --in-place --recursive compass tests
 	@date > $@
 .PHONY: format
-format: build/format
+format: .cache/make/format
 
-build/pip-audit: build/sync
+.cache/make/pip-audit: .cache/make/sync requirements-prod.lock
 	pip-audit --cache-dir=${HOME}/.cache/pip-audit --requirement=requirements-prod.lock
 	@date > $@
-build/bandit: build/sync ${PACKAGE_SRC}
+.cache/make/bandit: .cache/make/sync ${PACKAGE_SRC}
 	bandit --recursive compass
 	@date > $@
 .PHONY: secure
-secure: build/pip-audit build/bandit
+secure: .cache/make/pip-audit .cache/make/bandit
 
-build/lint: build/sync ${PACKAGE_SRC} .pylintrc
+.cache/make/lint: .cache/make/sync ${PACKAGE_SRC} .pylintrc
 	pylint compass
 	@date > $@
 .PHONY: lint
-lint: build/lint
+lint: .cache/make/lint
 
-build/test: build/sync ${PACKAGE_SRC} ${TESTS_SRC} ${TESTS_DATA}
+.cache/make/test: .cache/make/sync ${PACKAGE_SRC} ${TESTS_SRC} ${TESTS_DATA}
 	pytest --cov=compass --cov-report=term-missing tests
 	@date > $@
 .PHONY: test
-test: build/test
+test: .cache/make/test
 	
-build/package: build/sync ${PACKAGE_SRC} ${PACKAGE_CFG}
+.cache/make/package: .cache/make/sync ${PACKAGE_SRC} pyproject.toml
 	rm -rf dist/
 	python -m build
 	@date > $@
 .PHONY: package
-package: build/package
+package: .cache/make/package
 
-build/smoke: build/package
-	pip install --quiet dist/compass_investor*.whl
+.cache/make/smoke: .cache/make/package
+	pip install --quiet dist/*.whl
 	compass --help
 	compass --version
-	pip install --quiet --requirement=requirements-editable.txt
+	pip install --quiet --requirement=requirements-dev-editable.txt
 	@date > $@
 .PHONY: smoke
-smoke: build/smoke
+smoke: .cache/make/smoke
 
 .PHONY: venv
 venv:
 	bash make/venv.sh
 
-.PHONY: venv-init
-venv-init:
-	bash make/venv-init.sh
+.PHONY: bash
+bash:
+	bash .devcontainer/bash.sh
 
-.PHONY: docker
-docker:
+.PHONY: devcontainer
+devcontainer:
 	bash .devcontainer/devcontainer.sh
 
 .PHONY: testpypi
 testpypi:
-	twine upload --repository testpypi dist/compass*.whl
+	twine upload --repository testpypi dist/*.whl
+
+.PHONY: cookie
+cookie:
+	cookiecutter --overwrite-if-exists --output-dir=.. --no-input --config-file=cookiecutter.yaml $$(cookiecutter-python-vscode-github)
+
+.PHONY: prettier
+prettier:
+	prettier . --write

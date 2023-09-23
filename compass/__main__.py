@@ -61,7 +61,8 @@ def main(argv: list = None):
         _run_main(argv)
     except CompassException as ex:
         print(ex)
-    except Exception as ex:
+    # Handle unexpected exceptions with a proper error message
+    except Exception as ex:  # pylint: disable=broad-exception-caught
         logging.exception(ex)
         print(
             "Please visit https://github.com/dinaldoap/compass/issues/new to open an issue with the error log above."
