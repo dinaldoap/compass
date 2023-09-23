@@ -4,9 +4,9 @@ This guide describes how developers can contribute to this project.
 
 Requirements:
 
-* [Visual Studio Code](https://code.visualstudio.com/)
-  * [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-* [Docker](https://www.docker.com/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+  - [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [Docker](https://www.docker.com/)
 
 Steps:
 

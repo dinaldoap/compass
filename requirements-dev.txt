@@ -10,4 +10,7 @@ pytest
 pytest-cov
 pytest-env
 pip-tools
+pre-commit
 twine
+cookiecutter
+cookiecutter-python-vscode-github

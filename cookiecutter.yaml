@@ -1,0 +1,8 @@
+default_context:
+  full_name: "Dinaldo A. Pessoa"
+  email: "dinaldoap@gmail.com"
+  github_username: "dinaldoap"
+  project_name: "compass"
+  project_slug: "compass"
+  project_slug_underscore: "compass"
+  project_short_description: "Leading investors to theirs targets."
