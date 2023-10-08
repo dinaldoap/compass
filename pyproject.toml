@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools_scm[toml]"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "compass_investor"
+name = "compass-investor"
 authors = [
     {name = "Dinaldo A. Pessoa", email = "dinaldoap@gmail.com"},
 ]
