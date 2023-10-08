@@ -5,4 +5,6 @@ default_context:
   project_name: "compass"
   project_slug: "compass"
   project_slug_underscore: "compass"
+  project_slug_pypi: "compass-investor"
+  project_slug_entrypoint: "compass"
   project_short_description: "Leading investors to theirs targets."
