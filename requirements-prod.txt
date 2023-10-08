@@ -1,0 +1,5 @@
+# Dependencies for production
+pandas
+openpyxl
+babel
+pandera

@@ -1,8 +1,10 @@
 # Dependencies for development
 --constraint constraints.txt
+pyupgrade
 isort
 black
 docformatter
+flake8-bandit
 bandit
 pip-audit
 pylint
