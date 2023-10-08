@@ -223,9 +223,9 @@ def _change(
             # greatest step
             greatest_step_index = np.argmax(np.abs(step_to_range))
             # divide by actual so that the step become relative to group
-            greatest_step = step_to_range[greatest_step_index] / actual.sum()
+            greatest_step = step_to_range.iloc[greatest_step_index] / actual.sum()
             # step and change are relative to group
-            scale_factor = greatest_step / change[greatest_step_index]
+            scale_factor = greatest_step / change.iloc[greatest_step_index]
             # move to the nearest point inside the range
             change = scale_factor * change
             # amount changed per ticker

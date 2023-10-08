@@ -1,7 +1,13 @@
 [MAIN]
 
 # Files or directories to be skipped. They should be base names, not paths.
-ignore=version.py
+ignore=version.py,
+
+# Add files or directories matching the regular expressions patterns to the
+# ignore-list. The regex matches against paths and can be in Posix or Windows
+# format. Because '\\' represents the directory delimiter on Windows systems,
+# it can't be used as an escape character.
+ignore-paths=.*/tests
 
 [MESSAGES CONTROL]
 
@@ -17,4 +23,5 @@ ignore=version.py
 disable=line-too-long,
         too-few-public-methods,
         invalid-name,
-        abstract-class-instantiated
+        abstract-class-instantiated,
+        too-many-arguments,

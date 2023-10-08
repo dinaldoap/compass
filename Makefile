@@ -18,9 +18,9 @@ clean: .cache/make/clean
 .PHONY: install
 install: .cache/make/install
 
-requirements-dev.lock: .cache/make/install requirements-dev.txt constraints.txt pyproject.toml requirements-dev-constraints.txt
+requirements-dev.lock: .cache/make/install requirements-dev.txt constraints.txt pyproject.toml requirements-prod.txt
 	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml
-requirements-prod.lock: requirements-dev.lock pyproject.toml requirements-dev-constraints.txt
+requirements-prod.lock: pyproject.toml requirements-prod.txt requirements-dev-constraints.txt requirements-dev.lock
 	pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml requirements-dev-constraints.txt
 .PHONY: lock
 lock: requirements-dev.lock requirements-prod.lock
@@ -37,9 +37,11 @@ unlock:
 sync: .cache/make/sync
 
 .cache/make/format: .cache/make/sync ${PACKAGE_SRC} ${TESTS_SRC}
+	pyupgrade --py311-plus --exit-zero-even-if-changed $$(find compass tests -type f -name "*.py")
 	isort --profile black compass tests
 	black compass tests
-	docformatter --in-place --recursive compass tests
+	docformatter --in-place --recursive compass tests || [ "$$?" -eq "3" ]
+	-prettier . --write
 	@date > $@
 .PHONY: format
 format: .cache/make/format
@@ -100,7 +102,3 @@ testpypi:
 .PHONY: cookie
 cookie:
 	cookiecutter --overwrite-if-exists --output-dir=.. --no-input --config-file=cookiecutter.yaml $$(cookiecutter-python-vscode-github)
-
-.PHONY: prettier
-prettier:
-	prettier . --write

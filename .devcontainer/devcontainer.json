@@ -22,10 +22,11 @@
         "eamodio.gitlens",
         "mhutchie.git-graph",
         "njpwerner.autodocstring",
-        "esbenp.prettier-vscode"
-        // Extensions installed after VS Code initialization
-        // See .devcontainer/bash.sh
-        // "ms-python.isort"
+        "esbenp.prettier-vscode",
+        "ms-python.isort",
+        "ms-python.black-formatter",
+        "ms-python.pylint",
+        "ms-python.flake8"
       ],
       "settings": {
         // Save
@@ -40,7 +41,10 @@
           "source.organizeImports",
           "source.fixAll"
         ],
-        "python.formatting.provider": "black",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter"
+        },
+        "black-formatter.importStrategy": "fromEnvironment",
         "isort.importStrategy": "fromEnvironment",
         "isort.args": ["--profile", "black"],
         // Ignore files
@@ -71,16 +75,11 @@
         "python.testing.unittestEnabled": false,
         "python.testing.nosetestsEnabled": false,
         "python.testing.pytestEnabled": true,
-        // Bandit
-        "python.linting.banditEnabled": true,
+        // Flake8 (used to run Bandit)
+        "flake8.importStrategy": "fromEnvironment",
+        "flake8.args": ["--select=S", "--exclude=tests/*"],
         // Pylint
-        "python.linting.pylintEnabled": true,
-        "python.linting.ignorePatterns": [
-          "**/site-packages/**/*.py",
-          ".vscode/*.py",
-          "**/tests/**/*.py",
-          "**/lib/python*/**/*.py"
-        ],
+        "pylint.importStrategy": "fromEnvironment",
         // GitHub
         "githubPullRequests.defaultMergeMethod": "squash"
       }

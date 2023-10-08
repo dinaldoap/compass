@@ -41,7 +41,7 @@ class ChangePrint(Step):
             formatted[percentage_columns] = formatted[percentage_columns] * 100
             formatted[percentage_columns] = formatted[percentage_columns].round()
             formatted[percentage_columns] = formatted[percentage_columns].astype(int)
-            formatted[percentage_columns] = formatted[percentage_columns].applymap(
+            formatted[percentage_columns] = formatted[percentage_columns].map(
                 lambda x: f"{x}%"
             )
         print(formatted[columns])

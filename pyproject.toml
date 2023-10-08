@@ -15,13 +15,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
 ]
-dependencies = [
-    "pandas",
-    "openpyxl",
-    "babel",
-    "pandera",
-]
-dynamic = ["version"]
+dynamic = ["version", "dependencies"]
 
 [project.urls]
 repository = "https://github.com/dinaldoap/compass"
@@ -35,3 +29,6 @@ include = ["compass*"]
 [tool.setuptools_scm]
 write_to = "compass/version.py"
 version_scheme = "post-release"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements-prod.txt"]}
