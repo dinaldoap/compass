@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
@@ -16,7 +17,7 @@ def test_read_source():
             "Target": [0.2, 0.8],
             "Actual": [1, 2],
             "Price": [1, 2],
-            "Group": ["A", None],
+            "Group": ["A", np.nan],
         }
     )
     output = step.ReadSource(
@@ -36,7 +37,7 @@ def test_write_target(tmp_path):
             "Target": [0.2, 0.8],
             "Actual": [1, 2],
             "Price": [1, 2],
-            "Group": ["A", None],
+            "Group": ["A", np.nan],
         }
     )
     filename = tmp_path.joinpath("output.xlsx")

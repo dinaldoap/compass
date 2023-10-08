@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 from pandera.errors import SchemaErrors
@@ -17,7 +18,7 @@ def test_validate_convert():
             "Target": [0.2, 0.8],
             "Actual": [1, 2],
             "Price": [1.0, 2.0],
-            "Group": ["1.0", None],
+            "Group": ["1.0", np.nan],
         }
     )
     # Change column types as a possible wrong type inference done by the input spreadsheet

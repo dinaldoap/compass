@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -15,7 +16,7 @@ def test_Standard(tmp_path):
             "Target": [0.2, 0.8],
             "Actual": [1, 2],
             "Price": [1, 2],
-            "Group": ["A", None],
+            "Group": ["A", np.nan],
         }
     )
     filename = tmp_path.joinpath("output.xlsx")
