@@ -55,8 +55,9 @@ format: .cache/make/format
 .PHONY: secure
 secure: .cache/make/pip-audit .cache/make/bandit
 
-.cache/make/lint: .cache/make/sync ${PACKAGE_SRC} .pylintrc
+.cache/make/lint: .cache/make/sync ${PACKAGE_SRC} .pylintrc mypy.ini
 	pylint compass
+	mypy compass tests
 	@date > $@
 .PHONY: lint
 lint: .cache/make/lint
