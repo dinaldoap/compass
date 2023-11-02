@@ -8,6 +8,7 @@ flake8-bandit
 bandit
 pip-audit
 pylint
+mypy
 pytest
 pytest-cov
 pytest-env

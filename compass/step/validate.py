@@ -1,6 +1,7 @@
 """Validate step."""
 
 import math
+from typing import cast
 
 import pandas as pd
 import pandera as pa
@@ -65,12 +66,12 @@ class PortfolioSchema(pa.SchemaModel):
     Group: Series[str] = pa.Field(coerce=True, nullable=True)
 
     @pa.check("Target", name="sum_one")
-    def _sum_one(self, column: Series[float]) -> Series[float]:
-        return math.isclose(column.sum(), 1)
+    def _sum_one(self, column: Series[float]) -> Series[bool]:
+        return cast(Series[bool], math.isclose(column.sum(), 1))
 
     @pa.check("Actual", name="not_fractionable")
-    def _not_fractionable(self, column: Series[float]) -> Series[float]:
-        return column % 1 == 0
+    def _not_fractionable(self, column: Series[float]) -> Series[bool]:
+        return cast(Series[bool], column % 1 == 0)
 
 
 @pa.check_types(lazy=True)

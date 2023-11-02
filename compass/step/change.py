@@ -239,7 +239,7 @@ def _change(
     return accum_change
 
 
-def _normalize(input_: np.array):
+def _normalize(input_: np.ndarray):
     return input_ / input_.sum()
 
 

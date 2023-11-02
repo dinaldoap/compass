@@ -26,7 +26,8 @@
         "ms-python.isort",
         "ms-python.black-formatter",
         "ms-python.pylint",
-        "ms-python.flake8"
+        "ms-python.flake8",
+        "ms-python.mypy-type-checker"
       ],
       "settings": {
         // Save
@@ -44,6 +45,7 @@
         "[python]": {
           "editor.defaultFormatter": "ms-python.black-formatter"
         },
+        "python.formatting.provider": "none",
         "black-formatter.importStrategy": "fromEnvironment",
         "isort.importStrategy": "fromEnvironment",
         "isort.args": ["--profile", "black"],
@@ -80,6 +82,8 @@
         "flake8.args": ["--select=S", "--exclude=tests/*"],
         // Pylint
         "pylint.importStrategy": "fromEnvironment",
+        // Mypy
+        "mypy-type-checker.importStrategy": "fromEnvironment",
         // GitHub
         "githubPullRequests.defaultMergeMethod": "squash"
       }

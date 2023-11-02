@@ -51,7 +51,7 @@ def _add_config(argv: list, file: str, subcommands: list):
     return argv[:1] + configv + argv[1:]
 
 
-def main(argv: list = None):
+def main(argv: list[str] | None = None):
     """Command-line interface's entrypoint.
 
     Args:
@@ -69,7 +69,7 @@ def main(argv: list = None):
         )
 
 
-def _run_main(argv: list = None):
+def _run_main(argv: list | None = None):
     if argv is None:
         argv = sys.argv[1:]
     config = _parse_args(argv)

@@ -8,8 +8,8 @@ class Calculator:
     def __init__(self, value: float, expense_ratio: float):
         self.value = value
         self.expense_ratio = expense_ratio
-        self.deposit = None
-        self.withdraw = None
+        self.deposit: float = 0
+        self.withdraw: float = 0
 
     def calculate(self, df_change: pd.DataFrame):
         """Calculates gross deposit and withdraw values.
