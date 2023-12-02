@@ -175,4 +175,3 @@ Compass is free to use, and maintained by volunteers. If you wish to contribute,
 - :bulb: Share ideas and give feedback on [Ideas discussions](https://github.com/dinaldoap/compass/discussions/categories/ideas);
 - :lady_beetle: Report bugs on [Issues](https://github.com/dinaldoap/compass/issues);
 - :technologist: Fix issues following the [Developer Guide](https://raw.githubusercontent.com/dinaldoap/compass/main/CONTRIBUTING.md).
-- :purple_heart: [Sponsor](https://github.com/sponsors) the project (coming soon).
