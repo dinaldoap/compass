@@ -52,26 +52,26 @@ format: .cache/make/format
 .cache/make/pip-audit: .cache/make/sync requirements-prod.lock
 	pip-audit --cache-dir=${HOME}/.cache/pip-audit --requirement=requirements-prod.lock
 	@date > $@
-.cache/make/bandit: .cache/make/sync ${PACKAGE_SRC}
+.cache/make/bandit: .cache/make/format ${PACKAGE_SRC}
 	bandit --recursive compass
 	@date > $@
 .PHONY: secure
 secure: .cache/make/pip-audit .cache/make/bandit
 
-.cache/make/lint: .cache/make/sync ${PACKAGE_SRC} ${TESTS_SRC} .pylintrc mypy.ini
+.cache/make/lint: .cache/make/format ${PACKAGE_SRC} ${TESTS_SRC} .pylintrc mypy.ini
 	pylint compass
 	mypy compass tests
 	@date > $@
 .PHONY: lint
 lint: .cache/make/lint
 
-.cache/make/test: .cache/make/sync ${PACKAGE_SRC} ${TESTS_SRC} ${TESTS_DATA}
+.cache/make/test: .cache/make/format ${PACKAGE_SRC} ${TESTS_SRC} ${TESTS_DATA}
 	pytest --cov=compass --cov-report=term-missing tests
 	@date > $@
 .PHONY: test
 test: .cache/make/test
 	
-.cache/make/package: .cache/make/sync ${PACKAGE_SRC} pyproject.toml
+.cache/make/package: .cache/make/format ${PACKAGE_SRC} pyproject.toml
 	rm -rf dist/
 	python -m build
 	@date > $@
