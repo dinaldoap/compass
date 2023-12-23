@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3.x"
+          python-version: "3.11"
 
       - name: Build and test the project
-        run: make venv && source .venv/bin/activate && make --jobs
+        run: make venv && source .venv/bin/activate && make --jobs --output-sync
