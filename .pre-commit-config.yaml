@@ -10,7 +10,7 @@ repos:
         stages: [pre-commit]
       - id: make
         name: make
-        entry: bash -c "source .venv/bin/activate && make --always-make --jobs"
+        entry: bash -c "source .venv/bin/activate && make --always-make --jobs --output-sync"
         language: system
         always_run: true
         pass_filenames: false

@@ -27,7 +27,8 @@
         "ms-python.black-formatter",
         "ms-python.pylint",
         "ms-python.flake8",
-        "ms-python.mypy-type-checker"
+        "ms-python.mypy-type-checker",
+        "timonwong.shellcheck"
       ],
       "settings": {
         // Save
@@ -84,6 +85,8 @@
         "pylint.importStrategy": "fromEnvironment",
         // Mypy
         "mypy-type-checker.importStrategy": "fromEnvironment",
+        // Shellcheck
+        "shellcheck.useWorkspaceRootAsCwd": true,
         // GitHub
         "githubPullRequests.defaultMergeMethod": "squash"
       }

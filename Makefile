@@ -1,7 +1,8 @@
 CONFIG_SRC=$(shell prettier . --list-different)
-PACKAGE_SRC=$(shell find compass -type f -name '*.py' ! -name 'version.py')
+PACKAGE_SRC=$(shell find compass -type f -name '*.py' -not -name 'version.py')
 TESTS_SRC=$(shell find tests -type f -name '*.py')
 TESTS_DATA=$(shell find tests -type f -name '*.xlsx' -o -name '*.ini')
+SHELL_SRC=$(shell find . -type f -name '*.sh' -not -path '*/.venv/*')
 
 main: clean install lock sync format secure lint test package smoke
 .PHONY: main
@@ -14,7 +15,8 @@ main: clean install lock sync format secure lint test package smoke
 clean: .cache/make/clean
 
 .cache/make/install: .cache/make/clean requirements-dev-editable.txt pyproject.toml requirements-dev.txt constraints.txt
-	pip install --quiet --requirement=requirements-dev-editable.txt --requirement=requirements-dev.txt
+	pip install --quiet --requirement=requirements-dev.txt
+	pip install --quiet --requirement=requirements-dev-editable.txt
 	@date > $@
 .PHONY: install
 install: .cache/make/install
@@ -61,6 +63,7 @@ secure: .cache/make/pip-audit .cache/make/bandit
 .cache/make/lint: .cache/make/format ${PACKAGE_SRC} ${TESTS_SRC} .pylintrc mypy.ini
 	pylint compass
 	mypy compass tests
+	shellcheck ${SHELL_SRC}
 	@date > $@
 .PHONY: lint
 lint: .cache/make/lint

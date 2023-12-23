@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create and activate virtual environment
-python -m venv --clear --prompt=compass .venv
+python -m venv --clear --prompt='compass' .venv
 source .venv/bin/activate
 # Install development dependencies
 make -B install
