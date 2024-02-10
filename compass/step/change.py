@@ -1,4 +1,5 @@
 """Change step."""
+
 import functools as ft
 
 import numpy as np

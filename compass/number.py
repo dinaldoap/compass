@@ -1,4 +1,5 @@
 """Number utility functions."""
+
 import re
 
 from babel import numbers

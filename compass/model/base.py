@@ -1,4 +1,5 @@
 """Base clases for models."""
+
 import pandas as pd
 
 

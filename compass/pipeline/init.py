@@ -1,4 +1,5 @@
 """Init pipeline."""
+
 from compass import target
 from compass.step import Init, WriteTarget
 

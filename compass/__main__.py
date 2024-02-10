@@ -1,4 +1,5 @@
 """Main module."""
+
 import argparse
 import configparser
 import logging

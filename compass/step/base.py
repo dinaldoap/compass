@@ -1,4 +1,5 @@
 """Base classes for steps."""
+
 from abc import ABCMeta, abstractmethod
 
 import pandas as pd
