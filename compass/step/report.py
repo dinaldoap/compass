@@ -1,4 +1,5 @@
 """Report step."""
+
 import pandas as pd
 
 from compass.model import Calculator

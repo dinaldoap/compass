@@ -1,4 +1,5 @@
 """Print step."""
+
 import pandas as pd
 
 from compass.target import Target

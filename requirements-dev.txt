@@ -1,5 +1,4 @@
 # Dependencies for development
---constraint constraints.txt
 pyupgrade
 isort
 black

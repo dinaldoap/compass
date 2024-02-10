@@ -1,4 +1,5 @@
 """Factory for sources."""
+
 from .base import Source
 from .file import StandardPortfolio
 

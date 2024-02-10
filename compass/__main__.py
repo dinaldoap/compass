@@ -1,4 +1,5 @@
 """Main module."""
+
 import argparse
 import configparser
 import logging
@@ -25,7 +26,7 @@ def _parse_args(argv: list, file="compass.ini") -> dict:
         description="Compass: Leading investors to theirs targets.",
     )
     parser.add_argument("--version", action="version", version=__version__)
-    subparsers = parser.add_subparsers(dest="subcommand")
+    subparsers = parser.add_subparsers(dest="subcommand", required=True)
     subcommands = []
     subcommands.append(_add_subcommand_init(subparsers))
     subcommands.append(_add_subcommand_change(subparsers))
