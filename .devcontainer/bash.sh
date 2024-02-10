@@ -15,7 +15,6 @@ EOF
 # Config bashrc
 cat << EOF >> ~/.bashrc
 # >>> devcontainer >>>
-code --install-extension ms-python.isort > /dev/null
 # activate virtual environment
 activate
 # <<< devcontainer <<<

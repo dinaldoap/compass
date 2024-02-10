@@ -28,7 +28,7 @@ include = ["compass*"]
 
 [tool.setuptools_scm]
 write_to = "compass/version.py"
-version_scheme = "post-release"
+version_scheme = "no-guess-dev"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements-prod.txt"]}
