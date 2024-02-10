@@ -125,7 +125,9 @@ def _hierarchy_change(
                 relative_distance,
             )
             # apply _parent_group_change_partial, with freezed arguments, to each DataFrameGroup
-            percentage = group_percentage.apply(_parent_group_change_partial)
+            percentage = group_percentage.apply(
+                _parent_group_change_partial, include_groups=False
+            )
         leaf = percentage["Group"] == percentage[f"Group_{level}"]
         change.loc[leaf] = percentage.loc[leaf, f"Change_{level}"]
     return change
