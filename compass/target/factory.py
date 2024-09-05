@@ -1,4 +1,5 @@
 """Factory for targets."""
+
 from .base import Target
 from .file import Standard
 
