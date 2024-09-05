@@ -55,7 +55,7 @@ class Validate(Step):
             ) from ex
 
 
-class PortfolioSchema(pa.SchemaModel):
+class PortfolioSchema(pa.DataFrameModel):
     """Portfolio's data schema."""
 
     Name: Series[str] = pa.Field(coerce=True)

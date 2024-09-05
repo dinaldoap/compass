@@ -6,12 +6,10 @@
   "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace/compass",
   "workspaceFolder": "/workspace/compass",
   "mounts": [
-    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/user/.ssh",
-    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/user/.gitconfig",
     "type=volume,source=compass_vscode-server,target=/home/user/.vscode-server",
     "type=volume,source=home-cache,target=/home/user/.cache"
   ],
-  "postCreateCommand": "make devenv",
+  "postCreateCommand": "make env",
   "customizations": {
     "vscode": {
       "extensions": [
