@@ -3,14 +3,14 @@ repos:
     hooks:
       - id: make format lock
         name: make format lock
-        entry: bash -c "make format lock"
+        entry: bash -c "make --quiet format lock"
         language: system
         always_run: true
         pass_filenames: false
         stages: [pre-commit]
       - id: make
         name: make
-        entry: bash -c "make --jobs --output-sync"
+        entry: bash -c "make --quiet --jobs --output-sync && make --quiet check"
         language: system
         always_run: true
         pass_filenames: false

@@ -2,6 +2,7 @@
 
 ## Linux tools ##
 # Clean bashrc and bash aliases configurations
+touch ~/.bash_aliases
 sed --in-place --expression '/# >>> devcontainer >>>/,/*# <<< devcontainer <<</d' ~/.bashrc ~/.bash_aliases
 
 # Config bash aliases
