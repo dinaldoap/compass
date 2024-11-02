@@ -186,7 +186,7 @@ def _change(
     absolute_distance: float,
     relative_distance: float,
     percentage: pd.DataFrame,
-):  # pylint: disable=too-many-arguments,too-many-locals
+):
     # percentage per ticker
     target = percentage["Target"].copy()
     actual = percentage["Actual"].copy()

@@ -19,7 +19,7 @@ MYPY_SRC=$(shell ${GIT_FILES} | ${GREP_NOT_TEMPLATE} | ${GREP_PYTHON} | ${GREP_N
 SHELL_SRC=$(shell ${GIT_FILES} | ${GREP_SHELL} | ${GREP_NOT_DELETED}) $(shell ${GIT_UNTRACKED_FILES} | ${GREP_SHELL})
 VENV_BIN=.venv/bin/
 PYTHON=$(shell env --ignore-environment which python)
-PIP_TOOLS_VERSION=$(shell cat requirements-dev.lock 2>/dev/null | grep '^pip-tools==' | grep --extended-regexp --only-matching '==[.0-9]+')
+UV_VERSION=$(shell cat requirements-dev.lock 2>/dev/null | grep '^uv==' | grep --extended-regexp --only-matching '==[.0-9]+')
 SKIP=[ $$(stat -c %Y $|) -gt $$(stat -c %Y $@ 2> /dev/null || echo 0) ] || 
 GIT_STATUS=git status --porcelain
 DONE=@echo $@ done.
@@ -55,14 +55,19 @@ venv: ${VENV_BIN}activate
 	${DONE}
 
 ## lock        : Lock development and production dependencies.
-${VENV_BIN}pip-compile: ${VENV_BIN}activate
-	${VENV_BIN}pip install --quiet --disable-pip-version-check pip-tools${PIP_TOOLS_VERSION}
-requirements-dev.lock: ${VENV_BIN}pip-compile requirements-dev.txt constraints.txt pyproject.toml requirements-prod.txt
-	${VENV_BIN}pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml --constraint=constraints.txt
+# Tf there is pending changes, run gha-update.
+${VENV_BIN}uv: ${VENV_BIN}activate
+	${VENV_BIN}pip install --quiet uv${UV_VERSION}
+requirements-dev.lock: ${VENV_BIN}uv requirements-dev.txt constraints.txt pyproject.toml requirements-prod.txt
+	${VENV_BIN}uv pip compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-dev.lock --no-header --no-annotate requirements-dev.txt pyproject.toml --constraint=constraints.txt
 requirements-prod.lock: pyproject.toml requirements-prod.txt requirements-dev.lock
-	${VENV_BIN}pip-compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml --constraint=requirements-dev.lock
+	${VENV_BIN}uv pip compile --quiet --resolver=backtracking --generate-hashes --strip-extras --allow-unsafe --output-file=requirements-prod.lock --no-header --no-annotate pyproject.toml --constraint=requirements-dev.lock
+.cache/make/lock: requirements-dev.lock
+	${VENV_BIN}uv pip install --quiet $$(cat requirements-dev.lock 2>/dev/null | grep --extended-regexp --only-matching '^gha-update==[.0-9]+')
+	[ -z "$$(${GIT_STATUS})" ] || ${VENV_BIN}gha-update
+	${TOUCH}
 .PHONY: lock
-lock: requirements-dev.lock requirements-prod.lock
+lock: requirements-dev.lock requirements-prod.lock .cache/make/lock
 	${DONE}
 
 ## unlock      : Unlock development and production dependencies.
@@ -72,8 +77,8 @@ unlock:
 
 ## install     : Install development dependencies according to requirements-dev.lock.
 .cache/make/install: pyproject.toml requirements-dev.lock
-	${VENV_BIN}pip-sync --quiet --pip-args="--disable-pip-version-check" requirements-dev.lock
-	${VENV_BIN}pip install --quiet --disable-pip-version-check --editable=.
+	${VENV_BIN}uv pip sync --quiet requirements-dev.lock
+	${VENV_BIN}uv pip install --quiet --editable=.
 	${TOUCH}
 .PHONY: install
 install: .cache/make/install
@@ -83,14 +88,14 @@ install: .cache/make/install
 # If docformatter fails, the script ignores exit status 3, because that code is returned when docformatter changes any file.
 # If the variable PRETTIER_DIFF is not empty, prettier is executed. Ignore errors because prettier is not available in GitHub Actions.
 .cache/make/format-all: .cache/make/install
-	${VENV_BIN}pyupgrade --py311-plus --exit-zero-even-if-changed ${PACKAGE_SRC} ${TESTS_SRC}
+	${VENV_BIN}pyupgrade --py312-plus --exit-zero-even-if-changed ${PACKAGE_SRC} ${TESTS_SRC}
 	${VENV_BIN}isort --profile black ${PACKAGE_SRC} ${TESTS_SRC}
 	${VENV_BIN}black --quiet ${PACKAGE_SRC} ${TESTS_SRC}
 	${VENV_BIN}docformatter --in-place ${PACKAGE_SRC} ${TESTS_SRC} || [ "$$?" -eq "3" ]
 	[ -z "${PRETTIER_DIFF}" ] || prettier ${PRETTIER_DIFF} --write
 	${TOUCH}
 .cache/make/format-change: ${PACKAGE_SRC} ${TESTS_SRC} | .cache/make/format-all
-	${SKIP}${VENV_BIN}pyupgrade --py311-plus --exit-zero-even-if-changed $?
+	${SKIP}${VENV_BIN}pyupgrade --py312-plus --exit-zero-even-if-changed $?
 	${SKIP}${VENV_BIN}isort --profile black $?
 	${SKIP}${VENV_BIN}black --quiet $?
 	${SKIP}${VENV_BIN}docformatter --in-place $? || [ "$$?" -eq "3" ]
@@ -158,10 +163,10 @@ package: .cache/make/package
 
 ## smoke       : Smoke test wheel.
 .cache/make/smoke: .cache/make/package
-	${VENV_BIN}pip install --quiet --disable-pip-version-check dist/*.whl
+	${VENV_BIN}uv pip install --quiet dist/*.whl
 	${VENV_BIN}compass --help
 	${VENV_BIN}compass --version
-	${VENV_BIN}pip install --quiet --disable-pip-version-check --editable=.
+	${VENV_BIN}uv pip install --quiet --editable=.
 	${TOUCH}
 .PHONY: smoke
 smoke: .cache/make/smoke

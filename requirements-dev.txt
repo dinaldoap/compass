@@ -11,7 +11,8 @@ mypy
 pytest
 pytest-cov
 pytest-env
-pip-tools
+build
+gha-update
 pre-commit
 twine
 cookiecutter
